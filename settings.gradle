@@ -1,0 +1,4 @@
+rootProject.name = 'markdown-text'
+
+// Import module
+include ':markdown-text'
