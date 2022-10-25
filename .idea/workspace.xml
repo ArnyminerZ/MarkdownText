@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment=":wrench: Configured project">
+    <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment=":construction_worker: Added `version.gradle` creation">
       <change afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scripts/publish-module.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scripts/publish-root.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/markdown-text/version.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/markdown-text/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -72,6 +75,11 @@
         <option value="Arnau Mora &lt;arnyminer.z@gmail.com&gt;" />
       </list>
     </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
@@ -96,7 +104,7 @@
       <recent name="E:\GitProjects\MarkdownText\markdown-text" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.MarkdownText:markdown-text [publishReleasePublicationToMavenLocal]">
+  <component name="RunManager" selected="Gradle.MarkdownText:markdown-text [publishReleasePublicationToSonatypeRepository]">
     <configuration name="MarkdownText:markdown-text [assemble]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -217,9 +225,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Gradle.MarkdownText:markdown-text [publishReleasePublicationToMavenLocal]" />
-        <item itemvalue="Gradle.MarkdownText:markdown-text [publishToMavenLocal]" />
         <item itemvalue="Gradle.MarkdownText:markdown-text [publishReleasePublicationToSonatypeRepository]" />
+        <item itemvalue="Gradle.MarkdownText:markdown-text [publishToMavenLocal]" />
+        <item itemvalue="Gradle.MarkdownText:markdown-text [publishReleasePublicationToMavenLocal]" />
         <item itemvalue="Gradle.MarkdownText:markdown-text [components]" />
         <item itemvalue="Gradle.MarkdownText:markdown-text [assemble]" />
       </list>
@@ -250,7 +258,63 @@
       <option name="project" value="LOCAL" />
       <updated>1666696462176</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary=":wrench: Added publish scripts">
+      <created>1666698859821</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1666698859821</updated>
+    </task>
+    <task id="LOCAL-00004" summary=":wrench: Configured publish">
+      <created>1666698881087</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1666698881087</updated>
+    </task>
+    <task id="LOCAL-00005" summary=":wrench: Configured workspace">
+      <created>1666698898918</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1666698898918</updated>
+    </task>
+    <task id="LOCAL-00006" summary=":bug: Fixes theme for the `MarkdownText` component">
+      <created>1666699698148</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1666699698148</updated>
+    </task>
+    <task id="LOCAL-00007" summary=":broom: Cleaned up code">
+      <created>1666699719620</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1666699719620</updated>
+    </task>
+    <task id="LOCAL-00008" summary=":construction_worker: Added workflow">
+      <created>1666700276722</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1666700276722</updated>
+    </task>
+    <task id="LOCAL-00009" summary=":construction_worker: Changed execution policy">
+      <created>1666700897284</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1666700897284</updated>
+    </task>
+    <task id="LOCAL-00010" summary=":construction_worker: Added `version.gradle` creation">
+      <created>1666700934884</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1666700934884</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -268,8 +332,20 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="RELOAD_CONTEXT" value="false" />
     <MESSAGE value=":see_no_evil: Added `local.properties`" />
     <MESSAGE value=":wrench: Configured project" />
-    <option name="LAST_COMMIT_MESSAGE" value=":wrench: Configured project" />
+    <MESSAGE value=":wrench: Added publish scripts" />
+    <MESSAGE value=":wrench: Configured publish" />
+    <MESSAGE value=":wrench: Configured workspace" />
+    <MESSAGE value=":bug: Fixes theme for the `MarkdownText` component" />
+    <MESSAGE value=":broom: Cleaned up code" />
+    <MESSAGE value=":construction_worker: Added workflow" />
+    <MESSAGE value=":construction_worker: Changed execution policy" />
+    <MESSAGE value=":construction_worker: Added `version.gradle` creation" />
+    <option name="LAST_COMMIT_MESSAGE" value=":construction_worker: Added `version.gradle` creation" />
+    <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
+    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>
