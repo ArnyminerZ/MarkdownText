@@ -2,6 +2,7 @@ package com.arnyminerz.markdowntext
 
 import android.content.ActivityNotFoundException
 import android.util.Log
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,11 +11,16 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -24,6 +30,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+
+private const val TAG = "MarkdownText"
 
 /**
  * Annotates the [String] using Markdown formatting.
@@ -180,26 +188,38 @@ fun MarkdownText(
                     bodyStyle, headlineDepthStyles, bullet, linkColor
                 )
 
-                ClickableText(
+                // TODO: Current implementation, since ClickableText is not theming correctly.
+                // Reported at https://issuetracker.google.com/issues/255356401
+                // Code taken directly from the official sources of ClickableText
+                val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
+                val pressIndicator = Modifier.pointerInput(null) {
+                    detectTapGestures { pos ->
+                        layoutResult.value?.let { layoutResult ->
+                            val offset = layoutResult.getOffsetForPosition(pos)
+                            annotatedString
+                                .getStringAnnotations("link", offset, offset)
+                                .firstOrNull()?.let { stringAnnotation ->
+                                    try {
+                                        uriHandler.openUri(stringAnnotation.item)
+                                    } catch (e: ActivityNotFoundException) {
+                                        Log.w(TAG, "Could not find link handler.")
+                                    }
+                                }
+                        }
+                    }
+                }
+
+                Text(
                     text = annotatedString,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(0.dp),
+                        .padding(0.dp)
+                        .then(pressIndicator),
                     overflow = overflow,
                     maxLines = maxLines,
                     style = bodyStyle,
                     softWrap = softWrap,
-                    onClick = {
-                        annotatedString
-                            .getStringAnnotations("link", it, it)
-                            .firstOrNull()?.let { stringAnnotation ->
-                                try {
-                                    uriHandler.openUri(stringAnnotation.item)
-                                } catch (e: ActivityNotFoundException) {
-                                    Log.e("MarkdownText", "Could not find link handler.", e)
-                                }
-                            }
-                    },
+                    onTextLayout = { layoutResult.value = it }
                 )
             }
         }
