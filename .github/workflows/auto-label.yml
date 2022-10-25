@@ -1,0 +1,19 @@
+name: 🏷️ Auto Label
+
+on:
+  pull_request:
+    types: [ opened, synchronize ]
+
+jobs:
+  auto-label:
+    permissions:
+      # write permission is required for autolabeler
+      # otherwise, read permission is required at least
+      pull-requests: write
+    name: 🏷️ Auto Label
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: banyan/auto-label@1.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
