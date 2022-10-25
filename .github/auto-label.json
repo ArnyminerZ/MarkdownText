@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "github_structure": [
+      ".github"
+    ],
+    "documentation": [
+      "*.md"
+    ]
+  }
+}
