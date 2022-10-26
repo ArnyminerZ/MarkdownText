@@ -52,7 +52,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.3.2'
+        kotlinCompilerExtensionVersion "$compose_compiler_version"
     }
 }
 
@@ -61,13 +61,19 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
 
     // Jetpack Compose core
-    def compose_version = '1.2.1'
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation "androidx.compose.ui:ui:$compose_ui_version"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
     implementation 'androidx.activity:activity-compose:1.6.0'
 
     // Jetpack Compose - Material 3
-    implementation 'androidx.compose.material3:material3:1.0.0-rc01'
+    implementation "androidx.compose.material3:material3:$material3_version"
+
+    // Coil image loader
+    def coil_version = '2.2.2'
+    implementation "io.coil-kt:coil:$coil_version"
+    implementation "io.coil-kt:coil-svg:$coil_version"
+    implementation "io.coil-kt:coil-gif:$coil_version"
+    implementation "io.coil-kt:coil-compose:$coil_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
