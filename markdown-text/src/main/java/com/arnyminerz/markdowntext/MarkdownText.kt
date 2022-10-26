@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
@@ -247,47 +248,74 @@ fun MarkdownText(
     ) {
         markdown.split(System.lineSeparator()).forEach { line ->
             if (line.startsWith("--")) // If starts with at least two '-', add divider
-                Divider()
-            else {
-                val (annotatedString, inlineContent) = line.markdownAnnotated(
-                    bodyStyle, headlineDepthStyles, bullet, linkColor
-                )
+                return@forEach Divider()
+            if (line.startsWith("!")) { // Image block
+                val openPos = line.indexOf('[')
+                // Search for the closing tag
+                val preClosing = line.indexOf(']', openPos + 1)
+                // Search for the actual link start
+                val lOpen = line.indexOf('(', preClosing + 1)
+                // And the ending
+                val lClose = line.indexOf(')', lOpen + 1)
 
-                // TODO: Current implementation, since ClickableText is not theming correctly.
-                // Reported at https://issuetracker.google.com/issues/255356401
-                // Code taken directly from the official sources of ClickableText
-                val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
-                val pressIndicator = Modifier.pointerInput(null) {
-                    detectTapGestures { pos ->
-                        layoutResult.value?.let { layoutResult ->
-                            val offset = layoutResult.getOffsetForPosition(pos)
-                            annotatedString
-                                .getStringAnnotations("link", offset, offset)
-                                .firstOrNull()?.let { stringAnnotation ->
-                                    try {
-                                        uriHandler.openUri(stringAnnotation.item)
-                                    } catch (e: ActivityNotFoundException) {
-                                        Log.w(TAG, "Could not find link handler.")
-                                    }
+                // Check if link is valid
+                val outOfBounds = openPos < 0 || preClosing < 0 || lOpen < 0 || lClose < 0
+                val overwrites = lOpen > lClose || preClosing > lOpen
+                if (outOfBounds || overwrites) {
+                    // Skip image loading
+                } else {
+                    val text = line.substring(openPos + 1, preClosing)
+                    val link = line.substring(lOpen + 1, lClose)
+
+                    AsyncImage(
+                        model = link,
+                        contentDescription = text,
+                        modifier = Modifier.fillMaxWidth(),
+                        contentScale = ContentScale.Inside,
+                    )
+
+                    return@forEach
+                }
+            }
+
+            val (annotatedString, inlineContent) = line.markdownAnnotated(
+                bodyStyle, headlineDepthStyles, bullet, linkColor
+            )
+
+            // TODO: Current implementation, since ClickableText is not theming correctly.
+            // Reported at https://issuetracker.google.com/issues/255356401
+            // Code taken directly from the official sources of ClickableText
+            val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
+            val pressIndicator = Modifier.pointerInput(null) {
+                detectTapGestures { pos ->
+                    layoutResult.value?.let { layoutResult ->
+                        val offset = layoutResult.getOffsetForPosition(pos)
+                        annotatedString
+                            .getStringAnnotations("link", offset, offset)
+                            .firstOrNull()?.let { stringAnnotation ->
+                                try {
+                                    uriHandler.openUri(stringAnnotation.item)
+                                } catch (e: ActivityNotFoundException) {
+                                    Log.w(TAG, "Could not find link handler.")
                                 }
-                        }
+                            }
                     }
                 }
-
-                Text(
-                    text = annotatedString,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(0.dp)
-                        .then(pressIndicator),
-                    overflow = overflow,
-                    maxLines = maxLines,
-                    style = bodyStyle,
-                    softWrap = softWrap,
-                    inlineContent = inlineContent,
-                    onTextLayout = { layoutResult.value = it }
-                )
             }
+
+            Text(
+                text = annotatedString,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp)
+                    .then(pressIndicator),
+                overflow = overflow,
+                maxLines = maxLines,
+                style = bodyStyle,
+                softWrap = softWrap,
+                inlineContent = inlineContent,
+                onTextLayout = { layoutResult.value = it }
+            )
         }
     }
 }
@@ -324,6 +352,8 @@ fun MarkdownTextPreview() {
                 "That is a hr!",
                 "Here is a normal inline image: ![This is an image]($exampleBadge)",
                 "But this one has a link: [![This is an image]($exampleBadge)]($exampleBadge)",
+                "This is a large block image:",
+                "![Large image]($exampleImageUrl)",
             ).joinToString(System.lineSeparator()),
             modifier = Modifier
                 .padding(horizontal = 8.dp),
