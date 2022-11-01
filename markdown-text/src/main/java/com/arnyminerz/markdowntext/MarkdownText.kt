@@ -22,17 +22,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.Placeholder
-import androidx.compose.ui.text.PlaceholderVerticalAlign
-import androidx.compose.ui.text.TextLayoutResult
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -70,7 +64,7 @@ private fun String.markdownAnnotated(
             val headline = substring(depth + 1)
             val headlineTypography = headlineDepthStyles.getOrElse(depth - 1) { TextStyle.Default }
             withStyle(headlineTypography.toSpanStyle()) { append(headline) }
-        } else if (startsWith('-')) { // List
+        } else if (startsWith('-') || startsWith("* ") || startsWith("+ ")) { // List
             val item = substring(1)
             append("$bullet\t$item")
         } else {
