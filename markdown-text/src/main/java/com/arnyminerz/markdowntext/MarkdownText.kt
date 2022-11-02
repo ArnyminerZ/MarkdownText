@@ -23,6 +23,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.*
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -113,6 +114,17 @@ private fun String.markdownAnnotated(
                         lastStyle.copy(textDecoration = TextDecoration.None)
                     else
                         lastStyle.copy(textDecoration = TextDecoration.Underline)
+                    pushStyle(lastStyle)
+                    c++
+                } else if (char == '`') { // Code
+                    pop()
+                    lastStyle = if (lastStyle.fontFeatureSettings == "tnum")
+                        lastStyle.copy(fontFeatureSettings = null, fontFamily = FontFamily.Default)
+                    else
+                        lastStyle.copy(
+                            fontFeatureSettings = "tnum",
+                            fontFamily = FontFamily.Monospace
+                        )
                     pushStyle(lastStyle)
                     c++
                 } else if (char == '!') { // Image
@@ -338,6 +350,7 @@ fun MarkdownTextPreview() {
                 "Even use \\* backslashed special characters.",
                 "## And setting",
                 "Sub-sections",
+                "with `code` blocks!",
                 "### That get",
                 "#### Deeper",
                 "##### And Deeper",
@@ -345,8 +358,8 @@ fun MarkdownTextPreview() {
                 "Remember _this_ ~not this~? Also works!",
                 "[This](https://example.com) is a link.",
                 "- Lists",
-                "- are",
-                "- also",
+                "* are",
+                "* also",
                 "- supported",
                 "--------",
                 "That is a hr!",
