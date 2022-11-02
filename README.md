@@ -22,7 +22,6 @@ Will only display the first image.
 * Code blocks are not supported.
 * Horizontal rules are only supported for `-`, starting with at least 2 characters without spaces.
 * Automatic links are not supported.
-* Backslash of special characters is not supported.
 
 ## Usage
 
