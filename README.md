@@ -4,7 +4,7 @@ A library for displaying Markdown contents within Jetpack Compose. Uses [Coil][c
 
 ## Current limitations
 
-* Lists only support using character `-`
+* Lists that are annotated with the `*` must have an space after the delimiter.
 * If a line starts with an image, just the first one will be loaded. eg:
 
 ```markdown
@@ -14,6 +14,13 @@ A library for displaying Markdown contents within Jetpack Compose. Uses [Coil][c
 Will only display the first image.
 
 * Placeholders are not supported.
+* Header closing tags are not supported.
+* Blockquotes are not supported.
+* List elements must be in the same line.
+* Code blocks are not supported.
+* Horizontal rules are only supported for `-`, starting with at least 2 characters without spaces.
+* Automatic links are not supported.
+* Backslash of special characters is not supported.
 
 ## Usage example
 
