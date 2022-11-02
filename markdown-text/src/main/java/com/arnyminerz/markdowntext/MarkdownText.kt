@@ -77,7 +77,12 @@ private fun String.markdownAnnotated(
             while (c < lineLength) {
                 val char = get(c)
                 val nextChar = c.takeIf { it + 1 < lineLength }?.let { get(it + 1) }
-                if (char == '*' && nextChar == '*') { // Bold
+                val prevChar = if (c > 0) get(c - 1) else null
+                if (prevChar == '\\') {
+                    append(char)
+                    if (linkStart != null) linkEnd++
+                    c++
+                } else if (char == '*' && nextChar == '*') { // Bold
                     pop()
                     lastStyle = if (lastStyle.fontWeight == FontWeight.Bold)
                         lastStyle.copy(fontWeight = FontWeight.Normal)
