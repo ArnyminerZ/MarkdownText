@@ -111,6 +111,14 @@ private fun String.markdownAnnotated(
                         lastStyle.copy(textDecoration = TextDecoration.Underline)
                     pushStyle(lastStyle)
                     c++
+                } else if (char == '`') { // Code
+                    pop()
+                    lastStyle = if (lastStyle.fontFeatureSettings == "tnum")
+                        lastStyle.copy(fontFeatureSettings = null)
+                    else
+                        lastStyle.copy(fontFeatureSettings = "tnum")
+                    pushStyle(lastStyle)
+                    c++
                 } else if (char == '!') { // Image
                     val openPos = indexOf('[', c + 1)
                     // Search for the closing tag
@@ -332,6 +340,7 @@ fun MarkdownTextPreview() {
                 "The work for separating sections",
                 "## And setting",
                 "Sub-sections",
+                "with `code` blocks!",
                 "### That get",
                 "#### Deeper",
                 "##### And Deeper",
@@ -339,8 +348,8 @@ fun MarkdownTextPreview() {
                 "Remember _this_ ~not this~? Also works!",
                 "[This](https://example.com) is a link.",
                 "- Lists",
-                "- are",
-                "- also",
+                "* are",
+                "* also",
                 "- supported",
                 "--------",
                 "That is a hr!",
