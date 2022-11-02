@@ -77,11 +77,10 @@ private fun String.markdownAnnotated(
             while (c < lineLength) {
                 val char = get(c)
                 val nextChar = c.takeIf { it + 1 < lineLength }?.let { get(it + 1) }
-                val prevChar = if (c > 0) get(c - 1) else null
-                if (prevChar == '\\') {
-                    append(char)
+                if (char == '\\' && Regex("[*~_!\\[\\]()\\\\]").matches(nextChar.toString())) {
+                    append(nextChar?.toString() ?: "\u0000")
                     if (linkStart != null) linkEnd++
-                    c++
+                    c += 2
                 } else if (char == '*' && nextChar == '*') { // Bold
                     pop()
                     lastStyle = if (lastStyle.fontWeight == FontWeight.Bold)
@@ -324,6 +323,7 @@ fun MarkdownText(
 fun MarkdownTextPreview() {
     val exampleImageUrl = "https://picsum.photos/300/200"
     val exampleBadge = "https://raster.shields.io/badge/Label-Awesome!-success"
+    val exampleLink = "https://example.com"
 
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState()),
@@ -354,6 +354,7 @@ fun MarkdownTextPreview() {
                 "But this one has a link: [![This is an image]($exampleBadge)]($exampleBadge)",
                 "This is a large block image:",
                 "![Large image]($exampleImageUrl)",
+                "[Links also support \\~ backslashing \\_]($exampleLink)",
             ).joinToString(System.lineSeparator()),
             modifier = Modifier
                 .padding(horizontal = 8.dp),
