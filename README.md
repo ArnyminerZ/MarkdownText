@@ -2,7 +2,7 @@
 
 A library for displaying Markdown contents within Jetpack Compose. Uses [Coil][coil-url]
 
-[[maven-central-search-url]][![Latest version][version-badge]]
+[![Latest version][version-badge]][maven-central-search-url]
 
 ## Current limitations
 
