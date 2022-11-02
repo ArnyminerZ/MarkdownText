@@ -2,6 +2,8 @@
 
 A library for displaying Markdown contents within Jetpack Compose. Uses [Coil][coil-url]
 
+[![Latest version][version-badge]][maven-central-search-url]
+
 ## Current limitations
 
 * Lists that are annotated with the `*` must have an space after the delimiter.
@@ -20,9 +22,16 @@ Will only display the first image.
 * Code blocks are not supported.
 * Horizontal rules are only supported for `-`, starting with at least 2 characters without spaces.
 * Automatic links are not supported.
-* Backslash of special characters is not supported.
 
-## Usage example
+## Usage
+
+Add to the module's dependencies:
+
+```groovy
+implementation 'com.arnyminerz.markdowntext:markdowntext:1.0.1'
+```
+
+Jetpack Compose example:
 
 ```kotlin
 @Composable
@@ -72,3 +81,7 @@ fun MarkdownTextPreview() {
 [coil-url]: https://coil-kt.github.io/coil
 
 [example-image-url]: /docs/screenshot.png
+
+[version-badge]: https://img.shields.io/maven-central/v/com.arnyminerz.markdowntext/markdowntext?style=for-the-badge
+
+[maven-central-search-url]: https://search.maven.org/search?q=a:markdowntext
