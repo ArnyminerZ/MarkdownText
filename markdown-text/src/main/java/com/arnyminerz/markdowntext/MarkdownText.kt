@@ -335,6 +335,7 @@ fun MarkdownTextPreview() {
                 "**This** is where it gets complicated. With **bold and *italic* texts**.",
                 "# Headers are also supported",
                 "The work for separating sections",
+                "Even use \\* backslashed special characters.",
                 "## And setting",
                 "Sub-sections",
                 "### That get",
