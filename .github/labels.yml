@@ -73,6 +73,10 @@
   description: When a translation is added, updated or removed
   color: 3F888F
 
+- name: stale
+  description: Further testing or developing has to be done. Do not merge.
+  color: 6A5D4D
+
 - name: major
   description: Major changes. Used for release bump
   color: 16970B
