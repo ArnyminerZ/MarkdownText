@@ -23,6 +23,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.*
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -118,9 +119,12 @@ private fun String.markdownAnnotated(
                 } else if (char == '`') { // Code
                     pop()
                     lastStyle = if (lastStyle.fontFeatureSettings == "tnum")
-                        lastStyle.copy(fontFeatureSettings = null)
+                        lastStyle.copy(fontFeatureSettings = null, fontFamily = FontFamily.Default)
                     else
-                        lastStyle.copy(fontFeatureSettings = "tnum")
+                        lastStyle.copy(
+                            fontFeatureSettings = "tnum",
+                            fontFamily = FontFamily.Monospace
+                        )
                     pushStyle(lastStyle)
                     c++
                 } else if (char == '!') { // Image
