@@ -15,8 +15,10 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
@@ -30,6 +32,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 
 private const val TAG = "MarkdownText"
@@ -51,7 +54,7 @@ private fun String.markdownAnnotated(
     headlineDepthStyles: List<TextStyle> = MarkdownTextDefaults.headlineDepthStyles,
     bullet: Char = MarkdownTextDefaults.bullet,
     linkColor: Color = MarkdownTextDefaults.linkColor,
-): Pair<AnnotatedString, Map<String, InlineTextContent>> {
+): Pair<AnnotatedString, SnapshotStateMap<String, InlineTextContent>> {
     val images = mutableListOf<Pair<String, String>>()
     var lastStyle = bodyStyle.toSpanStyle()
 
@@ -201,19 +204,49 @@ private fun String.markdownAnnotated(
             }
         }
     }
-    val inlineContentMap = images.associate { (url, text) ->
-        url to InlineTextContent(
-            // TODO: Somehow calculate placeholder
-            Placeholder(
-                lastStyle.fontSize * 2,
-                lastStyle.fontSize,
-                PlaceholderVerticalAlign.TextCenter
-            )
-        ) {
-            AsyncImage(
-                model = url,
-                contentDescription = text,
-                modifier = Modifier.fillMaxSize(),
+    val inlineContentMap = remember {
+        mutableStateMapOf<String, InlineTextContent>().apply {
+            putAll(
+                images.associate { (url, text) ->
+                    url to InlineTextContent(
+                        Placeholder(
+                            lastStyle.fontSize,
+                            lastStyle.fontSize,
+                            PlaceholderVerticalAlign.TextCenter,
+                        )
+                    ) {
+                        Log.d(TAG, "Loading async image for $url...")
+                        AsyncImage(
+                            model = url,
+                            contentDescription = text,
+                            modifier = Modifier.fillMaxSize(),
+                            onError = {
+                                Log.e(TAG, "Could not load image. Error:", it.result.throwable)
+                                it.result.throwable.printStackTrace()
+                            },
+                            onSuccess = {
+                                val drawable = it.result.drawable
+                                val ratio = drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight.toFloat()
+
+                                Log.d(TAG, "Image ($url) loaded. Ratio: $ratio")
+
+                                set(url, InlineTextContent(
+                                    Placeholder(
+                                        (lastStyle.fontSize.value * ratio).sp,
+                                        lastStyle.fontSize,
+                                        PlaceholderVerticalAlign.TextCenter,
+                                    )
+                                ) {
+                                    AsyncImage(
+                                        model = url,
+                                        contentDescription = text,
+                                        modifier = Modifier.fillMaxSize(),
+                                    )
+                                })
+                            },
+                        )
+                    }
+                }
             )
         }
     }
