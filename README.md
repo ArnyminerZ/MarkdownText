@@ -28,7 +28,7 @@ Will only display the first image.
 Add to the module's dependencies:
 
 ```groovy
-implementation 'com.arnyminerz.markdowntext:markdowntext:1.0.1'
+implementation 'com.arnyminerz.markdowntext:markdowntext:1.1.0'
 ```
 
 Jetpack Compose example:
