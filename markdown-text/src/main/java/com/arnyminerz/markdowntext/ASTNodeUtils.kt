@@ -15,6 +15,13 @@ fun ASTNode.getNodeLinkText(allFileText: CharSequence) = getTextInNode(allFileTe
     .trimStart { it == '[' }
     .trimEnd { it == ']' }
 
+fun ASTNode.containsNodeWithName(nodeName: String): Boolean = children.any {
+    if (it.isNotEmpty())
+        it.containsNodeWithName(nodeName)
+    else
+        name == nodeName
+}
+
 /**
  * Alias for [ASTNode.type].[IElementType.name].
  */
