@@ -1,6 +1,7 @@
 package com.arnyminerz.markdowntext.annotatedstring
 
 import android.util.Log
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -13,23 +14,26 @@ fun Iterable<ASTNode>.explode(
     source: String,
     builder: AnnotatedString.Builder,
     annotationStyle: AnnotationStyle,
+    images: List<Pair<String, String>> = emptyList(),
     depth: Int = 0,
-) = forEach { it.explode(source, builder, annotationStyle, depth) }
+) = map { it.explode(source, builder, annotationStyle, images, depth) }.flatten()
 
 @OptIn(ExperimentalTextApi::class)
 fun ASTNode.explode(
     source: String,
     builder: AnnotatedString.Builder,
     annotationStyle: AnnotationStyle,
+    images: List<Pair<String, String>> = emptyList(),
     depth: Int = 0,
-) {
+): List<Pair<String, String>> {
     Log.i(
         "ASG",
         "${"  ".repeat(depth)}- Type: $name \t\t\t Children: ${children.size}. Parent: ${parent?.name}"
     )
+    val mutableImages = images.toMutableList()
 
     when {
-        name == "INLINE_LINK" && parent?.name != "IMAGE" && children.find { it.name == "IMAGE" } == null ->
+        name == "INLINE_LINK" && parent?.name != "IMAGE" && !containsNodeWithName("IMAGE") ->
             builder.withStyle(annotationStyle.linkStyle) {
                 val text = findChildOfType("LINK_TEXT")
                 val link = findChildOfType("LINK_DESTINATION")
@@ -37,28 +41,37 @@ fun ASTNode.explode(
                     Log.w("Analyzer", "Malformed tag.")
                 else {
                     val url = link.getTextInNode(source).toString()
-                    Log.v("Analyzer", "Adding link \"$url\" from $startOffset to $endOffset")
+                    Log.v("Analyzer", "Adding link \"$url\"")
                     withAnnotation(
                         tag = "link",
                         annotation = url,
                     ) { append(text.getNodeLinkText(source).toString()) }
                 }
             }
-        name == "IMAGE" -> findChildOfType("INLINE_LINK")?.let { link ->
+        parent?.name == "IMAGE" -> if (name == "INLINE_LINK") {
+            val textNode = findChildOfType("LINK_TEXT")
+            val linkNode = findChildOfType("LINK_DESTINATION")
+            if (textNode == null || linkNode == null) return mutableImages
 
+            val text = textNode.getNodeLinkText(source).toString()
+            val link = linkNode.getTextInNode(source).toString()
+
+            Log.v("Analyzer", "Adding image: $link")
+            builder.appendInlineContent(id = link, alternateText = text)
+            mutableImages.add(text to link)
         }
-        isNotEmpty() -> run {
+        isNotEmpty() -> {
             if (name == "STRONG")
-                return@run builder.withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                    children.explode(source, this, annotationStyle, depth + 1)
+                return builder.withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                    children.explode(source, this, annotationStyle, mutableImages, depth + 1)
                 }
             if (name == "EMPH")
-                return@run builder.withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
-                    children.explode(source, this, annotationStyle, depth + 1)
+                return builder.withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
+                    children.explode(source, this, annotationStyle, mutableImages, depth + 1)
                 }
             if (name == "CODE_SPAN")
-                return@run builder.withStyle(annotationStyle.codeBlockStyle) {
-                    children.explode(source, this, annotationStyle, depth + 1)
+                return builder.withStyle(annotationStyle.codeBlockStyle) {
+                    children.explode(source, this, annotationStyle, mutableImages, depth + 1)
                 }
             if (name.startsWith("ATX_"))
                 name.indexOf('_')
@@ -66,15 +79,22 @@ fun ASTNode.explode(
                     ?.let { name.substring(it + 1).toIntOrNull() }
                     ?.let { annotationStyle.headlineDepthStyles[it - 1] }
                     ?.let {
-                        return@run builder.withStyle(it.toSpanStyle()) {
-                            children.explode(source, this, annotationStyle, depth + 1)
+                        return builder.withStyle(it.toSpanStyle()) {
+                            children.explode(
+                                source,
+                                this,
+                                annotationStyle,
+                                mutableImages,
+                                depth + 1
+                            )
                         }
                     }
-            children.explode(source, builder, annotationStyle, depth + 1)
+            return children.explode(source, builder, annotationStyle, mutableImages, depth + 1)
         }
         name == "TEXT" -> builder.append(getTextInNode(source).toString())
         name == "WHITE_SPACE" -> builder.append(' ')
         name == "!" -> builder.append('!')
+        name == ":" -> builder.append(':')
         name == "EOL" -> builder.append('\n')
         name == "LIST_BULLET" -> builder.append("${annotationStyle.bullet}\t")
         name == "LIST_NUMBER" -> builder.append("${getTextInNode(source)}\t")
@@ -82,4 +102,6 @@ fun ASTNode.explode(
             append(" ".repeat(50))
         }
     }
+
+    return mutableImages
 }
