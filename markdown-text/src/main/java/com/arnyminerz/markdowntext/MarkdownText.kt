@@ -4,21 +4,31 @@ import android.content.ActivityNotFoundException
 import android.util.Log
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.isSpecified
+import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.arnyminerz.markdowntext.annotatedstring.AnnotationStyle
 import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
 import org.intellij.markdown.parser.MarkdownParser
@@ -53,7 +63,7 @@ fun MarkdownText(
 
     val flavour = CommonMarkFlavourDescriptor()
     val parsedTree = MarkdownParser(flavour).buildMarkdownTreeFromString(markdown)
-    val text = AnnotatedStringGenerator(markdown, parsedTree)
+    val (text, images) = AnnotatedStringGenerator(markdown, parsedTree)
         .generateAnnotatedString(annotationStyle)
 
     // TODO: Current implementation, since ClickableText is not theming correctly.
@@ -76,6 +86,56 @@ fun MarkdownText(
             }
         }
     }
+    val style = LocalTextStyle.current.takeIf { it.fontSize.isSpecified }
+        ?: MaterialTheme.typography.bodyMedium
+
+    val inlineContentMap = remember {
+        mutableStateMapOf<String, InlineTextContent>().apply {
+            putAll(
+                images.associate { (url, text) ->
+                    url to InlineTextContent(
+                        Placeholder(
+                            style.fontSize,
+                            style.fontSize,
+                            PlaceholderVerticalAlign.TextCenter,
+                        )
+                    ) {
+                        Log.d(TAG, "Loading async image for $url...")
+                        AsyncImage(
+                            model = url,
+                            contentDescription = text,
+                            modifier = Modifier.fillMaxSize(),
+                            onError = {
+                                Log.e(TAG, "Could not load image. Error:", it.result.throwable)
+                                it.result.throwable.printStackTrace()
+                            },
+                            onSuccess = {
+                                val drawable = it.result.drawable
+                                val ratio =
+                                    drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight.toFloat()
+
+                                Log.d(TAG, "Image ($url) loaded. Ratio: $ratio")
+
+                                set(url, InlineTextContent(
+                                    Placeholder(
+                                        (style.fontSize.value * ratio).sp,
+                                        style.fontSize,
+                                        PlaceholderVerticalAlign.TextCenter,
+                                    )
+                                ) {
+                                    AsyncImage(
+                                        model = url,
+                                        contentDescription = text,
+                                        modifier = Modifier.fillMaxSize(),
+                                    )
+                                })
+                            },
+                        )
+                    }
+                }
+            )
+        }
+    }
 
     Text(
         text = text,
@@ -85,6 +145,7 @@ fun MarkdownText(
         softWrap = softWrap,
         maxLines = maxLines,
         overflow = overflow,
+        inlineContent = inlineContentMap,
     )
 }
 
