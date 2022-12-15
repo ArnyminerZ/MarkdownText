@@ -68,6 +68,9 @@ dependencies {
     // Jetpack Compose - Material 3
     implementation "androidx.compose.material3:material3:$material3_version"
 
+    // Jetpack Compose - Icons
+    implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
+
     // Coil image loader
     def coil_version = '2.2.2'
     implementation "io.coil-kt:coil:$coil_version"
