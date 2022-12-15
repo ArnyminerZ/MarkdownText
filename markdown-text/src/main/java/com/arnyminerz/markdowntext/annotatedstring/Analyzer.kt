@@ -9,6 +9,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import com.arnyminerz.markdowntext.*
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
+import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 
 private const val TAG = "ASA"
 
@@ -97,6 +98,10 @@ internal fun ASTNode.explode(
                 }
             if (name == "EMPH")
                 return builder.withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
+                    children.explode(source, this, annotationStyle, mutableImages, depth + 1)
+                }
+            if (name == "STRIKETHROUGH")
+                return builder.withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
                     children.explode(source, this, annotationStyle, mutableImages, depth + 1)
                 }
             if (name == "CODE_SPAN")
