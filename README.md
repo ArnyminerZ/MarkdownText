@@ -76,11 +76,14 @@ fun MarkdownTextPreview() {
 }
 ```
 
-![example-image][example-image-url]
+![example-image1][example-image1]
+![example-image2][example-image2]
 
 [coil-url]: https://coil-kt.github.io/coil
 
-[example-image-url]: /docs/screenshot.png
+[example-image1]: /docs/screenshot1.png
+
+[example-image2]: /docs/screenshot2.png
 
 [version-badge]: https://img.shields.io/maven-central/v/com.arnyminerz.markdowntext/markdowntext?style=for-the-badge
 
