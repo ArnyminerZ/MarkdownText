@@ -45,6 +45,11 @@ internal fun ASTNode.explode(
         TAG,
         "${"  ".repeat(depth)}- Type: $name \t\t\t Children: ${children.size}. Parent: ${parent?.name}. Previous: ${previousNode?.name}"
     )
+    if (!render)
+        return if (isNotEmpty())
+            children.explode(source, builder, annotationStyle, emptyList(), depth + 1, false)
+        else
+            emptyList()
     val mutableImages = images.toMutableList()
 
     when {
