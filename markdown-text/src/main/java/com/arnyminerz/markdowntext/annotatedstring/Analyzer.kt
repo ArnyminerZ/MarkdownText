@@ -10,7 +10,7 @@ import com.arnyminerz.markdowntext.*
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
 
-fun Iterable<ASTNode>.explode(
+internal fun Iterable<ASTNode>.explode(
     source: String,
     builder: AnnotatedString.Builder,
     annotationStyle: AnnotationStyle,
@@ -19,7 +19,7 @@ fun Iterable<ASTNode>.explode(
 ) = map { it.explode(source, builder, annotationStyle, images, depth) }.flatten()
 
 @OptIn(ExperimentalTextApi::class)
-fun ASTNode.explode(
+internal fun ASTNode.explode(
     source: String,
     builder: AnnotatedString.Builder,
     annotationStyle: AnnotationStyle,
