@@ -107,6 +107,8 @@ internal fun ASTNode.explode(
         name == "WHITE_SPACE" -> builder.append(' ')
         name == "!" -> builder.append('!')
         name == ":" -> builder.append(':')
+        name == "[" && parent?.name != "LINK_TEXT" -> builder.append('[')
+        name == "]" && parent?.name != "LINK_TEXT" -> builder.append(']')
         name == "EOL" -> builder.append('\n')
         name == "LIST_BULLET" -> builder.append("${annotationStyle.bullet}\t")
         name == "LIST_NUMBER" -> builder.append("${getTextInNode(source)}\t")
