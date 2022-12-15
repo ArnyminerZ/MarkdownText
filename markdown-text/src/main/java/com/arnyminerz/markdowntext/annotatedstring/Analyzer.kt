@@ -14,18 +14,31 @@ internal fun Iterable<ASTNode>.explode(
     source: String,
     builder: AnnotatedString.Builder,
     annotationStyle: AnnotationStyle,
-    images: List<Pair<String, String>> = emptyList(),
+    images: List<ImageAnnotation> = emptyList(),
     depth: Int = 0,
-) = map { it.explode(source, builder, annotationStyle, images, depth) }.flatten()
+    render: Boolean = true,
+) = mapIndexed { index, astNode ->
+    astNode.explode(
+        source,
+        builder,
+        annotationStyle,
+        images,
+        this.elementAtOrNull(index - 1),
+        depth,
+        render
+    )
+}.flatten()
 
 @OptIn(ExperimentalTextApi::class)
 internal fun ASTNode.explode(
     source: String,
     builder: AnnotatedString.Builder,
     annotationStyle: AnnotationStyle,
-    images: List<Pair<String, String>> = emptyList(),
+    images: List<ImageAnnotation> = emptyList(),
+    previousNode: ASTNode? = null,
     depth: Int = 0,
-): List<Pair<String, String>> {
+    render: Boolean = true,
+): List<ImageAnnotation> {
     Log.i(
         "ASG",
         "${"  ".repeat(depth)}- Type: $name \t\t\t Children: ${children.size}. Parent: ${parent?.name}"
@@ -68,7 +81,7 @@ internal fun ASTNode.explode(
                 ) { appendInlineContent(id = link, alternateText = text) }
             } else
                 builder.appendInlineContent(id = link, alternateText = text)
-            mutableImages.add(link to text)
+            mutableImages.add(ImageAnnotation(link, text, previousNode?.name == "EOL"))
         }
         isNotEmpty() -> {
             if (name == "STRONG")
