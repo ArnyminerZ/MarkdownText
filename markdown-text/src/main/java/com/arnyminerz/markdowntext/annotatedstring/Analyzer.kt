@@ -127,10 +127,27 @@ internal fun ASTNode.explode(
         name == "[" && parent?.name != "LINK_TEXT" -> builder.append('[')
         name == "]" && parent?.name != "LINK_TEXT" -> builder.append(']')
         name == "EOL" -> builder.append('\n')
-        name == "LIST_BULLET" -> builder.append("${annotationStyle.bullet}\t")
+        name == "LIST_BULLET" && parent?.hasChildWithName("CHECK_BOX") != true -> builder.append("${annotationStyle.bullet}\t")
         name == "LIST_NUMBER" -> builder.append("${getTextInNode(source)}\t")
         name == "HORIZONTAL_RULE" -> builder.withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
             append(" ".repeat(50))
+        }
+        name == "CHECK_BOX" -> {
+            val text = getTextInNode(source).toString()
+            val unchecked = text.contains("[ ]")
+            builder.appendInlineContent(
+                id = if (unchecked) "checkbox" else "checkbox_checked",
+                alternateText = text,
+            )
+            mutableImages.add(ImageAnnotation.checkbox(!unchecked, text))
+        }
+        this == GFMTokenTypes.GFM_AUTOLINK -> getNodeLinkText(source).toString().let { link ->
+            builder.withStyle(annotationStyle.linkStyle) {
+                withAnnotation(
+                    tag = "link",
+                    annotation = link,
+                ) { append(link) }
+            }
         }
     }
 
