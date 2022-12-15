@@ -19,12 +19,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
@@ -66,6 +69,7 @@ fun MarkdownText(
     flavourDescriptor: MarkdownFlavourDescriptor = CommonMarkFlavourDescriptor()
 ) {
     val uriHandler = LocalUriHandler.current
+    val density = LocalDensity.current
 
     val parsedTree = MarkdownParser(flavourDescriptor).buildMarkdownTreeFromString(markdown)
     val (text, images) = AnnotatedStringGenerator(markdown, parsedTree)
@@ -93,15 +97,17 @@ fun MarkdownText(
     }
     val style = LocalTextStyle.current.takeIf { it.fontSize.isSpecified }
         ?: MaterialTheme.typography.bodyMedium
+    var size: IntSize = remember { IntSize.Zero }
 
     val inlineContentMap = remember {
         mutableStateMapOf<String, InlineTextContent>().apply {
             putAll(
-                images.associate { (url, text) ->
+                images.associate { (url, text, fullWidth) ->
+                    val fontSize = style.fontSize
                     url to InlineTextContent(
                         Placeholder(
-                            style.fontSize,
-                            style.fontSize,
+                            fontSize,
+                            fontSize,
                             PlaceholderVerticalAlign.TextCenter,
                         )
                     ) {
@@ -116,21 +122,32 @@ fun MarkdownText(
                             },
                             onSuccess = {
                                 val drawable = it.result.drawable
-                                val ratio =
+                                val whRatio =
                                     drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight.toFloat()
+                                val hwRatio =
+                                    drawable.intrinsicHeight.toFloat() / drawable.intrinsicWidth.toFloat()
 
-                                Log.d(TAG, "Image ($url) loaded. Ratio: $ratio")
+                                Log.d(
+                                    TAG,
+                                    "Image ($url) loaded. Ratio: $whRatio. fullWidth=$fullWidth. size=$size)"
+                                )
 
-                                set(url, InlineTextContent(
-                                    Placeholder(
-                                        (style.fontSize.value * ratio).sp,
-                                        style.fontSize,
-                                        PlaceholderVerticalAlign.TextCenter,
-                                    )
-                                ) {
-                                    AsyncImage(
-                                        model = url,
-                                        contentDescription = text,
+                                val width = with(density) { size.width.toSp() }.takeIf { fullWidth }
+                                    ?: (fontSize.value * whRatio).sp
+                                val height =
+                                    with(density) { (size.width * hwRatio).toSp() }.takeIf { fullWidth }
+                                        ?: fontSize
+                                set(
+                                    url, InlineTextContent(
+                                        Placeholder(
+                                            width,
+                                            height,
+                                            PlaceholderVerticalAlign.TextCenter,
+                                        )
+                                    ) {
+                                        AsyncImage(
+                                            model = url,
+                                            contentDescription = text,
                                         modifier = Modifier.fillMaxSize(),
                                     )
                                 })
@@ -145,6 +162,7 @@ fun MarkdownText(
     Text(
         text = text,
         modifier = modifier
+            .onGloballyPositioned { size = it.size }
             .then(pressIndicator),
         onTextLayout = { layoutResult.value = it },
         softWrap = softWrap,
