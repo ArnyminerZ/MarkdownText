@@ -33,7 +33,7 @@ fun ASTNode.explode(
     val mutableImages = images.toMutableList()
 
     when {
-        name == "INLINE_LINK" && parent?.name != "IMAGE" && !containsNodeWithName("IMAGE") ->
+        name == "INLINE_LINK" && findParentWithName("IMAGE") == null && !containsNodeWithName("IMAGE") ->
             builder.withStyle(annotationStyle.linkStyle) {
                 val text = findChildOfType("LINK_TEXT")
                 val link = findChildOfType("LINK_DESTINATION")
@@ -57,8 +57,18 @@ fun ASTNode.explode(
             val link = linkNode.getTextInNode(source).toString()
 
             Log.v("Analyzer", "Adding image: $link")
-            builder.appendInlineContent(id = link, alternateText = text)
-            mutableImages.add(text to link)
+            val parentLink = findParentWithName("INLINE_LINK")
+            val imageLinkNode = parentLink?.findChildOfType("LINK_DESTINATION")
+            if (imageLinkNode != null) {
+                Log.v("Analyzer", "Image has link")
+                val imageLink = imageLinkNode.getTextInNode(source).toString()
+                builder.withAnnotation(
+                    tag = "link",
+                    annotation = imageLink,
+                ) { appendInlineContent(id = link, alternateText = text) }
+            } else
+                builder.appendInlineContent(id = link, alternateText = text)
+            mutableImages.add(link to text)
         }
         isNotEmpty() -> {
             if (name == "STRONG")
