@@ -9,18 +9,21 @@ import org.intellij.markdown.ast.getTextInNode
  */
 internal fun ASTNode.isNotEmpty() = children.isNotEmpty()
 
-internal fun ASTNode.findChildOfType(tagName: String) = children.find { it.name == tagName }
+internal fun ASTNode.flatChildren(): List<ASTNode> {
+    val list = arrayListOf<ASTNode>()
+    list.add(this)
+    if (isNotEmpty())
+        list.addAll(children.map { it.flatChildren() }.flatten())
+    return list
+}
+
+internal fun ASTNode.findChildOfType(tagName: String) = flatChildren().find { it.name == tagName }
 
 internal fun ASTNode.getNodeLinkText(allFileText: CharSequence) = getTextInNode(allFileText)
     .trimStart { it == '[' }
     .trimEnd { it == ']' }
 
-internal fun ASTNode.containsNodeWithName(nodeName: String): Boolean = children.any {
-    if (it.isNotEmpty())
-        it.containsNodeWithName(nodeName)
-    else
-        name == nodeName
-}
+internal fun ASTNode.hasChildWithName(nodeName: String): Boolean = findChildOfType(nodeName) != null
 
 /**
  * Searches for a parent with the given [ASTNode.name].
