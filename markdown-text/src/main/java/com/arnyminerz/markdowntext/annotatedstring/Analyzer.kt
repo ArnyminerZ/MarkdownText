@@ -101,6 +101,8 @@ internal fun ASTNode.explode(
                     }
             return children.explode(source, builder, annotationStyle, mutableImages, depth + 1)
         }
+        // Collect all contents of links that leak
+        parent?.name == "LINK_DESTINATION" -> return mutableImages
         name == "TEXT" -> builder.append(getTextInNode(source).toString())
         name == "WHITE_SPACE" -> builder.append(' ')
         name == "!" -> builder.append('!')
