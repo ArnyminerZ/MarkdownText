@@ -32,6 +32,13 @@ internal fun ASTNode?.findParentWithName(nodeName: String): ASTNode? =
     }
 
 /**
+ * Checks if the node contains any parent with the given name..
+ * @since 20221215
+ */
+internal fun ASTNode?.hasParentWithName(nodeName: String): Boolean =
+    findParentWithName(nodeName) != null
+
+/**
  * Alias for [ASTNode.type].[IElementType.name].
  */
 internal val ASTNode.name: String

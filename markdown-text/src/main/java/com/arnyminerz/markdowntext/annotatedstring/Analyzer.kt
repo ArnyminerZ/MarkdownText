@@ -33,7 +33,7 @@ internal fun ASTNode.explode(
     val mutableImages = images.toMutableList()
 
     when {
-        name == "INLINE_LINK" && findParentWithName("IMAGE") == null && !containsNodeWithName("IMAGE") ->
+        name == "INLINE_LINK" && !hasParentWithName("IMAGE") && !containsNodeWithName("IMAGE") ->
             builder.withStyle(annotationStyle.linkStyle) {
                 val text = findChildOfType("LINK_TEXT")
                 val link = findChildOfType("LINK_DESTINATION")
