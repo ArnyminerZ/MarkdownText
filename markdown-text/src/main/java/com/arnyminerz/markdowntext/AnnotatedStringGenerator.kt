@@ -7,7 +7,7 @@ import com.arnyminerz.markdowntext.annotatedstring.ImageAnnotation
 import com.arnyminerz.markdowntext.annotatedstring.explode
 import org.intellij.markdown.ast.ASTNode
 
-class AnnotatedStringGenerator(
+internal class AnnotatedStringGenerator(
     private val source: String,
     private val tree: ASTNode,
 ) {
