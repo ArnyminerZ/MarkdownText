@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.arnyminerz.markdowntext.annotatedstring.AnnotationStyle
-import org.intellij.markdown.flavours.MarkdownFlavourDescriptor
 import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
 import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
 import org.intellij.markdown.parser.MarkdownParser
@@ -54,7 +53,7 @@ private const val TAG = "MarkdownText"
  * If the text exceeds the given number of lines, it will be truncated according to [overflow] and
  * [softWrap]. If it is not null, then it must be greater than zero.
  * @param annotationStyle The style to use with the annotated text.
- * @param flavourDescriptor The flavour of Markdown to use.
+ * @param flavour The flavour of Markdown to use.
  * @see GFMFlavourDescriptor
  * @see CommonMarkFlavourDescriptor
  */
@@ -66,12 +65,12 @@ fun MarkdownText(
     overflow: TextOverflow = TextOverflow.Visible,
     maxLines: Int = Int.MAX_VALUE,
     annotationStyle: AnnotationStyle = MarkdownTextDefaults.style,
-    flavourDescriptor: MarkdownFlavourDescriptor = CommonMarkFlavourDescriptor()
+    flavour: MarkdownFlavour = MarkdownFlavour.CommonMark
 ) {
     val uriHandler = LocalUriHandler.current
     val density = LocalDensity.current
 
-    val parsedTree = MarkdownParser(flavourDescriptor).buildMarkdownTreeFromString(markdown)
+    val parsedTree = MarkdownParser(flavour.descriptor).buildMarkdownTreeFromString(markdown)
     val (text, images) = AnnotatedStringGenerator(markdown, parsedTree)
         .generateAnnotatedString(annotationStyle)
 
@@ -174,7 +173,9 @@ fun MarkdownText(
 
 @Preview
 @Composable
-fun MarkdownTextPreview() {
+fun MarkdownTextPreview(
+    flavourDescriptor: MarkdownFlavour = MarkdownFlavour.CommonMark,
+) {
     val exampleImageUrl = "https://picsum.photos/300/200"
     val exampleBadge = "https://raster.shields.io/badge/Label-Awesome!-success"
     val exampleLink = "https://example.com"
@@ -186,6 +187,7 @@ fun MarkdownTextPreview() {
         "This is markdown text with **bold and *italic* texts**.",
         "Inline `code` annotations",
         "[This]($exampleLink) is a link.",
+        "Automatic link: $exampleLink",
         "# Header 1",
         "## Header 2",
         "### Header 3",
@@ -225,6 +227,7 @@ fun MarkdownTextPreview() {
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .fillMaxWidth(),
+            flavour = flavourDescriptor,
         )
     }
 }
