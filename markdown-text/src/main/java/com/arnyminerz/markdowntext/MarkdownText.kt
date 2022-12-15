@@ -197,6 +197,7 @@ fun MarkdownTextPreview(
         "This is markdown text with **bold** content.",
         "This is markdown text with *italic* content.",
         "This is markdown text with **bold and *italic* texts**.",
+        "This is markdown text with ~~strikethrough~~ content.",
         "Inline `code` annotations",
         "[This]($exampleLink) is a link.",
         "Automatic link: $exampleLink",
