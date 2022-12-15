@@ -9,6 +9,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import com.arnyminerz.markdowntext.*
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
+import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 
 private const val TAG = "ASA"
 
@@ -99,6 +100,10 @@ internal fun ASTNode.explode(
                 return builder.withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
                     children.explode(source, this, annotationStyle, mutableImages, depth + 1)
                 }
+            if (name == "STRIKETHROUGH")
+                return builder.withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
+                    children.explode(source, this, annotationStyle, mutableImages, depth + 1)
+                }
             if (name == "CODE_SPAN")
                 return builder.withStyle(annotationStyle.codeBlockStyle) {
                     children.explode(source, this, annotationStyle, mutableImages, depth + 1)
@@ -127,10 +132,27 @@ internal fun ASTNode.explode(
         name == "[" && parent?.name != "LINK_TEXT" -> builder.append('[')
         name == "]" && parent?.name != "LINK_TEXT" -> builder.append(']')
         name == "EOL" -> builder.append('\n')
-        name == "LIST_BULLET" -> builder.append("${annotationStyle.bullet}\t")
+        name == "LIST_BULLET" && parent?.hasChildWithName("CHECK_BOX") != true -> builder.append("${annotationStyle.bullet}\t")
         name == "LIST_NUMBER" -> builder.append("${getTextInNode(source)}\t")
         name == "HORIZONTAL_RULE" -> builder.withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
             append(" ".repeat(50))
+        }
+        name == "CHECK_BOX" -> {
+            val text = getTextInNode(source).toString()
+            val unchecked = text.contains("[ ]")
+            builder.appendInlineContent(
+                id = if (unchecked) "checkbox" else "checkbox_checked",
+                alternateText = text,
+            )
+            mutableImages.add(ImageAnnotation.checkbox(!unchecked, text))
+        }
+        this == GFMTokenTypes.GFM_AUTOLINK -> getNodeLinkText(source).toString().let { link ->
+            builder.withStyle(annotationStyle.linkStyle) {
+                withAnnotation(
+                    tag = "link",
+                    annotation = link,
+                ) { append(link) }
+            }
         }
     }
 

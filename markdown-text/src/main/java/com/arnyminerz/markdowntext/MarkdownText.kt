@@ -33,8 +33,7 @@ import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.arnyminerz.markdowntext.annotatedstring.AnnotationStyle
-import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
-import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
+import com.arnyminerz.markdowntext.ui.CheckBoxIcon
 import org.intellij.markdown.parser.MarkdownParser
 
 private const val TAG = "MarkdownText"
@@ -54,8 +53,6 @@ private const val TAG = "MarkdownText"
  * [softWrap]. If it is not null, then it must be greater than zero.
  * @param annotationStyle The style to use with the annotated text.
  * @param flavour The flavour of Markdown to use.
- * @see GFMFlavourDescriptor
- * @see CommonMarkFlavourDescriptor
  */
 @Composable
 fun MarkdownText(
@@ -65,7 +62,7 @@ fun MarkdownText(
     overflow: TextOverflow = TextOverflow.Visible,
     maxLines: Int = Int.MAX_VALUE,
     annotationStyle: AnnotationStyle = MarkdownTextDefaults.style,
-    flavour: MarkdownFlavour = MarkdownFlavour.CommonMark
+    flavour: MarkdownFlavour = MarkdownFlavour.Github
 ) {
     val uriHandler = LocalUriHandler.current
     val density = LocalDensity.current
@@ -103,55 +100,66 @@ fun MarkdownText(
             putAll(
                 images.associate { (url, text, fullWidth) ->
                     val fontSize = style.fontSize
-                    url to InlineTextContent(
-                        Placeholder(
-                            fontSize,
-                            fontSize,
-                            PlaceholderVerticalAlign.TextCenter,
-                        )
-                    ) {
-                        Log.d(TAG, "Loading async image for $url...")
-                        AsyncImage(
-                            model = url,
-                            contentDescription = text,
-                            modifier = Modifier.fillMaxSize(),
-                            onError = {
-                                Log.e(TAG, "Could not load image. Error:", it.result.throwable)
-                                it.result.throwable.printStackTrace()
-                            },
-                            onSuccess = {
-                                val drawable = it.result.drawable
-                                val whRatio =
-                                    drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight.toFloat()
-                                val hwRatio =
-                                    drawable.intrinsicHeight.toFloat() / drawable.intrinsicWidth.toFloat()
+                    url to when (url) {
+                        "checkbox" -> InlineTextContent(
+                            Placeholder(fontSize, fontSize, PlaceholderVerticalAlign.TextCenter)
+                        ) { CheckBoxIcon(checked = false, alt = it) }
+                        "checkbox_checked" -> InlineTextContent(
+                            Placeholder(fontSize, fontSize, PlaceholderVerticalAlign.TextCenter)
+                        ) { CheckBoxIcon(checked = true, alt = it) }
+                        else -> InlineTextContent(
+                            Placeholder(
+                                fontSize,
+                                fontSize,
+                                PlaceholderVerticalAlign.TextCenter,
+                            )
+                        ) {
+                            Log.d(TAG, "Loading async image for $url...")
+                            AsyncImage(
+                                model = url,
+                                contentDescription = text,
+                                modifier = Modifier.fillMaxSize(),
+                                onError = {
+                                    Log.e(TAG, "Could not load image. Error:", it.result.throwable)
+                                    it.result.throwable.printStackTrace()
+                                },
+                                onSuccess = {
+                                    val drawable = it.result.drawable
+                                    val whRatio =
+                                        drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight.toFloat()
+                                    val hwRatio =
+                                        drawable.intrinsicHeight.toFloat() / drawable.intrinsicWidth.toFloat()
 
-                                Log.d(
-                                    TAG,
-                                    "Image ($url) loaded. Ratio: $whRatio. fullWidth=$fullWidth. size=$size)"
-                                )
-
-                                val width = with(density) { size.width.toSp() }.takeIf { fullWidth }
-                                    ?: (fontSize.value * whRatio).sp
-                                val height =
-                                    with(density) { (size.width * hwRatio).toSp() }.takeIf { fullWidth }
-                                        ?: fontSize
-                                set(
-                                    url, InlineTextContent(
-                                        Placeholder(
-                                            width,
-                                            height,
-                                            PlaceholderVerticalAlign.TextCenter,
-                                        )
-                                    ) {
-                                        AsyncImage(
-                                            model = url,
-                                            contentDescription = text,
-                                        modifier = Modifier.fillMaxSize(),
+                                    Log.d(
+                                        TAG,
+                                        "Image ($url) loaded. Ratio: $whRatio. fullWidth=$fullWidth. size=$size)"
                                     )
-                                })
-                            },
-                        )
+
+                                    val width =
+                                        with(density) { size.width.toSp() }.takeIf { fullWidth }
+                                            ?: (fontSize.value * whRatio).sp
+                                    val height =
+                                        with(density) { (size.width * hwRatio).toSp() }.takeIf { fullWidth }
+                                            ?: fontSize
+                                    set(
+                                        url,
+                                        InlineTextContent(
+                                            Placeholder(
+                                                width,
+                                                height,
+                                                PlaceholderVerticalAlign.TextCenter,
+                                            )
+                                        ) {
+                                            AsyncImage(
+                                                model = url,
+                                                contentDescription = text,
+                                                modifier = Modifier.fillMaxSize(),
+                                            )
+                                        },
+                                    )
+                                },
+                            )
+                        }
                     }
                 }
             )
@@ -185,6 +193,7 @@ fun MarkdownTextPreview(
         "This is markdown text with **bold** content.",
         "This is markdown text with *italic* content.",
         "This is markdown text with **bold and *italic* texts**.",
+        "This is markdown text with ~~strikethrough~~ content.",
         "Inline `code` annotations",
         "[This]($exampleLink) is a link.",
         "Automatic link: $exampleLink",
@@ -205,10 +214,10 @@ fun MarkdownTextPreview(
         "3. Third",
         "4. Fifth",
         "## Checkboxes",
-        "[ ] First",
-        "[ ] Second",
-        "[x] Third",
-        "[ ] Fifth",
+        "- [ ] First",
+        "- [ ] Second",
+        "- [x] Third",
+        "- [ ] Fifth",
         "--------",
         "/\\ That is a hr! /\\",
         "# Images",

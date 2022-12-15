@@ -17,7 +17,7 @@ A library for displaying Markdown contents within Jetpack Compose. Uses [Coil][c
 * Blockquotes are not supported.
 * Nested lists are not supported.
 * Code blocks are not supported.
-* Automatic links are not supported.
+* Tables are not supported.
 * Horizontal rules do not fill the whole width.
 
 ## Usage
@@ -45,49 +45,63 @@ fun MarkdownTextPreview() {
                 "# General formatting",
                 "This is markdown text with **bold** content.",
                 "This is markdown text with *italic* content.",
-                "This is markdown text with **bold and *italic* texts**.",
-                "Inline `code` annotations",
-                "[This]($exampleLink) is a link.",
-                "# Header 1",
+              "This is markdown text with **bold and *italic* texts**.",
+              "This is markdown text with ~~strikethrough~~ content.",
+              "Inline `code` annotations",
+              "[This]($exampleLink) is a link.",
+              "Automatic link: $exampleLink",
+              "# Header 1",
                 "## Header 2",
                 "### Header 3",
                 "#### Header 4",
                 "##### Header 5",
                 "###### Header 6",
                 "## Unordered lists",
-                "- First",
-                "* Second",
-                "* Third",
-                "- Fifth",
-                "## Ordered lists",
-                "1. First",
-                "2. Second",
-                "3. Third",
-                "4. Fifth",
-                "## Checkboxes",
-                "[ ] First",
-                "[ ] Second",
-                "[x] Third",
-                "[ ] Fifth",
-                "--------",
-                "/\\ That is a hr! /\\",
-                "# Images",
-                " ![Badge]($exampleBadge)![Badge]($exampleBadge)",
-                "Here is a normal inline image: ![This is an image]($exampleBadge)",
-                "But this one has a link: [![This is an image]($exampleBadge)]($exampleLink)",
-                "This is a large block image:",
-                "![Large image]($exampleImageUrl)",
+              "- First",
+              "* Second",
+              "* Third",
+              "- Fifth",
+              "## Ordered lists",
+              "1. First",
+              "2. Second",
+              "3. Third",
+              "4. Fifth",
+              "## Checkboxes",
+              "- [ ] First",
+              "- [ ] Second",
+              "- [x] Third",
+              "- [ ] Fifth",
+              "--------",
+              "/\\ That is a hr! /\\",
+              "# Images",
+              " ![Badge]($exampleBadge)![Badge]($exampleBadge)",
+              "Here is a normal inline image: ![This is an image]($exampleBadge)",
+              "But this one has a link: [![This is an image]($exampleBadge)]($exampleLink)",
+              "This is a large block image:",
+              "![Large image]($exampleImageUrl)",
             ).joinToString(System.lineSeparator()),
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .fillMaxWidth(),
+          modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .fillMaxWidth(),
         )
     }
 }
 ```
 
-![example-image1][example-image1]
-![example-image2][example-image2]
+![example-image1][example-image1]![example-image2][example-image2]
+
+# Flavours
+
+There are different flavours for different specifications of Markdown. The flavour to use can be set
+with the `flavour` parameter of `MarkdownText`. The available flavours and their exclusive features
+are:
+
+* `MarkdownFlavour.CommonMark`
+* `MarkdownFlavour.Github`
+  * Checkboxes
+  * Strikethrough
+  * Tables (not supported)
+  * Automatic links
 
 [coil-url]: https://coil-kt.github.io/coil
 
