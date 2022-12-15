@@ -109,15 +109,12 @@ internal fun ASTNode.explode(
                     ?.let { name.substring(it + 1).toIntOrNull() }
                     ?.let { annotationStyle.headlineDepthStyles[it - 1] }
                     ?.let {
-                        return builder.withStyle(it.toSpanStyle()) {
-                            children.explode(
-                                source,
-                                this,
-                                annotationStyle,
-                                mutableImages,
-                                depth + 1
-                            )
-                        }
+                        val text = findChildOfType("ATX_CONTENT")
+                            ?.getTextInNode(source)
+                            ?.trimStart()
+                            .toString()
+                        builder.withStyle(it.toSpanStyle()) { append(text) }
+                        return mutableImages
                     }
             return children.explode(source, builder, annotationStyle, mutableImages, depth + 1)
         }
