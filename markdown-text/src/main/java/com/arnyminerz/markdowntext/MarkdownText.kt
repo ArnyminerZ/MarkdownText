@@ -34,8 +34,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.arnyminerz.markdowntext.annotatedstring.AnnotationStyle
 import com.arnyminerz.markdowntext.ui.CheckBoxIcon
-import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
-import org.intellij.markdown.flavours.gfm.GFMFlavourDescriptor
 import org.intellij.markdown.parser.MarkdownParser
 
 private const val TAG = "MarkdownText"
@@ -55,8 +53,6 @@ private const val TAG = "MarkdownText"
  * [softWrap]. If it is not null, then it must be greater than zero.
  * @param annotationStyle The style to use with the annotated text.
  * @param flavour The flavour of Markdown to use.
- * @see GFMFlavourDescriptor
- * @see CommonMarkFlavourDescriptor
  */
 @Composable
 fun MarkdownText(
@@ -66,7 +62,7 @@ fun MarkdownText(
     overflow: TextOverflow = TextOverflow.Visible,
     maxLines: Int = Int.MAX_VALUE,
     annotationStyle: AnnotationStyle = MarkdownTextDefaults.style,
-    flavour: MarkdownFlavour = MarkdownFlavour.CommonMark
+    flavour: MarkdownFlavour = MarkdownFlavour.Github
 ) {
     val uriHandler = LocalUriHandler.current
     val density = LocalDensity.current
