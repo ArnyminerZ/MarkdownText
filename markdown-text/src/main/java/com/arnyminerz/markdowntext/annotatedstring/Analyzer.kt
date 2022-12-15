@@ -10,6 +10,8 @@ import com.arnyminerz.markdowntext.*
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
 
+private const val TAG = "ASA"
+
 internal fun Iterable<ASTNode>.explode(
     source: String,
     builder: AnnotatedString.Builder,
@@ -40,8 +42,8 @@ internal fun ASTNode.explode(
     render: Boolean = true,
 ): List<ImageAnnotation> {
     Log.i(
-        "ASG",
-        "${"  ".repeat(depth)}- Type: $name \t\t\t Children: ${children.size}. Parent: ${parent?.name}"
+        TAG,
+        "${"  ".repeat(depth)}- Type: $name \t\t\t Children: ${children.size}. Parent: ${parent?.name}. Previous: ${previousNode?.name}"
     )
     val mutableImages = images.toMutableList()
 
@@ -51,10 +53,10 @@ internal fun ASTNode.explode(
                 val text = findChildOfType("LINK_TEXT")
                 val link = findChildOfType("LINK_DESTINATION")
                 if (text == null || link == null)
-                    Log.w("Analyzer", "Malformed tag.")
+                    Log.w(TAG, "Malformed tag.")
                 else {
                     val url = link.getTextInNode(source).toString()
-                    Log.v("Analyzer", "Adding link \"$url\"")
+                    Log.v(TAG, "Adding link \"$url\"")
                     withAnnotation(
                         tag = "link",
                         annotation = url,
@@ -69,11 +71,11 @@ internal fun ASTNode.explode(
             val text = textNode.getNodeLinkText(source).toString()
             val link = linkNode.getTextInNode(source).toString()
 
-            Log.v("Analyzer", "Adding image: $link")
+            Log.v(TAG, "Adding image: $link")
             val parentLink = findParentWithName("INLINE_LINK")
             val imageLinkNode = parentLink?.findChildOfType("LINK_DESTINATION")
             if (imageLinkNode != null) {
-                Log.v("Analyzer", "Image has link")
+                Log.v(TAG, "Image has link")
                 val imageLink = imageLinkNode.getTextInNode(source).toString()
                 builder.withAnnotation(
                     tag = "link",
