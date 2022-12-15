@@ -193,7 +193,7 @@ fun MarkdownTextPreview() {
         "--------",
         "That is a hr!",
         "Here is a normal inline image: ![This is an image]($exampleBadge)",
-        "But this one has a link: [![This is an image]($exampleBadge)]($exampleBadge)",
+        "But this one has a link: [![This is an image]($exampleBadge)]($exampleLink)",
         "This is a large block image:",
         "![Large image]($exampleImageUrl)",
     ).joinToString(System.lineSeparator())
