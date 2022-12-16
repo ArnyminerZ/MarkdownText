@@ -153,10 +153,15 @@ internal fun ASTNode.explode(
                     ?.let { name.substring(it + 1).toIntOrNull() }
                     ?.let { annotationStyle.headlineDepthStyles[it - 1] }
                     ?.let {
-                        val text = findChildOfType("ATX_CONTENT")
+                        var text = findChildOfType("ATX_CONTENT")
                             ?.getTextInNode(source)
-                            ?.trimStart()
-                            .toString()
+                            ?.trimStart() ?: return@let
+
+                        if (conserveMarkers)
+                            findChildOfType("ATX_HEADER")
+                                ?.getTextInNode(source)
+                                ?.toString()?.let { h -> text = h + text }
+
                         builder.withStyle(it.toSpanStyle()) { append(text) }
                         return mutableImages
                     }
