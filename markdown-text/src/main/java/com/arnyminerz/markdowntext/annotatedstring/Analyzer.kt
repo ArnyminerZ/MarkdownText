@@ -152,17 +152,18 @@ internal fun ASTNode.explode(
                     .takeIf { it >= 0 }
                     ?.let { name.substring(it + 1).toIntOrNull() }
                     ?.let { annotationStyle.headlineDepthStyles[it - 1] }
-                    ?.let {
+                    ?.let { headerStyle ->
                         var text = findChildOfType("ATX_CONTENT")
                             ?.getTextInNode(source)
-                            ?.trimStart() ?: return@let
+                            ?.let { if (conserveMarkers) it else it.trimStart() }
+                            ?: return@let
 
                         if (conserveMarkers)
                             findChildOfType("ATX_HEADER")
                                 ?.getTextInNode(source)
                                 ?.toString()?.let { h -> text = h + text }
 
-                        builder.withStyle(it.toSpanStyle()) { append(text) }
+                        builder.withStyle(headerStyle.toSpanStyle()) { append(text) }
                         return mutableImages
                     }
             return children.explode(
