@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -98,7 +97,7 @@ fun MarkdownText(
             }
         }
     }
-    val style = LocalTextStyle.current.takeIf { it.fontSize.isSpecified }
+    val textStyle = style.takeIf { it.fontSize.isSpecified }
         ?: MaterialTheme.typography.bodyMedium
     var size: IntSize = remember { IntSize.Zero }
 
@@ -106,18 +105,18 @@ fun MarkdownText(
         mutableStateMapOf<String, InlineTextContent>().apply {
             putAll(
                 images.associate { (url, text, fullWidth) ->
-                    val fontSize = style.fontSize
+                    val fs = fontSize.takeIf { it.isSpecified } ?: textStyle.fontSize
                     url to when (url) {
                         "checkbox" -> InlineTextContent(
-                            Placeholder(fontSize, fontSize, PlaceholderVerticalAlign.TextCenter)
+                            Placeholder(fs, fs, PlaceholderVerticalAlign.TextCenter)
                         ) { CheckBoxIcon(checked = false, alt = it) }
                         "checkbox_checked" -> InlineTextContent(
-                            Placeholder(fontSize, fontSize, PlaceholderVerticalAlign.TextCenter)
+                            Placeholder(fs, fs, PlaceholderVerticalAlign.TextCenter)
                         ) { CheckBoxIcon(checked = true, alt = it) }
                         else -> InlineTextContent(
                             Placeholder(
-                                fontSize,
-                                fontSize,
+                                fs,
+                                fs,
                                 PlaceholderVerticalAlign.TextCenter,
                             )
                         ) {
@@ -144,10 +143,10 @@ fun MarkdownText(
 
                                     val width =
                                         with(density) { size.width.toSp() }.takeIf { fullWidth }
-                                            ?: (fontSize.value * whRatio).sp
+                                            ?: (fs.value * whRatio).sp
                                     val height =
                                         with(density) { (size.width * hwRatio).toSp() }.takeIf { fullWidth }
-                                            ?: fontSize
+                                            ?: fs
                                     set(
                                         url,
                                         InlineTextContent(
