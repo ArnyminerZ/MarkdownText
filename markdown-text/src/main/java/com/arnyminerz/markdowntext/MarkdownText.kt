@@ -75,7 +75,7 @@ fun MarkdownText(
 
     val parsedTree = MarkdownParser(flavour.descriptor).buildMarkdownTreeFromString(markdown)
     val (text, images) = AnnotatedStringGenerator(markdown, parsedTree)
-        .generateAnnotatedString(annotationStyle)
+        .generateAnnotatedString(annotationStyle, false)
 
     // TODO: Current implementation, since ClickableText is not theming correctly.
     // Reported at https://issuetracker.google.com/issues/255356401
@@ -90,7 +90,7 @@ fun MarkdownText(
                     ?.let { stringAnnotation ->
                         try {
                             uriHandler.openUri(stringAnnotation.item)
-                        } catch (e: ActivityNotFoundException) {
+                        } catch (_: ActivityNotFoundException) {
                             Log.w(TAG, "Could not find link handler.")
                         }
                     }
@@ -212,6 +212,8 @@ fun MarkdownTextPreview(
         "Inline `code` annotations",
         "[This]($exampleLink) is a link.",
         "Automatic link: $exampleLink",
+        "# Loose characters",
+        "If there are loose characters such as ` or ~ or *, which should indicate formatting, but are not closed, they should be ignored.",
         "# Header 1",
         "## Header 2",
         "### Header 3",

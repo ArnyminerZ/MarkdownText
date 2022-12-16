@@ -12,4 +12,10 @@ internal data class ImageAnnotation(
             false,
         )
     }
+
+    constructor(
+        link: CharSequence,
+        alt: CharSequence,
+        fullWidth: Boolean,
+    ) : this(link.toString(), alt.toString(), fullWidth)
 }

@@ -14,12 +14,13 @@ internal class AnnotatedStringGenerator(
     @Composable
     fun generateAnnotatedString(
         style: AnnotationStyle,
+        conserveMarkers: Boolean,
     ): Pair<AnnotatedString, List<ImageAnnotation>> {
         // Log.i("ASG", "There are ${tree.children.size} nodes in the tree.")
         // Log.i("ASG", "Flat children: ${tree.flatChildren().joinToString(", ") { it.name }}")
         // Log.i("ASG", "Has images: ${tree.hasChildWithName("IMAGE")}")
         val builder = AnnotatedString.Builder()
-        val images = tree.explode(source, builder, style)
+        val images = tree.explode(source, builder, style, conserveMarkers = conserveMarkers)
         return builder.toAnnotatedString() to images
     }
 }
