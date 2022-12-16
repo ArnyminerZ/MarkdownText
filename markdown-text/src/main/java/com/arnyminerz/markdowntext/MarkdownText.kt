@@ -90,7 +90,7 @@ fun MarkdownText(
                     ?.let { stringAnnotation ->
                         try {
                             uriHandler.openUri(stringAnnotation.item)
-                        } catch (e: ActivityNotFoundException) {
+                        } catch (_: ActivityNotFoundException) {
                             Log.w(TAG, "Could not find link handler.")
                         }
                     }
