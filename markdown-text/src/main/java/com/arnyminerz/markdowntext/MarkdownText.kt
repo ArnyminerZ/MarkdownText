@@ -212,6 +212,8 @@ fun MarkdownTextPreview(
         "Inline `code` annotations",
         "[This]($exampleLink) is a link.",
         "Automatic link: $exampleLink",
+        "# Loose characters",
+        "If there are loose characters such as ` or ~ or *, which should indicate formatting, but are not closed, they should be ignored.",
         "# Header 1",
         "## Header 2",
         "### Header 3",
