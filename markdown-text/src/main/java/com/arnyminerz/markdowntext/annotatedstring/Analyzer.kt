@@ -73,19 +73,18 @@ internal fun ASTNode.explode(
     )
 
     when {
-        name == "INLINE_LINK" && !hasParentWithName("IMAGE") && !hasChildWithName("IMAGE") ->
-            annotationStyle.linkStyle.style {
-                val text = findChildOfType("LINK_TEXT")
-                val link = findChildOfType("LINK_DESTINATION")
-                if (text == null || link == null)
-                    Log.w(TAG, "Malformed tag.")
-                else {
-                    val url = link.getTextInNode(source)
-                    val txt = text.getNodeLinkText(source)
-                    Log.v(TAG, "Adding link \"$url\"")
-                    with(annotationStyle) { appendLink(url, txt) }
-                }
+        name == "INLINE_LINK" && !hasParentWithName("IMAGE") && !hasChildWithName("IMAGE") -> {
+            val text = findChildOfType("LINK_TEXT")
+            val link = findChildOfType("LINK_DESTINATION")
+            if (text == null || link == null)
+                Log.w(TAG, "Malformed tag.")
+            else {
+                val url = link.getTextInNode(source)
+                val txt = text.getNodeLinkText(source)
+                Log.v(TAG, "Adding link \"$url\"")
+                with(annotationStyle) { appendLink(url, txt) }
             }
+        }
         name == "IMAGE" -> if (hasChildWithName("INLINE_LINK")) {
             val textNode = findChildOfType("LINK_TEXT") ?: return mutableImages
             val linkNode = findChildOfType("LINK_DESTINATION") ?: return mutableImages
