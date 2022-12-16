@@ -206,6 +206,21 @@ internal fun ASTNode.explode(
                 ) { append(link) }
             }
         }
+        // Once reached down here, these indicators should be ignored if conserveMarkers is false
+        name == "EMPH" && (conserveMarkers || (parent?.name != "STRONG" && parent?.name != "EMPH")) ->
+            builder.append('*')
+        name == "~" && (conserveMarkers || parent?.name != "STRIKETHROUGH") ->
+            builder.append('~')
+        name == "BACKTICK" && (conserveMarkers || parent?.name != "CODE_SPAN") ->
+            builder.append('`')
+        name == "[" && (conserveMarkers || parent?.name?.contains("LINK") == false) ->
+            builder.append('[')
+        name == "]" && (conserveMarkers || parent?.name?.contains("LINK") == false) ->
+            builder.append(']')
+        name == "(" && (conserveMarkers || parent?.name?.contains("LINK") == false) ->
+            builder.append('(')
+        name == ")" && (conserveMarkers || parent?.name?.contains("LINK") == false) ->
+            builder.append(')')
     }
 
     return mutableImages
