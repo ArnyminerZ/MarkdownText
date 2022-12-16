@@ -75,7 +75,7 @@ fun MarkdownText(
 
     val parsedTree = MarkdownParser(flavour.descriptor).buildMarkdownTreeFromString(markdown)
     val (text, images) = AnnotatedStringGenerator(markdown, parsedTree)
-        .generateAnnotatedString(annotationStyle, false)
+        .generateAnnotatedString(annotationStyle, true)
 
     // TODO: Current implementation, since ClickableText is not theming correctly.
     // Reported at https://issuetracker.google.com/issues/255356401
