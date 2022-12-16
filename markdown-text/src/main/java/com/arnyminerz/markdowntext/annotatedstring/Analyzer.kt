@@ -73,11 +73,9 @@ internal fun ASTNode.explode(
                     Log.w(TAG, "Malformed tag.")
                 else {
                     val url = link.getTextInNode(source).toString()
+                    val txt = text.getNodeLinkText(source).toString()
                     Log.v(TAG, "Adding link \"$url\"")
-                    withAnnotation(
-                        tag = "link",
-                        annotation = url,
-                    ) { append(text.getNodeLinkText(source).toString()) }
+                    with(annotationStyle) { builder.appendLink(url, txt) }
                 }
             }
         name == "IMAGE" -> if (hasChildWithName("INLINE_LINK")) {
@@ -199,11 +197,8 @@ internal fun ASTNode.explode(
             mutableImages.add(ImageAnnotation.checkbox(!unchecked, text))
         }
         this == GFMTokenTypes.GFM_AUTOLINK -> getNodeLinkText(source).toString().let { link ->
-            builder.withStyle(annotationStyle.linkStyle) {
-                withAnnotation(
-                    tag = "link",
-                    annotation = link,
-                ) { append(link) }
+            with(annotationStyle) {
+                builder.appendLink(link)
             }
         }
         // Once reached down here, these indicators should be ignored if conserveMarkers is false
