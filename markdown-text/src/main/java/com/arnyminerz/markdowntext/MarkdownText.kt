@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -25,12 +26,15 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.isSpecified
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import coil.compose.AsyncImage
 import com.arnyminerz.markdowntext.annotatedstring.AnnotationStyle
 import com.arnyminerz.markdowntext.ui.CheckBoxIcon
@@ -44,15 +48,9 @@ private const val TAG = "MarkdownText"
  * @since 20221019
  * @param markdown The markdown-formatted text to display.
  * @param modifier Modifiers to apply to the wrapper.
- * @param softWrap Whether the text should break at soft line breaks. If false, the glyphs in the
- * text will be positioned as if there was unlimited horizontal space. If [softWrap] is `false`,
- * [overflow] and TextAlign may have unexpected effects.
- * @param overflow How visual overflow should be handled.
- * @param maxLines An optional maximum number of lines for the text to span, wrapping if necessary.
- * If the text exceeds the given number of lines, it will be truncated according to [overflow] and
- * [softWrap]. If it is not null, then it must be greater than zero.
  * @param annotationStyle The style to use with the annotated text.
  * @param flavour The flavour of Markdown to use.
+ * @see Text
  */
 @Composable
 fun MarkdownText(
@@ -61,6 +59,15 @@ fun MarkdownText(
     softWrap: Boolean = true,
     overflow: TextOverflow = TextOverflow.Visible,
     maxLines: Int = Int.MAX_VALUE,
+    color: Color = Color.Unspecified,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    fontStyle: FontStyle? = null,
+    fontWeight: FontWeight? = null,
+    fontFamily: FontFamily? = null,
+    letterSpacing: TextUnit = TextUnit.Unspecified,
+    textDecoration: TextDecoration? = null,
+    textAlign: TextAlign? = null,
+    style: TextStyle = TextStyle.Default,
     annotationStyle: AnnotationStyle = MarkdownTextDefaults.style,
     flavour: MarkdownFlavour = MarkdownFlavour.Github
 ) {
@@ -176,6 +183,15 @@ fun MarkdownText(
         maxLines = maxLines,
         overflow = overflow,
         inlineContent = inlineContentMap,
+        color = color,
+        fontSize = fontSize,
+        fontStyle = fontStyle,
+        fontWeight = fontWeight,
+        fontFamily = fontFamily,
+        letterSpacing = letterSpacing,
+        textDecoration = textDecoration,
+        textAlign = textAlign,
+        style = style,
     )
 }
 
