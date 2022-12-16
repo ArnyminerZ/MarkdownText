@@ -18,6 +18,7 @@ internal fun Iterable<ASTNode>.explode(
     builder: AnnotatedString.Builder,
     annotationStyle: AnnotationStyle,
     images: List<ImageAnnotation> = emptyList(),
+    conserveMarkers: Boolean = false,
     depth: Int = 0,
     render: Boolean = true,
 ) = mapIndexed { index, astNode ->
@@ -26,6 +27,7 @@ internal fun Iterable<ASTNode>.explode(
         builder,
         annotationStyle,
         images,
+        conserveMarkers,
         this.elementAtOrNull(index - 1),
         depth,
         render
@@ -38,6 +40,7 @@ internal fun ASTNode.explode(
     builder: AnnotatedString.Builder,
     annotationStyle: AnnotationStyle,
     images: List<ImageAnnotation> = emptyList(),
+    conserveMarkers: Boolean = false,
     previousNode: ASTNode? = null,
     depth: Int = 0,
     render: Boolean = true,
@@ -48,7 +51,15 @@ internal fun ASTNode.explode(
     )
     if (!render)
         return if (isNotEmpty())
-            children.explode(source, builder, annotationStyle, emptyList(), depth + 1, false)
+            children.explode(
+                source,
+                builder,
+                annotationStyle,
+                emptyList(),
+                conserveMarkers,
+                depth + 1,
+                false
+            )
         else
             emptyList()
     val mutableImages = images.toMutableList()
@@ -94,19 +105,47 @@ internal fun ASTNode.explode(
         isNotEmpty() -> {
             if (name == "STRONG")
                 return builder.withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
-                    children.explode(source, this, annotationStyle, mutableImages, depth + 1)
+                    children.explode(
+                        source,
+                        this,
+                        annotationStyle,
+                        mutableImages,
+                        conserveMarkers,
+                        depth + 1
+                    )
                 }
             if (name == "EMPH")
                 return builder.withStyle(SpanStyle(fontStyle = FontStyle.Italic)) {
-                    children.explode(source, this, annotationStyle, mutableImages, depth + 1)
+                    children.explode(
+                        source,
+                        this,
+                        annotationStyle,
+                        mutableImages,
+                        conserveMarkers,
+                        depth + 1
+                    )
                 }
             if (name == "STRIKETHROUGH")
                 return builder.withStyle(SpanStyle(textDecoration = TextDecoration.LineThrough)) {
-                    children.explode(source, this, annotationStyle, mutableImages, depth + 1)
+                    children.explode(
+                        source,
+                        this,
+                        annotationStyle,
+                        mutableImages,
+                        conserveMarkers,
+                        depth + 1
+                    )
                 }
             if (name == "CODE_SPAN")
                 return builder.withStyle(annotationStyle.codeBlockStyle) {
-                    children.explode(source, this, annotationStyle, mutableImages, depth + 1)
+                    children.explode(
+                        source,
+                        this,
+                        annotationStyle,
+                        mutableImages,
+                        conserveMarkers,
+                        depth + 1
+                    )
                 }
             if (name.startsWith("ATX_"))
                 name.indexOf('_')
@@ -121,7 +160,14 @@ internal fun ASTNode.explode(
                         builder.withStyle(it.toSpanStyle()) { append(text) }
                         return mutableImages
                     }
-            return children.explode(source, builder, annotationStyle, mutableImages, depth + 1)
+            return children.explode(
+                source,
+                builder,
+                annotationStyle,
+                mutableImages,
+                conserveMarkers,
+                depth + 1
+            )
         }
         // Collect all contents of links that leak
         parent?.name == "LINK_DESTINATION" -> return mutableImages
