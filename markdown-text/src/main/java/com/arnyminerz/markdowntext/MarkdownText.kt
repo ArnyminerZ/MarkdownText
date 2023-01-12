@@ -242,6 +242,12 @@ fun MarkdownTextPreview(
         "This is a large block image:",
         "![Large image]($exampleImageUrl)",
         "'Quotes' are rendered \"correctly\" (I hope)",
+        "",
+        "| Column 1  | Column 2 | Column 3 |   |   |",
+        "|-----------|----------|----------|---|---|",
+        "| This      | Is       | A table  |   |   |",
+        "| Formatted | In       | Markdown |   |   |",
+        "|           |          |          |   |   |",
     ).joinToString(System.lineSeparator())
 
     Column(
