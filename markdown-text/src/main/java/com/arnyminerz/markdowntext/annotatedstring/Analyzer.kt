@@ -54,6 +54,9 @@ internal fun ASTNode.explode(
     val mutableImages = images.toMutableList()
 
     when {
+        name == "TABLE" -> builder.withStyle(annotationStyle.codeBlockStyle) {
+            builder.append(getTextInNode(source).toString())
+        }
         name == "INLINE_LINK" && !hasParentWithName("IMAGE") && !hasChildWithName("IMAGE") ->
             builder.withStyle(annotationStyle.linkStyle) {
                 val text = findChildOfType("LINK_TEXT")
