@@ -88,7 +88,10 @@ fun MarkdownTextPreview() {
 }
 ```
 
-![example-image1][example-image1]![example-image2][example-image2]
+<div width="100%">
+  <img width="30%" src="/docs/screenshot1.png" alt="Sample Screenshot 1" />
+  <img width="30%" src="/docs/screenshot2.png" alt="Sample Screenshot 2" />
+</div>
 
 # Flavours
 
