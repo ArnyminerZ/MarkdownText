@@ -108,9 +108,9 @@ are:
 Feel free to open a new PR to add your application or implementation here:
 
 * jtx Board ([Github][https://github.com/TechbeeAT/jtxBoard/])
-  
-  [<img alt="Download the app from Google Play Store" height="50px" src="/docs/google-play-badge.png" title="Google Play Badge"/>](https://play.google.com/store/apps/details?id=at.techbee.jtx)
-  [<img alt="Download the app from F-Droid" height="50px" src="/docs/fdroid-badge.png" title="F-Droid Badge"/>](https://f-droid.org/de/packages/at.techbee.jtx/)
+
+  [<img alt="Download the app from Google Play Store" height="70px" src="/docs/google-play-badge.png" title="Google Play Badge"/>](https://play.google.com/store/apps/details?id=at.techbee.jtx)
+  [<img alt="Download the app from F-Droid" height="70px" src="/docs/fdroid-badge.svg" title="F-Droid Badge"/>](https://f-droid.org/de/packages/at.techbee.jtx/)
 
 [coil-url]: https://coil-kt.github.io/coil
 
