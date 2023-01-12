@@ -241,6 +241,7 @@ fun MarkdownTextPreview(
         "But this one has a link: [![This is an image]($exampleBadge)]($exampleLink)",
         "This is a large block image:",
         "![Large image]($exampleImageUrl)",
+        "'Quotes' are rendered \"correctly\" (I hope)",
     ).joinToString(System.lineSeparator())
 
     Column(
