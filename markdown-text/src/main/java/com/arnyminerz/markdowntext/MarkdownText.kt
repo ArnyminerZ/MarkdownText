@@ -22,6 +22,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextLayoutResult
@@ -33,7 +34,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.isSpecified
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.arnyminerz.markdowntext.annotatedstring.AnnotationStyle
 import com.arnyminerz.markdowntext.ui.CheckBoxIcon
@@ -49,6 +54,10 @@ private const val TAG = "MarkdownText"
  * @param modifier Modifiers to apply to the wrapper.
  * @param annotationStyle The style to use with the annotated text.
  * @param flavour The flavour of Markdown to use.
+ * @param onClick Gets called when the element is clicked. May be null for not having any listener.
+ * Returns an element called `annotation` which matches the element that has been tapped.
+ * @param onClickOverrides If `true`, all links embed in the markdown text will be ignored, and only
+ * [onClick] will be called. Ignored if [onClick] is null.
  * @see Text
  */
 @Composable
@@ -68,7 +77,9 @@ fun MarkdownText(
     textAlign: TextAlign? = null,
     style: TextStyle = TextStyle.Default,
     annotationStyle: AnnotationStyle = MarkdownTextDefaults.style,
-    flavour: MarkdownFlavour = MarkdownFlavour.Github
+    flavour: MarkdownFlavour = MarkdownFlavour.Github,
+    onClick: ((annotation: AnnotatedString.Range<String>?) -> Unit)? = null,
+    onClickOverrides: Boolean = false,
 ) {
     val uriHandler = LocalUriHandler.current
     val density = LocalDensity.current
@@ -85,11 +96,15 @@ fun MarkdownText(
         detectTapGestures { pos ->
             layoutResult.value?.let { layoutResult ->
                 val offset = layoutResult.getOffsetForPosition(pos)
+                text.getStringAnnotations(offset, offset)
+                    .firstOrNull()
+                    .let { annotation -> onClick?.invoke(annotation) }
                 text.getStringAnnotations("link", offset, offset)
                     .firstOrNull()
                     ?.let { stringAnnotation ->
                         try {
-                            uriHandler.openUri(stringAnnotation.item)
+                            if (onClick == null || !onClickOverrides)
+                                uriHandler.openUri(stringAnnotation.item)
                         } catch (e: ActivityNotFoundException) {
                             Log.w(TAG, "Could not find link handler.")
                         }
