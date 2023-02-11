@@ -9,249 +9,42 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.*
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.TextLayoutResult
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.arnyminerz.markdowntext.annotatedstring.AnnotationStyle
+import com.arnyminerz.markdowntext.ui.CheckBoxIcon
+import org.intellij.markdown.parser.MarkdownParser
 
 private const val TAG = "MarkdownText"
-
-/**
- * Annotates the [String] using Markdown formatting.
- * @author Arnau Mora
- * @since 20221019
- * @param bodyStyle The default style for the body, and non-annotated texts.
- * @param headlineDepthStyles A list of styles that will be used for headlines. Each element of the
- * list matches the depth given by adding `#`. Example: `###` will use the element at `2` of the list.
- * @param bullet The character to use as bullet for lists.
- * @param linkColor The color to use for tinting links.
- * @return As [AnnotatedString] instance formatted with the given markdown.
- */
-@Composable
-private fun String.markdownAnnotated(
-    bodyStyle: TextStyle = MarkdownTextDefaults.bodyStyle,
-    headlineDepthStyles: List<TextStyle> = MarkdownTextDefaults.headlineDepthStyles,
-    bullet: Char = MarkdownTextDefaults.bullet,
-    linkColor: Color = MarkdownTextDefaults.linkColor,
-): Pair<AnnotatedString, SnapshotStateMap<String, InlineTextContent>> {
-    val images = mutableListOf<Pair<String, String>>()
-    var lastStyle = bodyStyle.toSpanStyle()
-
-    val annotatedString = buildAnnotatedString {
-        val headlineIndex = indexOf('#')
-        if (headlineIndex >= 0) {
-            // This is header, count depth
-            val regex = Regex("[^#]")
-            var depth = 0
-            while (!regex.matchesAt(this@markdownAnnotated, depth)) depth++
-            val headline = substring(depth + 1)
-            val headlineTypography = headlineDepthStyles.getOrElse(depth - 1) { TextStyle.Default }
-            withStyle(headlineTypography.toSpanStyle()) { append(headline) }
-        } else if (startsWith('-') || startsWith("* ") || startsWith("+ ")) { // List
-            val item = substring(1)
-            append("$bullet\t$item")
-        } else {
-            val lineLength = this@markdownAnnotated.length
-            var linkStart: Int? = null
-            var linkEnd: Int = -1
-            lastStyle = bodyStyle.toSpanStyle()
-            var c = 0
-            pushStyle(bodyStyle.toSpanStyle())
-            while (c < lineLength) {
-                val char = get(c)
-                val nextChar = c.takeIf { it + 1 < lineLength }?.let { get(it + 1) }
-                if (char == '\\' && Regex("[*~_!\\[\\]()\\\\]").matches(nextChar.toString())) {
-                    append(nextChar?.toString() ?: "\u0000")
-                    if (linkStart != null) linkEnd++
-                    c += 2
-                } else if (char == '*' && nextChar == '*') { // Bold
-                    pop()
-                    lastStyle = if (lastStyle.fontWeight == FontWeight.Bold)
-                        lastStyle.copy(fontWeight = FontWeight.Normal)
-                    else
-                        lastStyle.copy(fontWeight = FontWeight.Bold)
-                    pushStyle(lastStyle)
-
-                    // Add two since the pointer is double
-                    c += 2
-                } else if (char == '*') { // Italic
-                    pop()
-                    lastStyle = if (lastStyle.fontStyle == FontStyle.Italic)
-                        lastStyle.copy(fontStyle = FontStyle.Normal)
-                    else
-                        lastStyle.copy(fontStyle = FontStyle.Italic)
-                    pushStyle(lastStyle)
-                    c++
-                } else if (char == '~') { // Strikethrough
-                    pop()
-                    lastStyle = if (lastStyle.textDecoration == TextDecoration.LineThrough)
-                        lastStyle.copy(textDecoration = TextDecoration.None)
-                    else
-                        lastStyle.copy(textDecoration = TextDecoration.LineThrough)
-                    pushStyle(lastStyle)
-                    c++
-                } else if (char == '_') { // Underline
-                    pop()
-                    lastStyle = if (lastStyle.textDecoration == TextDecoration.Underline)
-                        lastStyle.copy(textDecoration = TextDecoration.None)
-                    else
-                        lastStyle.copy(textDecoration = TextDecoration.Underline)
-                    pushStyle(lastStyle)
-                    c++
-                } else if (char == '`') { // Code
-                    pop()
-                    lastStyle = if (lastStyle.fontFeatureSettings == "tnum")
-                        lastStyle.copy(fontFeatureSettings = null, fontFamily = FontFamily.Default)
-                    else
-                        lastStyle.copy(
-                            fontFeatureSettings = "tnum",
-                            fontFamily = FontFamily.Monospace
-                        )
-                    pushStyle(lastStyle)
-                    c++
-                } else if (char == '!') { // Image
-                    val openPos = indexOf('[', c + 1)
-                    // Search for the closing tag
-                    val preClosing = indexOf(']', openPos + 1)
-                    // Search for the actual link start
-                    val lOpen = indexOf('(', c + 1)
-                    // And the ending
-                    val lClose = indexOf(')', c + 1)
-
-                    // Check if link is valid
-                    val outOfBounds = openPos < 0 || preClosing < 0 || lOpen < 0 || lClose < 0
-                    val overwrites = lOpen > lClose || preClosing > lOpen
-                    if (outOfBounds || overwrites) {
-                        append(char)
-                        c++
-                    } else {
-                        val text = substring(openPos + 1, preClosing)
-                        val link = substring(lOpen + 1, lClose)
-
-                        appendInlineContent(id = link, alternateText = text)
-                        images.add(link to text)
-
-                        c = lClose + 1
-                    }
-                } else if (char == '[') { // Starts a link
-                    // Search for the closing tag
-                    val preClosing = indexOf(']', c + 1)
-
-                    if (preClosing >= 0) {
-                        linkStart = c
-                        linkEnd = c
-                    }
-                    c++
-                } else if (char == ']' && linkStart != null) { // Ends a link
-                    // Search for the actual link start
-                    val lOpen = indexOf('(', c + 1)
-                    // And the ending
-                    val lClose = indexOf(')', c + 1)
-
-                    // Check if link is valid
-                    val outOfBounds = lOpen < 0 || lClose < 0
-                    val overwrites = lOpen > lClose
-                    if (outOfBounds || overwrites) {
-                        append(char)
-                        c++
-                    } else {
-                        val link = substring(lOpen + 1, lClose)
-                        addStringAnnotation(
-                            tag = "link",
-                            annotation = link,
-                            start = linkStart,
-                            end = linkEnd,
-                        )
-                        addStyle(
-                            lastStyle.copy(
-                                textDecoration = TextDecoration.Underline,
-                                color = linkColor,
-                            ),
-                            start = linkStart,
-                            end = linkEnd,
-                        )
-                        linkStart = null
-                        linkEnd = -1
-                        c = lClose + 1
-                    }
-                } else {
-                    append(char)
-                    if (linkStart != null)
-                        linkEnd++
-                    c++
-                }
-            }
-        }
-    }
-    val inlineContentMap = remember {
-        mutableStateMapOf<String, InlineTextContent>().apply {
-            putAll(
-                images.associate { (url, text) ->
-                    url to InlineTextContent(
-                        Placeholder(
-                            lastStyle.fontSize,
-                            lastStyle.fontSize,
-                            PlaceholderVerticalAlign.TextCenter,
-                        )
-                    ) {
-                        Log.d(TAG, "Loading async image for $url...")
-                        AsyncImage(
-                            model = url,
-                            contentDescription = text,
-                            modifier = Modifier.fillMaxSize(),
-                            onError = {
-                                Log.e(TAG, "Could not load image. Error:", it.result.throwable)
-                                it.result.throwable.printStackTrace()
-                            },
-                            onSuccess = {
-                                val drawable = it.result.drawable
-                                val ratio = drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight.toFloat()
-
-                                Log.d(TAG, "Image ($url) loaded. Ratio: $ratio")
-
-                                set(url, InlineTextContent(
-                                    Placeholder(
-                                        (lastStyle.fontSize.value * ratio).sp,
-                                        lastStyle.fontSize,
-                                        PlaceholderVerticalAlign.TextCenter,
-                                    )
-                                ) {
-                                    AsyncImage(
-                                        model = url,
-                                        contentDescription = text,
-                                        modifier = Modifier.fillMaxSize(),
-                                    )
-                                })
-                            },
-                        )
-                    }
-                }
-            )
-        }
-    }
-    return annotatedString to inlineContentMap
-}
 
 /**
  * Creates a Text component that supports markdown formatting.
@@ -259,18 +52,13 @@ private fun String.markdownAnnotated(
  * @since 20221019
  * @param markdown The markdown-formatted text to display.
  * @param modifier Modifiers to apply to the wrapper.
- * @param softWrap Whether the text should break at soft line breaks. If false, the glyphs in the
- * text will be positioned as if there was unlimited horizontal space. If [softWrap] is `false`,
- * [overflow] and TextAlign may have unexpected effects.
- * @param overflow How visual overflow should be handled.
- * @param maxLines An optional maximum number of lines for the text to span, wrapping if necessary.
- * If the text exceeds the given number of lines, it will be truncated according to [overflow] and
- * [softWrap]. If it is not null, then it must be greater than zero.
- * @param bodyStyle The default style for the body, and non-annotated texts.
- * @param headlineDepthStyles A list of styles that will be used for headlines. Each element of the
- * list matches the depth given by adding `#`. Example: `###` will use the element at `2` of the list.
- * @param bullet The character to use as bullet for lists.
- * @param linkColor The color to use for tinting links.
+ * @param annotationStyle The style to use with the annotated text.
+ * @param flavour The flavour of Markdown to use.
+ * @param onClick Gets called when the element is clicked. May be null for not having any listener.
+ * Returns an element called `annotation` which matches the element that has been tapped.
+ * @param onClickOverrides If `true`, all links embed in the markdown text will be ignored, and only
+ * [onClick] will be called. Ignored if [onClick] is null.
+ * @see Text
  */
 @Composable
 fun MarkdownText(
@@ -279,132 +67,213 @@ fun MarkdownText(
     softWrap: Boolean = true,
     overflow: TextOverflow = TextOverflow.Visible,
     maxLines: Int = Int.MAX_VALUE,
-    bodyStyle: TextStyle = MarkdownTextDefaults.bodyStyle,
-    headlineDepthStyles: List<TextStyle> = MarkdownTextDefaults.headlineDepthStyles,
-    bullet: Char = MarkdownTextDefaults.bullet,
-    linkColor: Color = MarkdownTextDefaults.linkColor,
+    color: Color = Color.Unspecified,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    fontStyle: FontStyle? = null,
+    fontWeight: FontWeight? = null,
+    fontFamily: FontFamily? = null,
+    letterSpacing: TextUnit = TextUnit.Unspecified,
+    textDecoration: TextDecoration? = null,
+    textAlign: TextAlign? = null,
+    style: TextStyle = TextStyle.Default,
+    annotationStyle: AnnotationStyle = MarkdownTextDefaults.style,
+    flavour: MarkdownFlavour = MarkdownFlavour.Github,
+    onClick: ((annotation: AnnotatedString.Range<String>?) -> Unit)? = null,
+    onClickOverrides: Boolean = false,
 ) {
     val uriHandler = LocalUriHandler.current
+    val density = LocalDensity.current
 
-    Column(
-        modifier = modifier,
-    ) {
-        markdown.split(System.lineSeparator()).forEach { line ->
-            if (line.startsWith("--")) // If starts with at least two '-', add divider
-                return@forEach Divider()
-            if (line.startsWith("!")) { // Image block
-                val openPos = line.indexOf('[')
-                // Search for the closing tag
-                val preClosing = line.indexOf(']', openPos + 1)
-                // Search for the actual link start
-                val lOpen = line.indexOf('(', preClosing + 1)
-                // And the ending
-                val lClose = line.indexOf(')', lOpen + 1)
+    val parsedTree = MarkdownParser(flavour.descriptor).buildMarkdownTreeFromString(markdown)
+    val (text, images) = AnnotatedStringGenerator(markdown, parsedTree)
+        .generateAnnotatedString(annotationStyle)
 
-                // Check if link is valid
-                val outOfBounds = openPos < 0 || preClosing < 0 || lOpen < 0 || lClose < 0
-                val overwrites = lOpen > lClose || preClosing > lOpen
-                if (outOfBounds || overwrites) {
-                    // Skip image loading
-                } else {
-                    val text = line.substring(openPos + 1, preClosing)
-                    val link = line.substring(lOpen + 1, lClose)
-
-                    AsyncImage(
-                        model = link,
-                        contentDescription = text,
-                        modifier = Modifier.fillMaxWidth(),
-                        contentScale = ContentScale.Inside,
-                    )
-
-                    return@forEach
-                }
+    // TODO: Current implementation, since ClickableText is not theming correctly.
+    // Reported at https://issuetracker.google.com/issues/255356401
+    // Code taken directly from the official sources of ClickableText
+    val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
+    val pressIndicator = Modifier.pointerInput(null) {
+        detectTapGestures { pos ->
+            layoutResult.value?.let { layoutResult ->
+                val offset = layoutResult.getOffsetForPosition(pos)
+                text.getStringAnnotations(offset, offset)
+                    .firstOrNull()
+                    .let { annotation -> onClick?.invoke(annotation) }
+                text.getStringAnnotations("link", offset, offset)
+                    .firstOrNull()
+                    ?.let { stringAnnotation ->
+                        try {
+                            if (onClick == null || !onClickOverrides)
+                                uriHandler.openUri(stringAnnotation.item)
+                        } catch (e: ActivityNotFoundException) {
+                            Log.w(TAG, "Could not find link handler.")
+                        }
+                    }
             }
+        }
+    }
+    val textStyle = style.takeIf { it.fontSize.isSpecified }
+        ?: MaterialTheme.typography.bodyMedium
+    var size: IntSize = remember { IntSize.Zero }
 
-            val (annotatedString, inlineContent) = line.markdownAnnotated(
-                bodyStyle, headlineDepthStyles, bullet, linkColor
-            )
+    val inlineContentMap = remember {
+        mutableStateMapOf<String, InlineTextContent>().apply {
+            putAll(
+                images.associate { (url, text, fullWidth) ->
+                    val fs = fontSize.takeIf { it.isSpecified } ?: textStyle.fontSize
+                    url to when (url) {
+                        "checkbox" -> InlineTextContent(
+                            Placeholder(fs, fs, PlaceholderVerticalAlign.TextCenter)
+                        ) { CheckBoxIcon(checked = false, alt = it) }
+                        "checkbox_checked" -> InlineTextContent(
+                            Placeholder(fs, fs, PlaceholderVerticalAlign.TextCenter)
+                        ) { CheckBoxIcon(checked = true, alt = it) }
+                        else -> InlineTextContent(
+                            Placeholder(
+                                fs,
+                                fs,
+                                PlaceholderVerticalAlign.TextCenter,
+                            )
+                        ) {
+                            Log.d(TAG, "Loading async image for $url...")
+                            AsyncImage(
+                                model = url,
+                                contentDescription = text,
+                                modifier = Modifier.fillMaxSize(),
+                                onError = {
+                                    Log.e(TAG, "Could not load image. Error:", it.result.throwable)
+                                    it.result.throwable.printStackTrace()
+                                },
+                                onSuccess = {
+                                    val drawable = it.result.drawable
+                                    val whRatio =
+                                        drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight.toFloat()
+                                    val hwRatio =
+                                        drawable.intrinsicHeight.toFloat() / drawable.intrinsicWidth.toFloat()
 
-            // TODO: Current implementation, since ClickableText is not theming correctly.
-            // Reported at https://issuetracker.google.com/issues/255356401
-            // Code taken directly from the official sources of ClickableText
-            val layoutResult = remember { mutableStateOf<TextLayoutResult?>(null) }
-            val pressIndicator = Modifier.pointerInput(null) {
-                detectTapGestures { pos ->
-                    layoutResult.value?.let { layoutResult ->
-                        val offset = layoutResult.getOffsetForPosition(pos)
-                        annotatedString
-                            .getStringAnnotations("link", offset, offset)
-                            .firstOrNull()?.let { stringAnnotation ->
-                                try {
-                                    uriHandler.openUri(stringAnnotation.item)
-                                } catch (e: ActivityNotFoundException) {
-                                    Log.w(TAG, "Could not find link handler.")
-                                }
-                            }
+                                    Log.d(
+                                        TAG,
+                                        "Image ($url) loaded. Ratio: $whRatio. fullWidth=$fullWidth. size=$size)"
+                                    )
+
+                                    val width =
+                                        with(density) { size.width.toSp() }.takeIf { fullWidth }
+                                            ?: (fs.value * whRatio).sp
+                                    val height =
+                                        with(density) { (size.width * hwRatio).toSp() }.takeIf { fullWidth }
+                                            ?: fs
+                                    set(
+                                        url,
+                                        InlineTextContent(
+                                            Placeholder(
+                                                width,
+                                                height,
+                                                PlaceholderVerticalAlign.TextCenter,
+                                            )
+                                        ) {
+                                            AsyncImage(
+                                                model = url,
+                                                contentDescription = text,
+                                                modifier = Modifier.fillMaxSize(),
+                                            )
+                                        },
+                                    )
+                                },
+                            )
+                        }
                     }
                 }
-            }
-
-            Text(
-                text = annotatedString,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(0.dp)
-                    .then(pressIndicator),
-                overflow = overflow,
-                maxLines = maxLines,
-                style = bodyStyle,
-                softWrap = softWrap,
-                inlineContent = inlineContent,
-                onTextLayout = { layoutResult.value = it }
             )
         }
     }
+
+    Text(
+        text = text,
+        modifier = modifier
+            .onGloballyPositioned { size = it.size }
+            .then(pressIndicator),
+        onTextLayout = { layoutResult.value = it },
+        softWrap = softWrap,
+        maxLines = maxLines,
+        overflow = overflow,
+        inlineContent = inlineContentMap,
+        color = color,
+        fontSize = fontSize,
+        fontStyle = fontStyle,
+        fontWeight = fontWeight,
+        fontFamily = fontFamily,
+        letterSpacing = letterSpacing,
+        textDecoration = textDecoration,
+        textAlign = textAlign,
+        style = style,
+    )
 }
 
 @Preview
 @Composable
-fun MarkdownTextPreview() {
+fun MarkdownTextPreview(
+    flavourDescriptor: MarkdownFlavour = MarkdownFlavour.CommonMark,
+) {
     val exampleImageUrl = "https://picsum.photos/300/200"
     val exampleBadge = "https://raster.shields.io/badge/Label-Awesome!-success"
     val exampleLink = "https://example.com"
+
+    val src = listOf(
+        "# General formatting",
+        "This is markdown text with **bold** content.",
+        "This is markdown text with *italic* content.",
+        "This is markdown text with **bold and *italic* texts**.",
+        "This is markdown text with ~~strikethrough~~ content.",
+        "Inline `code` annotations",
+        "[This]($exampleLink) is a link.",
+        "Automatic link: $exampleLink",
+        "# Header 1",
+        "## Header 2",
+        "### Header 3",
+        "#### Header 4",
+        "##### Header 5",
+        "###### Header 6",
+        "## Unordered lists",
+        "- First",
+        "* Second",
+        "* Third",
+        "- Fifth",
+        "## Ordered lists",
+        "1. First",
+        "2. Second",
+        "3. Third",
+        "4. Fifth",
+        "## Checkboxes",
+        "- [ ] First",
+        "- [ ] Second",
+        "- [x] Third",
+        "- [ ] Fifth",
+        "--------",
+        "/\\ That is a hr! /\\",
+        "# Images",
+        " ![Badge]($exampleBadge)![Badge]($exampleBadge)",
+        "Here is a normal inline image: ![This is an image]($exampleBadge)",
+        "But this one has a link: [![This is an image]($exampleBadge)]($exampleLink)",
+        "This is a large block image:",
+        "![Large image]($exampleImageUrl)",
+        "'Quotes' are rendered \"correctly\" (I hope)",
+        "",
+        "| Column 1  | Column 2 | Column 3 |   |   |",
+        "|-----------|----------|----------|---|---|",
+        "| This      | Is       | A table  |   |   |",
+        "| Formatted | In       | Markdown |   |   |",
+        "|           |          |          |   |   |",
+    ).joinToString(System.lineSeparator())
 
     Column(
         modifier = Modifier.verticalScroll(rememberScrollState()),
     ) {
         MarkdownText(
-            markdown = listOf(
-                "This is markdown text with **bold** content.",
-                "This is markdown text with *italic* content.",
-                "**This** is where it gets complicated. With **bold and *italic* texts**.",
-                "# Headers are also supported",
-                "The work for separating sections",
-                "Even use \\* backslashed special characters.",
-                "## And setting",
-                "Sub-sections",
-                "with `code` blocks!",
-                "### That get",
-                "#### Deeper",
-                "##### And Deeper",
-                "###### And even deeper",
-                "Remember _this_ ~not this~? Also works!",
-                "[This](https://example.com) is a link.",
-                "- Lists",
-                "* are",
-                "* also",
-                "- supported",
-                "--------",
-                "That is a hr!",
-                "Here is a normal inline image: ![This is an image]($exampleBadge)",
-                "But this one has a link: [![This is an image]($exampleBadge)]($exampleBadge)",
-                "This is a large block image:",
-                "![Large image]($exampleImageUrl)",
-                "[Links also support \\~ backslashing \\_]($exampleLink)",
-            ).joinToString(System.lineSeparator()),
+            markdown = src,
             modifier = Modifier
-                .padding(horizontal = 8.dp),
-            bodyStyle = MaterialTheme.typography.bodyMedium,
+                .padding(horizontal = 8.dp)
+                .fillMaxWidth(),
+            flavour = flavourDescriptor,
         )
     }
 }
