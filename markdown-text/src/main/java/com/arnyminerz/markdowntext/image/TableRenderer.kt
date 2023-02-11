@@ -1,6 +1,11 @@
 package com.arnyminerz.markdowntext.image
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.Typeface
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 
@@ -126,6 +131,10 @@ class TableRenderer(
         Rect().apply { paint.getTextBounds(value, 0, value.length, this) }
     }
 
+    /**
+     * Draws the table as a Bitmap.
+     * @return A Bitmap with the drawn table.
+     */
     private fun draw(): Bitmap {
         // First we want to get the maximum width of each column, in any row
         // Measure the bounds of all the headers
