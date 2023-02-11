@@ -106,6 +106,14 @@ are:
   * Tables (not supported)
   * Automatic links
 
+# Click listener
+
+By default, `MarkdownText` handles all links embed in the markdown text given, and will launch them
+using the default browser. However, you can pass the optional parameter `onClick`, and an additional
+click listener will be added. By default, even if you add this callback, the automatic link launcher
+is respected, however, if you set `onClickOverrides` to `true`, only your handler will be called
+(_Note that you must pass something to `onClick` for this parameter to be considered._).
+
 # Used by
 
 Feel free to open a new PR to add your application or implementation here:
