@@ -96,9 +96,11 @@ fun MarkdownText(
         detectTapGestures { pos ->
             layoutResult.value?.let { layoutResult ->
                 val offset = layoutResult.getOffsetForPosition(pos)
+                text.getStringAnnotations(offset, offset)
+                    .firstOrNull()
+                    .let { annotation -> onClick?.invoke(annotation) }
                 text.getStringAnnotations("link", offset, offset)
                     .firstOrNull()
-                    .also { annotation -> onClick?.invoke(annotation) }
                     ?.let { stringAnnotation ->
                         try {
                             if (onClick == null || !onClickOverrides)
