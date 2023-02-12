@@ -98,16 +98,23 @@ fun MarkdownText(
                 val offset = layoutResult.getOffsetForPosition(pos)
                 text.getStringAnnotations(offset, offset)
                     .firstOrNull()
-                    .let { annotation -> onClick?.invoke(annotation) }
-                text.getStringAnnotations("link", offset, offset)
-                    .firstOrNull()
-                    ?.let { stringAnnotation ->
-                        try {
-                            if (onClick == null || !onClickOverrides)
+                    .let { stringAnnotation ->
+                        // If the annotation is a link, and there's no click listener, or onClickOverrides is false
+                        if (stringAnnotation?.tag == "link" && (onClick == null || !onClickOverrides)) {
+                            try {
+                                // Launch the link
                                 uriHandler.openUri(stringAnnotation.item)
-                        } catch (e: ActivityNotFoundException) {
-                            Log.w(TAG, "Could not find link handler.")
+                            } catch (e: ActivityNotFoundException) {
+                                Log.w(TAG, "Could not find a link handler.")
+                            }
+                        } else {
+                            // Otherwise, call the listener if not null
+                            onClick?.invoke(stringAnnotation)
                         }
+                    }
+                    ?: run {
+                        Log.w(TAG, "Tapped string without annotation")
+                        onClick?.invoke(null)
                     }
             }
         }
