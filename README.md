@@ -25,7 +25,7 @@ A library for displaying Markdown contents within Jetpack Compose. Uses [Coil][c
 Add to the module's dependencies:
 
 ```groovy
-implementation 'com.arnyminerz.markdowntext:markdowntext:1.3.0'
+implementation 'com.arnyminerz.markdowntext:markdowntext:1.3.1'
 ```
 
 Jetpack Compose example:
