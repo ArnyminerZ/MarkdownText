@@ -9,7 +9,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import com.arnyminerz.markdowntext.*
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
-import org.intellij.markdown.flavours.gfm.GFMTokenTypes
 
 private const val TAG = "ASA"
 
@@ -44,7 +43,13 @@ internal fun ASTNode.explode(
 ): List<ImageAnnotation> {
     Log.i(
         TAG,
-        "${"  ".repeat(depth)}- Type: $name \t\t\t Children: ${children.size}. Parent: ${parent?.name}. Previous: ${previousNode?.name}"
+        "${"  ".repeat(depth)}- Type: $name \t\t\t Children: ${children.size}. Parent: ${parent?.name}. Previous: ${previousNode?.name}.${
+            if (children.isEmpty()) " Value: ${
+                getTextInNode(
+                    source
+                )
+            }" else ""
+        }"
     )
     if (!render)
         return if (isNotEmpty())
@@ -153,7 +158,7 @@ internal fun ASTNode.explode(
             )
             mutableImages.add(ImageAnnotation.checkbox(!unchecked, text))
         }
-        this == GFMTokenTypes.GFM_AUTOLINK -> getNodeLinkText(source).toString().let { link ->
+        name == "GFM_AUTOLINK" -> getTextInNode(source).toString().let { link ->
             builder.withStyle(annotationStyle.linkStyle) {
                 withAnnotation(
                     tag = "link",
