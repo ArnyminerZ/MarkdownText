@@ -110,9 +110,19 @@ are:
 
 By default, `MarkdownText` handles all links embed in the markdown text given, and will launch them
 using the default browser. However, you can pass the optional parameter `onClick`, and an additional
-click listener will be added. By default, even if you add this callback, the automatic link launcher
-is respected, however, if you set `onClickOverrides` to `true`, only your handler will be called
-(_Note that you must pass something to `onClick` for this parameter to be considered._).
+click listener will be added. Summary:
+
+1. If `onClick` is `null`:
+
+* Clicking on links will launch them with the browser.
+
+2. If `onClick` is not `null`:
+
+* If `onClickOverrides` is `false`:
+  * Tapping a link will launch it.
+  * Tapping something else will call `onClick`
+* If `onClickOverrides` is `true`:
+  * Tapping anything will call `onClick`
 
 # Used by
 
