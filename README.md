@@ -45,44 +45,44 @@ fun MarkdownTextPreview() {
                 "# General formatting",
                 "This is markdown text with **bold** content.",
                 "This is markdown text with *italic* content.",
-              "This is markdown text with **bold and *italic* texts**.",
-              "This is markdown text with ~~strikethrough~~ content.",
-              "Inline `code` annotations",
-              "[This]($exampleLink) is a link.",
-              "Automatic link: $exampleLink",
-              "# Header 1",
+                "This is markdown text with **bold and *italic* texts**.",
+                "This is markdown text with ~~strikethrough~~ content.",
+                "Inline `code` annotations",
+                "[This]($exampleLink) is a link.",
+                "Automatic link: $exampleLink",
+                "# Header 1",
                 "## Header 2",
                 "### Header 3",
                 "#### Header 4",
                 "##### Header 5",
                 "###### Header 6",
                 "## Unordered lists",
-              "- First",
-              "* Second",
-              "* Third",
-              "- Fifth",
-              "## Ordered lists",
-              "1. First",
-              "2. Second",
-              "3. Third",
-              "4. Fifth",
-              "## Checkboxes",
-              "- [ ] First",
-              "- [ ] Second",
-              "- [x] Third",
-              "- [ ] Fifth",
-              "--------",
-              "/\\ That is a hr! /\\",
-              "# Images",
-              " ![Badge]($exampleBadge)![Badge]($exampleBadge)",
-              "Here is a normal inline image: ![This is an image]($exampleBadge)",
-              "But this one has a link: [![This is an image]($exampleBadge)]($exampleLink)",
-              "This is a large block image:",
-              "![Large image]($exampleImageUrl)",
+                "- First",
+                "* Second",
+                "* Third",
+                "- Fifth",
+                "## Ordered lists",
+                "1. First",
+                "2. Second",
+                "3. Third",
+                "4. Fifth",
+                "## Checkboxes",
+                "- [ ] First",
+                "- [ ] Second",
+                "- [x] Third",
+                "- [ ] Fifth",
+                "--------",
+                "/\\ That is a hr! /\\",
+                "# Images",
+                " ![Badge]($exampleBadge)![Badge]($exampleBadge)",
+                "Here is a normal inline image: ![This is an image]($exampleBadge)",
+                "But this one has a link: [![This is an image]($exampleBadge)]($exampleLink)",
+                "This is a large block image:",
+                "![Large image]($exampleImageUrl)",
             ).joinToString(System.lineSeparator()),
-          modifier = Modifier
-            .padding(horizontal = 8.dp)
-            .fillMaxWidth(),
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .fillMaxWidth(),
         )
     }
 }
@@ -101,10 +101,10 @@ are:
 
 * `MarkdownFlavour.CommonMark`
 * `MarkdownFlavour.Github`
-  * Checkboxes
-  * Strikethrough
-  * Tables (not supported)
-  * Automatic links
+    * Checkboxes
+    * Strikethrough
+    * Tables (not supported)
+    * Automatic links
 
 # Click listener
 
@@ -113,16 +113,13 @@ using the default browser. However, you can pass the optional parameter `onClick
 click listener will be added. Summary:
 
 1. If `onClick` is `null`:
-
-* Clicking on links will launch them with the browser.
-
+    * Clicking on links will launch them with the browser.
 2. If `onClick` is not `null`:
-
-* If `onClickOverrides` is `false`:
-  * Tapping a link will launch it.
-  * Tapping something else will call `onClick`
-* If `onClickOverrides` is `true`:
-  * Tapping anything will call `onClick`
+    * If `onClickOverrides` is `false`:
+        * Tapping a link will launch it.
+        * Tapping something else will call `onClick`
+    * If `onClickOverrides` is `true`:
+        * Tapping anything will call `onClick`
 
 # Used by
 
