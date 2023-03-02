@@ -60,7 +60,7 @@ internal fun ASTNode.explode(
 
     when {
         name == "TABLE" -> builder.withStyle(annotationStyle.codeBlockStyle) {
-            builder.append(getTextInNode(source).toString())
+            builder.append(getTextInNode(source))
         }
         name == "INLINE_LINK" && !hasParentWithName("IMAGE") && !hasChildWithName("IMAGE") ->
             builder.withStyle(annotationStyle.linkStyle) {
@@ -74,7 +74,7 @@ internal fun ASTNode.explode(
                     withAnnotation(
                         tag = "link",
                         annotation = url,
-                    ) { append(text.getNodeLinkText(source).toString()) }
+                    ) { append(text.getNodeLinkText(source)) }
                 }
             }
         name == "IMAGE" -> if (hasChildWithName("INLINE_LINK")) {
@@ -82,15 +82,15 @@ internal fun ASTNode.explode(
             val linkNode = findChildOfType("LINK_DESTINATION")
             if (textNode == null || linkNode == null) return mutableImages
 
-            val text = textNode.getNodeLinkText(source).toString()
-            val link = linkNode.getTextInNode(source).toString()
+            val text = textNode.getNodeLinkText(source)
+            val link = linkNode.getTextInNode(source)
 
             Log.v(TAG, "Adding image: $link")
             val parentLink = findParentWithName("INLINE_LINK")
             val imageLinkNode = parentLink?.findChildOfType("LINK_DESTINATION")
             if (imageLinkNode != null) {
                 Log.v(TAG, "Image has link")
-                val imageLink = imageLinkNode.getTextInNode(source).toString()
+                val imageLink = imageLinkNode.getTextInNode(source)
                 builder.withAnnotation(
                     tag = "link",
                     annotation = imageLink,
@@ -122,18 +122,19 @@ internal fun ASTNode.explode(
                     ?.let { name.substring(it + 1).toIntOrNull() }
                     ?.let { annotationStyle.headlineDepthStyles[it - 1] }
                     ?.let {
-                        val text = findChildOfType("ATX_CONTENT")
+                        findChildOfType("ATX_CONTENT")
                             ?.getTextInNode(source)
                             ?.trimStart()
-                            .toString()
-                        builder.withStyle(it.toSpanStyle()) { append(text) }
+                            ?.let { text ->
+                                builder.withStyle(it.toSpanStyle()) { append(text) }
+                            }
                         return mutableImages
                     }
             return children.explode(source, builder, annotationStyle, mutableImages, depth + 1)
         }
         // Collect all contents of links that leak
         parent?.name == "LINK_DESTINATION" -> return mutableImages
-        name == "TEXT" -> builder.append(getTextInNode(source).toString())
+        name == "TEXT" -> builder.append(getTextInNode(source))
         name == "WHITE_SPACE" -> builder.append(' ')
         name == "!" -> builder.append('!')
         name == ":" -> builder.append(':')
@@ -150,7 +151,7 @@ internal fun ASTNode.explode(
             append(" ".repeat(50))
         }
         name == "CHECK_BOX" -> {
-            val text = getTextInNode(source).toString()
+            val text = getTextInNode(source)
             val unchecked = text.contains("[ ]")
             builder.appendInlineContent(
                 id = if (unchecked) "checkbox" else "checkbox_checked",
@@ -158,7 +159,7 @@ internal fun ASTNode.explode(
             )
             mutableImages.add(ImageAnnotation.checkbox(!unchecked, text))
         }
-        name == "GFM_AUTOLINK" -> getTextInNode(source).toString().let { link ->
+        name == "GFM_AUTOLINK" -> getTextInNode(source).let { link ->
             builder.withStyle(annotationStyle.linkStyle) {
                 withAnnotation(
                     tag = "link",
