@@ -1,7 +1,6 @@
 package com.arnyminerz.markdowntext.annotatedstring
 
 import android.util.Log
-import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -60,6 +59,9 @@ internal fun ASTNode.explode(
 
     when {
         name == "TABLE" -> builder.withStyle(annotationStyle.codeBlockStyle) {
+            builder.append(getTextInNode(source))
+        }
+        name == "CODE_BLOCK" -> builder.withStyle(annotationStyle.codeBlockStyle) {
             builder.append(getTextInNode(source))
         }
         name == "INLINE_LINK" && !hasParentWithName("IMAGE") && !hasChildWithName("IMAGE") ->
