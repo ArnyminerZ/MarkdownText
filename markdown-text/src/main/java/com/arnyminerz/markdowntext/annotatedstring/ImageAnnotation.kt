@@ -11,5 +11,13 @@ internal data class ImageAnnotation(
             alt,
             false,
         )
+
+        fun checkbox(checked: Boolean, alt: CharSequence) = checkbox(checked, alt.toString())
     }
+
+    constructor(link: CharSequence, alt: CharSequence, fullWidth: Boolean) : this(
+        link.toString(),
+        alt.toString(),
+        fullWidth,
+    )
 }
