@@ -1,4 +1,4 @@
-package com.arnyminerz.markdowntext.annotatedstring
+package com.arnyminerz.markdowntext.render.full
 
 internal data class ImageAnnotation(
     val link: String,

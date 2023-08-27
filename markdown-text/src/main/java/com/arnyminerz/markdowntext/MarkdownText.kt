@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.arnyminerz.markdowntext.annotatedstring.AnnotationStyle
+import com.arnyminerz.markdowntext.render.AnnotationStyle
 import com.arnyminerz.markdowntext.ui.CheckBoxIcon
 import org.intellij.markdown.parser.MarkdownParser
 

@@ -1,12 +1,8 @@
-package com.arnyminerz.markdowntext.annotatedstring
+package com.arnyminerz.markdowntext.render
 
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 
-@Deprecated(
-    message = "File moved",
-    replaceWith = ReplaceWith("com.arnyminerz.markdowntext.render.AnnotationStyle")
-)
 data class AnnotationStyle(
     val headlineDepthStyles: List<TextStyle>,
     val codeBlockStyle: SpanStyle,

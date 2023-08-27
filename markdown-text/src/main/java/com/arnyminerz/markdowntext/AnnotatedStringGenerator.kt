@@ -2,9 +2,9 @@ package com.arnyminerz.markdowntext
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString
-import com.arnyminerz.markdowntext.annotatedstring.AnnotationStyle
-import com.arnyminerz.markdowntext.annotatedstring.ImageAnnotation
-import com.arnyminerz.markdowntext.annotatedstring.explode
+import com.arnyminerz.markdowntext.render.AnnotationStyle
+import com.arnyminerz.markdowntext.render.full.ImageAnnotation
+import com.arnyminerz.markdowntext.render.full.explode
 import org.intellij.markdown.ast.ASTNode
 
 internal class AnnotatedStringGenerator(

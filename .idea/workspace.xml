@@ -9,15 +9,15 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment="Extended explanation for click listeners">
-      <change afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+    <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment="Upgraded Kotlin to 1.9.0">
+      <change afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/AnnotationStyle.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/MarkdownText.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/MarkdownText.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/AnnotatedStringGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/AnnotatedStringGenerator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/annotatedstring/Analyzer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/full/Analyzer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/annotatedstring/AnnotationStyle.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/annotatedstring/AnnotationStyle.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/annotatedstring/ImageAnnotation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/full/ImageAnnotation.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +27,7 @@
   <component name="ComposerSettings">
     <execution />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[974AY0Z7GC]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Arnym\.android\avd\Pixel_3a_API_24.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -91,6 +91,8 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
+        <option value="Arnau Mora &lt;arnyminerz@proton.me&gt;" />
+        <option value="ar" />
         <option value="Arnau Mora &lt;arnyminer.z@gmail.com&gt;" />
         <option value="dge" />
       </list>
@@ -114,32 +116,51 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="Ubuntu" />
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2GRqWkze7nelNC3zjgGiT5NtFu0" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;ignore.preview.features.used&quot;: &quot;true&quot;,
-    &quot;memory.settings.postsync.last.time.stamp&quot;: &quot;1673620486726&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "master",
+    "ignore.preview.features.used": "true",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/Arnym/GitProjects/MarkdownText",
+    "memory.settings.postsync.last.time.stamp": "1673620486726",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/markdown-text" />
       <recent name="$PROJECT_DIR$/docs" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Arnym\GitProjects\MarkdownText\markdown-text\src\main\java\com\arnyminerz\markdowntext\render\full" />
       <recent name="E:\GitProjects\MarkdownText\markdown-text" />
+    </key>
+    <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
+      <recent name="com.arnyminerz.markdowntext.render" />
     </key>
   </component>
   <component name="RunManager" selected="Android App.example_app">
@@ -153,7 +174,6 @@
       <option name="ALL_USERS" value="false" />
       <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
       <option name="CLEAR_APP_STORAGE" value="false" />
-      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
       <option name="CLEAR_LOGCAT" value="false" />
@@ -162,13 +182,15 @@
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
       <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
       <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
-      <option name="DEBUGGER_TYPE" value="Auto" />
+      <option name="DEBUGGER_TYPE" value="Java" />
       <Auto>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
         <option name="SHOW_STATIC_VARS" value="true" />
         <option name="WORKING_DIR" value="" />
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Auto>
       <Hybrid>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -176,14 +198,21 @@
         <option name="WORKING_DIR" value="" />
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Hybrid>
-      <Java />
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
       <Native>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
         <option name="SHOW_STATIC_VARS" value="true" />
         <option name="WORKING_DIR" value="" />
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Native>
       <Profilers>
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
@@ -211,7 +240,6 @@
       <option name="ALL_USERS" value="false" />
       <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
       <option name="CLEAR_APP_STORAGE" value="false" />
-      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="--es composable com.arnyminerz.markdowntext.MarkdownTextKt.MarkdownTextPreview" />
       <option name="MODE" value="specific_activity" />
       <option name="CLEAR_LOGCAT" value="false" />
@@ -220,13 +248,15 @@
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
       <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
       <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
-      <option name="DEBUGGER_TYPE" value="Auto" />
+      <option name="DEBUGGER_TYPE" value="Java" />
       <Auto>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
         <option name="SHOW_STATIC_VARS" value="true" />
         <option name="WORKING_DIR" value="" />
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Auto>
       <Hybrid>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
@@ -234,14 +264,21 @@
         <option name="WORKING_DIR" value="" />
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Hybrid>
-      <Java />
+      <Java>
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
+      </Java>
       <Native>
         <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
         <option name="SHOW_STATIC_VARS" value="true" />
         <option name="WORKING_DIR" value="" />
         <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
         <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
+        <option name="DEBUG_SANDBOX_SDK" value="false" />
       </Native>
       <Profilers>
         <option name="ADVANCED_PROFILING_ENABLED" value="false" />
@@ -377,6 +414,7 @@
       <updated>1666361782378</updated>
       <workItem from="1666606097268" duration="1114000" />
       <workItem from="1666607235116" duration="1418000" />
+      <workItem from="1693152784649" duration="161000" />
     </task>
     <task id="LOCAL-00001" summary=":see_no_evil: Added `local.properties`">
       <created>1666696435166</created>
@@ -574,7 +612,84 @@
       <option name="project" value="LOCAL" />
       <updated>1676206123343</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Upgraded `androidx.core:core-ktx` to `1.10.1`">
+      <created>1693153037541</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1693153037541</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Upgraded `androidx.appcompat:appcompat` to `1.6.1`">
+      <created>1693153052139</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1693153052139</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Using Jetpack Compose BOM 2023.08.00">
+      <created>1693153178850</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1693153178850</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Upgraded `androidx.activity:activity-compose` to 1.7.2">
+      <created>1693153206292</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1693153206292</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Upgraded Gradle Wrapper to 8.0">
+      <created>1693153224538</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1693153224538</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Upgraded androidx.core:core-ktx to 1.10.1">
+      <created>1693153251275</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1693153251275</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Upgraded androidx.lifecycle:lifecycle-runtime-ktx to 2.6.1">
+      <created>1693153271000</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1693153271000</updated>
+    </task>
+    <task id="LOCAL-00036" summary="Using SDK 34">
+      <created>1693153299389</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1693153299389</updated>
+    </task>
+    <task id="LOCAL-00037" summary="Upgraded Compose Compiler to 1.5.2">
+      <created>1693153360442</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1693153360442</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Upgraded Kotlin to 1.9.0">
+      <created>1693153372316</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1693153372316</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Upgraded Kotlin to 1.9.0">
+      <created>1693153403870</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1693153403870</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -592,17 +707,8 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="RELOAD_CONTEXT" value="false" />
-    <MESSAGE value=":wrench: Configured publish" />
-    <MESSAGE value=":wrench: Configured workspace" />
-    <MESSAGE value=":bug: Fixes theme for the `MarkdownText` component" />
-    <MESSAGE value=":broom: Cleaned up code" />
-    <MESSAGE value=":construction_worker: Added workflow" />
-    <MESSAGE value=":construction_worker: Changed execution policy" />
-    <MESSAGE value=":construction_worker: Added `version.gradle` creation" />
-    <MESSAGE value="Added badge images" />
-    <MESSAGE value="Added jtx to used by" />
-    <MESSAGE value="Adjusted badges" />
     <MESSAGE value="Adjusted Github jtx link" />
     <MESSAGE value="Fixed display of `(`, `)`, `'` and `&quot;`" />
     <MESSAGE value="Added demo `(`, `)`, `'` and `&quot;`" />
@@ -618,9 +724,17 @@
     <MESSAGE value="Improved click handler overload" />
     <MESSAGE value="Fixed automatic links" />
     <MESSAGE value="Extended explanation for click listeners" />
-    <option name="LAST_COMMIT_MESSAGE" value="Extended explanation for click listeners" />
+    <MESSAGE value="Upgraded `androidx.core:core-ktx` to `1.10.1`" />
+    <MESSAGE value="Upgraded `androidx.appcompat:appcompat` to `1.6.1`" />
+    <MESSAGE value="Using Jetpack Compose BOM 2023.08.00" />
+    <MESSAGE value="Upgraded `androidx.activity:activity-compose` to 1.7.2" />
+    <MESSAGE value="Upgraded Gradle Wrapper to 8.0" />
+    <MESSAGE value="Upgraded androidx.core:core-ktx to 1.10.1" />
+    <MESSAGE value="Upgraded androidx.lifecycle:lifecycle-runtime-ktx to 2.6.1" />
+    <MESSAGE value="Using SDK 34" />
+    <MESSAGE value="Upgraded Compose Compiler to 1.5.2" />
+    <MESSAGE value="Upgraded Kotlin to 1.9.0" />
+    <option name="LAST_COMMIT_MESSAGE" value="Upgraded Kotlin to 1.9.0" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
-    <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>

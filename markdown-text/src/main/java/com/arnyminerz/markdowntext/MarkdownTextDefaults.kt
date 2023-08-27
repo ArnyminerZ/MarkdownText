@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextDecoration
-import com.arnyminerz.markdowntext.annotatedstring.AnnotationStyle
+import com.arnyminerz.markdowntext.render.AnnotationStyle
 
 /**
  * Provides the default values for calling [MarkdownText].
