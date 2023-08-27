@@ -9,15 +9,15 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment="Upgraded Kotlin to 1.9.0">
-      <change afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/AnnotationStyle.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment="Moved files around">
+      <change afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/interactable/StaticAnalyzer.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/model/Generator.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/model/IAnalyzer.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/AnnotatedStringGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/AnnotatedStringGenerator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/annotatedstring/Analyzer.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/full/Analyzer.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/annotatedstring/AnnotationStyle.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/annotatedstring/AnnotationStyle.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/annotatedstring/ImageAnnotation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/full/ImageAnnotation.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/AnnotatedStringGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/interactable/StaticGenerator.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/MarkdownText.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/MarkdownText.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/full/Analyzer.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/full/ImageAnnotation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/interactable/ImageAnnotation.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,6 +85,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Kotlin File" />
+        <option value="Kotlin Class" />
+        <option value="Kotlin Interface" />
       </list>
     </option>
   </component>
@@ -158,6 +160,10 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Arnym\GitProjects\MarkdownText\markdown-text\src\main\java\com\arnyminerz\markdowntext\render\full" />
       <recent name="E:\GitProjects\MarkdownText\markdown-text" />
+    </key>
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="com.arnyminerz.markdowntext.render.model" />
+      <recent name="com.arnyminerz.markdowntext.render.interactable" />
     </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
       <recent name="com.arnyminerz.markdowntext.render" />
@@ -689,7 +695,14 @@
       <option name="project" value="LOCAL" />
       <updated>1693153403870</updated>
     </task>
-    <option name="localTasksCounter" value="40" />
+    <task id="LOCAL-00040" summary="Moved files around">
+      <created>1693153800929</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1693153800929</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -709,7 +722,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="RELOAD_CONTEXT" value="false" />
-    <MESSAGE value="Adjusted Github jtx link" />
     <MESSAGE value="Fixed display of `(`, `)`, `'` and `&quot;`" />
     <MESSAGE value="Added demo `(`, `)`, `'` and `&quot;`" />
     <MESSAGE value="Tables get rendered as raw" />
@@ -734,7 +746,8 @@
     <MESSAGE value="Using SDK 34" />
     <MESSAGE value="Upgraded Compose Compiler to 1.5.2" />
     <MESSAGE value="Upgraded Kotlin to 1.9.0" />
-    <option name="LAST_COMMIT_MESSAGE" value="Upgraded Kotlin to 1.9.0" />
+    <MESSAGE value="Moved files around" />
+    <option name="LAST_COMMIT_MESSAGE" value="Moved files around" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>

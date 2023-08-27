@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.isSpecified
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.arnyminerz.markdowntext.render.AnnotationStyle
+import com.arnyminerz.markdowntext.render.interactable.StaticGenerator
 import com.arnyminerz.markdowntext.ui.CheckBoxIcon
 import org.intellij.markdown.parser.MarkdownParser
 
@@ -85,7 +86,7 @@ fun MarkdownText(
     val density = LocalDensity.current
 
     val parsedTree = MarkdownParser(flavour.descriptor).buildMarkdownTreeFromString(markdown)
-    val (text, images) = AnnotatedStringGenerator(markdown, parsedTree)
+    val (text, images) = StaticGenerator(markdown, parsedTree)
         .generateAnnotatedString(annotationStyle)
 
     // TODO: Current implementation, since ClickableText is not theming correctly.
