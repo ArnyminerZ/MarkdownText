@@ -68,7 +68,7 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.7.2'
 
     // Coil image loader
-    def coil_version = '2.4.0'
+    def coil_version = '2.5.0'
     implementation "io.coil-kt:coil:$coil_version"
     implementation "io.coil-kt:coil-svg:$coil_version"
     implementation "io.coil-kt:coil-gif:$coil_version"
