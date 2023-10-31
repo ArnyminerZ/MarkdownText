@@ -25,7 +25,7 @@ jobs:
           echo "  PUBLISH_VERSION=\"${{ steps.create_release.outputs.tag_name }}\"" >> markdown-text/version.gradle
           echo "}" >> markdown-text/version.gradle
           cat markdown-text/version.gradle
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: ":robot: Commit Changes"
           file_pattern: "gradle.properties markdown-text/version.gradle"
