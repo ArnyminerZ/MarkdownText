@@ -4,42 +4,34 @@ plugins {
 }
 
 android {
-    namespace "com.arnyminerz.markdowntext.app"
-    compileSdk 34
+    namespace = "com.arnyminerz.markdowntext.app"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId "com.arnyminerz.markdowntext.app"
-        minSdk 24
-        targetSdk 34
-        versionCode 1
-        versionName "1.0.0"
+        applicationId = "com.arnyminerz.markdowntext.app"
+        minSdk = 24
+        versionCode = 1
+        versionName = "1.0.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
-            useSupportLibrary true
+            useSupportLibrary = true
         }
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt")
-        }
-    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        compose true
+        compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion libs.versions.compose.compiler.get()
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
-    packagingOptions {
+    packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
@@ -56,7 +48,7 @@ dependencies {
     implementation(libs.compose.ui.toolingPreview)
 
     // Jetpack Compose - Markdown Text
-    implementation project(":markdown-text")
+    implementation(project(":markdown-text"))
 
     debugImplementation(libs.compose.ui.tooling)
 }
