@@ -9,10 +9,17 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment="Moved files around">
+    <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment="Upgrade Gradle to 8.5">
+      <change afterPath="$PROJECT_DIR$/.idea/deploymentTargetDropDown.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/migrations.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example_app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example_app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/markdown-text/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +32,7 @@
   <component name="ComposerSettings">
     <execution />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Arnym\.android\avd\Pixel_3a_API_24.avd]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[C:\Users\Arnym\.android\avd\Pixel_3a_API_34.avd]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -99,7 +106,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="47-bug-text-links-without-markdown-tags-disappear" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -139,7 +146,7 @@
     "android.gradle.sync.needed": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "version__catalog",
     "ignore.preview.features.used": "true",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/Arnym/GitProjects/MarkdownText",
@@ -708,7 +715,15 @@
       <option name="project" value="LOCAL" />
       <updated>1693153800929</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Upgrade Gradle to 8.5">
+      <option name="closed" value="true" />
+      <created>1706188962868</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1706188962868</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -728,7 +743,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="RELOAD_CONTEXT" value="false" />
-    <MESSAGE value="Fixed display of `(`, `)`, `'` and `&quot;`" />
     <MESSAGE value="Added demo `(`, `)`, `'` and `&quot;`" />
     <MESSAGE value="Tables get rendered as raw" />
     <MESSAGE value="Added sample table" />
@@ -753,7 +767,8 @@
     <MESSAGE value="Upgraded Compose Compiler to 1.5.2" />
     <MESSAGE value="Upgraded Kotlin to 1.9.0" />
     <MESSAGE value="Moved files around" />
-    <option name="LAST_COMMIT_MESSAGE" value="Moved files around" />
+    <MESSAGE value="Upgrade Gradle to 8.5" />
+    <option name="LAST_COMMIT_MESSAGE" value="Upgrade Gradle to 8.5" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>
