@@ -3,6 +3,8 @@ package com.arnyminerz.markdowntext.render.interactable
 import android.util.Log
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.ParagraphStyle
+import androidx.compose.ui.text.PlatformParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +23,7 @@ import com.arnyminerz.markdowntext.render.model.IAnalyzer
 import com.arnyminerz.markdowntext.withAnnotation
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
+import java.lang.StringBuilder
 
 private const val TAG = "ASA"
 
@@ -81,6 +84,16 @@ internal object StaticAnalyzer: IAnalyzer<List<ImageAnnotation>> {
             }
             name == "CODE_BLOCK" -> builder.withStyle(annotationStyle.codeBlockStyle) {
                 builder.append(getTextInNode(source))
+            }
+            name == "CODE_FENCE" -> builder.withStyle(annotationStyle.codeBlockStyle) {
+                val text = StringBuilder()
+                for (child in children) {
+                    when (child.type.name) {
+                        "CODE_FENCE_CONTENT" -> text.append(child.getTextInNode(source))
+                        "EOL" -> text.append("\n")
+                    }
+                }
+                builder.append(text)
             }
             name == "INLINE_LINK" && !hasParentWithName("IMAGE") && !hasChildWithName("IMAGE") ->
                 builder.withStyle(annotationStyle.linkStyle) {

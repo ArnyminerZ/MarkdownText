@@ -271,10 +271,15 @@ fun MarkdownTextPreview(
         "| This      | Is       | A table  |   |   |",
         "| Formatted | In       | Markdown |   |   |",
         "|           |          |          |   |   |",
+        "",
+        "```bash",
+        "#!/bin/bash",
+        "echo 'Hello world!'",
+        "```"
     ).joinToString(System.lineSeparator())
 
     Column(
-        modifier = Modifier.verticalScroll(rememberScrollState()),
+        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()),
     ) {
         MarkdownText(
             markdown = src,
