@@ -10,19 +10,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment="Moved files around">
-      <change afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/interactable/StaticAnalyzer.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/model/Generator.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/model/IAnalyzer.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/AnnotatedStringGenerator.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/interactable/StaticGenerator.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/MarkdownText.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/MarkdownText.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/full/Analyzer.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/full/ImageAnnotation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/src/main/java/com/arnyminerz/markdowntext/render/interactable/ImageAnnotation.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
   </component>
   <component name="ComposerSettings">
     <execution />
@@ -138,6 +136,8 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
+    "android.gradle.sync.needed": "true",
+    "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "master",
     "ignore.preview.features.used": "true",
@@ -180,6 +180,7 @@
       <option name="ALL_USERS" value="false" />
       <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
       <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
       <option name="CLEAR_LOGCAT" value="false" />
@@ -246,6 +247,7 @@
       <option name="ALL_USERS" value="false" />
       <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
       <option name="CLEAR_APP_STORAGE" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="--es composable com.arnyminerz.markdowntext.MarkdownTextKt.MarkdownTextPreview" />
       <option name="MODE" value="specific_activity" />
       <option name="CLEAR_LOGCAT" value="false" />
@@ -322,6 +324,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <configuration name="MarkdownText:markdown-text [publishAllPublicationsToSonatypeRepository]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -343,6 +346,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <configuration name="MarkdownText:markdown-text [publishReleasePublicationToSonatypeRepository]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -364,6 +368,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <configuration name="MarkdownText:markdown-text [publishToMavenLocal]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -385,6 +390,7 @@
       <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
       <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
       <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
     <configuration default="true" type="JetRunConfigurationType">
