@@ -14,7 +14,9 @@ import org.intellij.markdown.parser.MarkdownParser
 class JetbrainsMarkdownProcessor(
     private val flavour: MarkdownFlavour = MarkdownFlavour.Github
 ) : IProcessor {
-    private val MaxLogTextLength = 48
+    companion object {
+        private const val MaxLogTextLength = 48
+    }
 
     @Suppress("MagicNumber")
     private fun logNode(node: ASTNode, allFileText: String, depth: Int = 0) {
