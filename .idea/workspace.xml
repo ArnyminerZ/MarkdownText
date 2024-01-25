@@ -9,9 +9,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment="Changed release logic">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example_app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example_app/build.gradle.kts" afterDir="false" />
+    <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment="Removed version.gradle">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/drafter.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/drafter.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -691,7 +690,31 @@
       <option name="project" value="LOCAL" />
       <updated>1706196176481</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="Migrated to Kotlin DSL">
+      <option name="closed" value="true" />
+      <created>1706196345041</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1706196345041</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Removed secring.gpg">
+      <option name="closed" value="true" />
+      <created>1706196397463</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1706196397463</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Removed version.gradle">
+      <option name="closed" value="true" />
+      <created>1706196417388</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1706196417388</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -711,9 +734,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="RELOAD_CONTEXT" value="false" />
-    <MESSAGE value="Added `TableRenderer`" />
-    <MESSAGE value="Development" />
-    <MESSAGE value="Added click listener" />
     <MESSAGE value="Added click listener explanation" />
     <MESSAGE value="Moved callback" />
     <MESSAGE value="Updated dependencies" />
@@ -736,7 +756,10 @@
     <MESSAGE value="Using Gradle version catalog" />
     <MESSAGE value="Proguard cleanup" />
     <MESSAGE value="Changed release logic" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed release logic" />
+    <MESSAGE value="Migrated to Kotlin DSL" />
+    <MESSAGE value="Removed secring.gpg" />
+    <MESSAGE value="Removed version.gradle" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed version.gradle" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>
