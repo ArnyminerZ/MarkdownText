@@ -2,8 +2,4 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.kotlin) apply false
-
-    alias(libs.plugins.nexus.publish)
 }
-
-apply from: "${rootProject.projectDir}/scripts/publish-root.gradle"
