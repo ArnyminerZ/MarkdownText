@@ -12,13 +12,19 @@ import org.intellij.markdown.ast.getTextInNode
 import org.intellij.markdown.parser.MarkdownParser
 
 class JetbrainsMarkdownProcessor(
-    private val flavour: MarkdownFlavour
+    private val flavour: MarkdownFlavour = MarkdownFlavour.Github
 ) : IProcessor {
+    private val MaxLogTextLength = 48
+
     @Suppress("MagicNumber")
     private fun logNode(node: ASTNode, allFileText: String, depth: Int = 0) {
         val prefix = "  ".repeat(depth)
         var text = node.getTextInNode(allFileText)
-        if (text.length > 48) text = text.substring(0, text.length) + " ..."
+        if (text.length > MaxLogTextLength) {
+            text = text
+                .substring(0, MaxLogTextLength)
+                .replace("\n", "\\n") + " ..."
+        }
         println("$prefix- ${node.name} [${node.startOffset}-${node.endOffset}] (${node.children.size}) - $text")
         for (child in node.children) logNode(child,  allFileText, depth + 1)
     }
@@ -47,7 +53,7 @@ class JetbrainsMarkdownProcessor(
         logNode(parsedTree, markdown)
         println()
 
-        val context = ProcessingContext.build(markdown)
+        val context = ProcessingContext.build(markdown, this)
         return context.explode(parsedTree)
     }
 }

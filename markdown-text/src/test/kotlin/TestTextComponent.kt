@@ -1,6 +1,7 @@
 import com.arnyminerz.markdowntext.component.model.TextComponent
 import com.arnyminerz.markdowntext.component.model.TextComponent.StyledText
 import com.arnyminerz.markdowntext.component.model.TextComponent.StyledText.Companion.extract
+import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
 import com.arnyminerz.markdowntext.processor.ProcessingContext
 import org.intellij.markdown.IElementType
 import org.intellij.markdown.ast.ASTNode
@@ -50,7 +51,7 @@ class TestTextComponent {
                     ),
                 )
             )
-            with(ProcessingContext.build(raw)) {
+            with(ProcessingContext.build(raw, JetbrainsMarkdownProcessor())) {
                 val text = extract(node)
                 block(text)
             }
