@@ -1,11 +1,7 @@
 name: 📦 Releaser
 
 on:
-  workflow_run:
-    workflows: [ "Release Drafter" ]
-    branches: [ master ]
-    types:
-      - completed
+  release:
 
 jobs:
   publish:
