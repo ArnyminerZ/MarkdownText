@@ -69,7 +69,8 @@ dependencies {
 
     implementation(libs.jetbrains.markdown)
 
-    testImplementation(libs.junit)
+    testImplementation(kotlin("test"))
+
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)
 }
