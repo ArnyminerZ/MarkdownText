@@ -1,3 +1,5 @@
+@file:Suppress("LongParameterList", "LongMethod", "CyclomaticComplexMethod", "SwallowedException", "FunctionNaming")
+
 package com.arnyminerz.markdowntext.render.model
 
 import androidx.compose.ui.text.AnnotatedString

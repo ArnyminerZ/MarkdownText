@@ -26,7 +26,19 @@ fun assertIsStyledText(
 ) {
     assertIs<TextComponent.StyledText>(component)
     assertEquals(text, component.text)
-    assertEquals(isBold, component.isBold, "Expected component to ${if (isBold) "" else "not "}be bold.")
-    assertEquals(isItalic, component.isItalic, "Expected component to ${if (isItalic) "" else "not "}be italic.")
-    assertEquals(isStrikethrough, component.isStrikethrough, "Expected component to ${if (isStrikethrough) "" else "not "}be strikethrough.")
+    assertEquals(
+        isBold,
+        component.isBold,
+        "Expected component to ${if (isBold) "" else "not "}be bold."
+    )
+    assertEquals(
+        isItalic,
+        component.isItalic,
+        "Expected component to ${if (isItalic) "" else "not "}be italic."
+    )
+    assertEquals(
+        isStrikethrough,
+        component.isStrikethrough,
+        "Expected component to ${if (isStrikethrough) "" else "not "}be strikethrough."
+    )
 }

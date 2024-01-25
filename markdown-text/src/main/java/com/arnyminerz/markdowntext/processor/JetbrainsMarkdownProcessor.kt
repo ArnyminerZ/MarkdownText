@@ -9,6 +9,7 @@ import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
 import org.intellij.markdown.parser.MarkdownParser
 
+@Suppress("MagicNumber")
 class JetbrainsMarkdownProcessor(
     private val flavour: MarkdownFlavour
 ) : IProcessor {

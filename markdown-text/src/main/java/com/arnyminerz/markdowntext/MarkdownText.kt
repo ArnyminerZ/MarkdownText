@@ -1,3 +1,5 @@
+@file:Suppress("LongParameterList", "LongMethod", "CyclomaticComplexMethod", "SwallowedException", "FunctionNaming")
+
 package com.arnyminerz.markdowntext
 
 import android.content.ActivityNotFoundException
@@ -62,6 +64,7 @@ private const val TAG = "MarkdownText"
  * @see Text
  */
 @Composable
+@Suppress("ForbiddenComment")
 fun MarkdownText(
     markdown: String,
     modifier: Modifier = Modifier,

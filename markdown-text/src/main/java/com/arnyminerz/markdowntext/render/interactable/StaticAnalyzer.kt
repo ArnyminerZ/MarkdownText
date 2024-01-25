@@ -1,3 +1,5 @@
+@file:Suppress("LongParameterList", "LongMethod", "CyclomaticComplexMethod", "NestedBlockDepth", "MaxLineLength", "MagicNumber")
+
 package com.arnyminerz.markdowntext.render.interactable
 
 import android.util.Log

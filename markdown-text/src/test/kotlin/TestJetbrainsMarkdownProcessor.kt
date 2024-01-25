@@ -62,16 +62,37 @@ class TestJetbrainsMarkdownProcessor {
             assertIsStyledText(list.next(), "strikethrough", isStrikethrough = true)
             assertIsText(list.next(), ",")
             assertIsWS(list.next())
-            assertIsStyledText(list.next(), "bold with italics", isBold = true, isItalic = true)
+            assertIsStyledText(
+                list.next(),
+                "bold with italics",
+                isBold = true,
+                isItalic = true
+            )
             assertIsText(list.next(), ",")
             assertIsWS(list.next())
-            assertIsStyledText(list.next(), "bold with strikethrough", isBold = true, isStrikethrough = true)
+            assertIsStyledText(
+                list.next(),
+                "bold with strikethrough",
+                isBold = true,
+                isStrikethrough = true
+            )
             assertIsText(list.next(), ",")
             assertIsWS(list.next())
-            assertIsStyledText(list.next(), "italics with strikethrough", isItalic = true, isStrikethrough = true)
+            assertIsStyledText(
+                list.next(),
+                "italics with strikethrough",
+                isItalic = true,
+                isStrikethrough = true
+            )
             assertIsText(list.next(), ",")
             assertIsWS(list.next())
-            assertIsStyledText(list.next(), "bold with italics and strikethrough", isBold = true, isItalic = true, isStrikethrough = true)
+            assertIsStyledText(
+                list.next(),
+                "bold with italics and strikethrough",
+                isBold = true,
+                isItalic = true,
+                isStrikethrough = true
+            )
             assertIsText(list.next(), ".")
             assertFalse(list.hasNext())
         }
