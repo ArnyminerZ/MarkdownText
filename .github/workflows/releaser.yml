@@ -26,15 +26,15 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: 🔒 Prepare secure files
         run: |
-          touch ./local.properties
-          echo 'signing.keyId=${{ secrets.SIGNING_KEY_ID }}' > ./local.properties
-          echo 'signing.password=${{ secrets.SIGNING_PASSWORD }}' > ./local.properties
-          echo 'signing.secretKeyRingFile=./secring.gpg' > ./local.properties
-          echo 'ossrhUsername=${{ secrets.OSSRH_USERNAME }}' > ./local.properties
-          echo 'ossrhPassword=${{ secrets.OSSRH_PASSWORD }}' > ./local.properties
-          echo 'sonatypeStagingProfileId=${{ secrets.SONATYPE_STAGING_PROFILE_ID }}' > ./local.properties
+          echo -n '${{ secrets.KEY_BASE64 }}' | base64 --decode > ${{ github.workspace }}/secring.gpg
+          
+          touch ./markdown-text/gradle.properties
+          echo 'signing.keyId=${{ secrets.SIGNING_KEY_ID }}' > ./markdown-text/gradle.properties
+          echo 'signing.password=${{ secrets.SIGNING_PASSWORD }}' > ./markdown-text/gradle.properties
+          echo 'signing.secretKeyRingFile=${{ github.workspace }}/secring.gpg' > ./markdown-text/gradle.properties
       - name: ✈️ Run
         id: publish
-        run: |
-          yes | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;33.0.0"
-          bash ./gradlew publishReleasePublicationToSonatypeRepository
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+        run: ./gradlew publishAllPublicationsToMavenRepository

@@ -12,8 +12,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = 'markdown-text'
+rootProject.name = "markdown-text"
 
 // Import module
-include ':markdown-text'
-include ':example_app'
+include(":markdown-text")
+include(":example_app")

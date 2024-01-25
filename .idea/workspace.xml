@@ -9,12 +9,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment="Using Gradle version catalog">
-      <change beforePath="$PROJECT_DIR$/example_app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example_app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example_app/proguard-rules.pro" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/markdown-text/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/markdown-text/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/markdown-text/consumer-rules.pro" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/markdown-text/proguard-rules.pro" beforeDir="false" />
+    <list default="true" id="165c969f-cdc8-495c-bc13-97231d52d579" name="Changes" comment="Removed version.gradle">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/drafter.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/drafter.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,13 +61,6 @@
                 <item name="markdown-text" type="f1a62948:ProjectNode" />
                 <item name="markdown-text" type="2d1252cf:ModuleNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="markdown-text" type="f1a62948:ProjectNode" />
-                <item name="markdown-text" type="2d1252cf:ModuleNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
                 <item name="publishing" type="c8890929:TasksNode$1" />
               </path>
             </expand>
@@ -101,7 +90,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="version_catalog" />
+        <entry key="$PROJECT_DIR$" value="master" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -140,7 +129,7 @@
     "WebServerToolWindowFactoryState": "false",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "kotlin__dsl",
     "ignore.preview.features.used": "true",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/Arnym/GitProjects/MarkdownText",
@@ -170,7 +159,13 @@
       <recent name="com.arnyminerz.markdowntext.render" />
     </key>
   </component>
-  <component name="RunManager" selected="Android App.example_app">
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="gradle sign" />
+      <command value="gradle signMavenJavaPublication" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Gradle.MarkdownText:markdown-text [publishAllPublicationsToMavenRepository]">
     <configuration name="example_app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="markdown-text.example_app.main" />
       <option name="DEPLOY" value="true" />
@@ -238,73 +233,49 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="MarkdownTextPreview" type="ComposePreviewRunConfiguration" activateToolWindowBeforeRun="false" temporary="true">
-      <module name="markdown-text.markdown-text" />
-      <option name="DEPLOY" value="true" />
-      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
-      <option name="DEPLOY_AS_INSTANT" value="false" />
-      <option name="ARTIFACT_NAME" value="" />
-      <option name="PM_INSTALL_OPTIONS" value="" />
-      <option name="ALL_USERS" value="false" />
-      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
-      <option name="CLEAR_APP_STORAGE" value="false" />
-      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
-      <option name="ACTIVITY_EXTRA_FLAGS" value="--es composable com.arnyminerz.markdowntext.MarkdownTextKt.MarkdownTextPreview" />
-      <option name="MODE" value="specific_activity" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
-      <option name="INSPECTION_WITHOUT_ACTIVITY_RESTART" value="false" />
-      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
-      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
-      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
-      <option name="DEBUGGER_TYPE" value="Java" />
-      <Auto>
-        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
-        <option name="SHOW_STATIC_VARS" value="true" />
-        <option name="WORKING_DIR" value="" />
-        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
-        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
-        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
-      </Auto>
-      <Hybrid>
-        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
-        <option name="SHOW_STATIC_VARS" value="true" />
-        <option name="WORKING_DIR" value="" />
-        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
-        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
-        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
-      </Hybrid>
-      <Java>
-        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
-      </Java>
-      <Native>
-        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
-        <option name="SHOW_STATIC_VARS" value="true" />
-        <option name="WORKING_DIR" value="" />
-        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
-        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
-        <option name="ATTACH_ON_WAIT_FOR_DEBUGGER" value="false" />
-        <option name="DEBUG_SANDBOX_SDK" value="false" />
-      </Native>
-      <Profilers>
-        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
-        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Java/Kotlin Method Sample (legacy)" />
-        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
-        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
-      </Profilers>
-      <option name="DEEP_LINK" value="" />
-      <option name="ACTIVITY_CLASS" value="androidx.compose.ui.tooling.PreviewActivity" />
-      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="true" />
-      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
-      <compose-preview-run-configuration composable-fqn="com.arnyminerz.markdowntext.MarkdownTextKt.MarkdownTextPreview" />
-      <method v="2">
-        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-      </method>
+    <configuration name="MarkdownText [signMavenJavaPublication]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="signMavenJavaPublication" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="MarkdownText [sign]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="sign" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
     </configuration>
     <configuration name="MarkdownText:markdown-text [assemble]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
@@ -328,7 +299,7 @@
       <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
-    <configuration name="MarkdownText:markdown-text [publishAllPublicationsToSonatypeRepository]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="MarkdownText:markdown-text [publishAllPublicationsToMavenLocalRepository]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/markdown-text" />
@@ -339,7 +310,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="publishAllPublicationsToSonatypeRepository" />
+            <option value="publishAllPublicationsToMavenLocalRepository" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -350,7 +321,7 @@
       <ForceTestExec>false</ForceTestExec>
       <method v="2" />
     </configuration>
-    <configuration name="MarkdownText:markdown-text [publishReleasePublicationToSonatypeRepository]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="MarkdownText:markdown-text [publishAllPublicationsToMavenRepository]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$/markdown-text" />
@@ -361,29 +332,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="publishReleasePublicationToSonatypeRepository" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <ForceTestExec>false</ForceTestExec>
-      <method v="2" />
-    </configuration>
-    <configuration name="MarkdownText:markdown-text [publishToMavenLocal]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/markdown-text" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="publishToMavenLocal" />
+            <option value="publishAllPublicationsToMavenRepository" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -409,11 +358,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.MarkdownText:markdown-text [publishAllPublicationsToMavenRepository]" />
+        <item itemvalue="Gradle.MarkdownText [signMavenJavaPublication]" />
+        <item itemvalue="Gradle.MarkdownText [sign]" />
+        <item itemvalue="Gradle.MarkdownText:markdown-text [publishAllPublicationsToMavenLocalRepository]" />
         <item itemvalue="Gradle.MarkdownText:markdown-text [assemble]" />
-        <item itemvalue="Gradle.MarkdownText:markdown-text [publishAllPublicationsToSonatypeRepository]" />
-        <item itemvalue="Compose Preview.MarkdownTextPreview" />
-        <item itemvalue="Gradle.MarkdownText:markdown-text [publishReleasePublicationToSonatypeRepository]" />
-        <item itemvalue="Gradle.MarkdownText:markdown-text [publishToMavenLocal]" />
       </list>
     </recent_temporary>
   </component>
@@ -725,7 +674,47 @@
       <option name="project" value="LOCAL" />
       <updated>1706190167663</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="Proguard cleanup">
+      <option name="closed" value="true" />
+      <created>1706190255878</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1706190255878</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Changed release logic">
+      <option name="closed" value="true" />
+      <created>1706196176481</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1706196176481</updated>
+    </task>
+    <task id="LOCAL-00045" summary="Migrated to Kotlin DSL">
+      <option name="closed" value="true" />
+      <created>1706196345041</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1706196345041</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Removed secring.gpg">
+      <option name="closed" value="true" />
+      <created>1706196397463</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1706196397463</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Removed version.gradle">
+      <option name="closed" value="true" />
+      <created>1706196417388</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1706196417388</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -745,11 +734,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="RELOAD_CONTEXT" value="false" />
-    <MESSAGE value="Tables get rendered as raw" />
-    <MESSAGE value="Added sample table" />
-    <MESSAGE value="Added `TableRenderer`" />
-    <MESSAGE value="Development" />
-    <MESSAGE value="Added click listener" />
     <MESSAGE value="Added click listener explanation" />
     <MESSAGE value="Moved callback" />
     <MESSAGE value="Updated dependencies" />
@@ -770,7 +754,12 @@
     <MESSAGE value="Moved files around" />
     <MESSAGE value="Upgrade Gradle to 8.5" />
     <MESSAGE value="Using Gradle version catalog" />
-    <option name="LAST_COMMIT_MESSAGE" value="Using Gradle version catalog" />
+    <MESSAGE value="Proguard cleanup" />
+    <MESSAGE value="Changed release logic" />
+    <MESSAGE value="Migrated to Kotlin DSL" />
+    <MESSAGE value="Removed secring.gpg" />
+    <MESSAGE value="Removed version.gradle" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed version.gradle" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>
