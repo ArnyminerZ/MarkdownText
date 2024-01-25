@@ -19,6 +19,8 @@ internal fun ASTNode.flatChildren(): List<ASTNode> {
 
 internal fun ASTNode.findChildOfType(tagName: String) = flatChildren().find { it.name == tagName }
 
+internal fun ASTNode.findAllChildrenOfType(tagName: String) = flatChildren().filter { it.name == tagName }
+
 internal fun ASTNode.getNodeLinkText(allFileText: CharSequence) = getTextInNode(allFileText)
     .trimStart { it == '[' }
     .trimEnd { it == ']' }

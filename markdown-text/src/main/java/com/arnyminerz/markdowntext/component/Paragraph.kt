@@ -8,7 +8,6 @@ import com.arnyminerz.markdowntext.component.model.TextComponent.StyledText
 import com.arnyminerz.markdowntext.component.model.TextComponent.Text
 import com.arnyminerz.markdowntext.component.model.TextComponent.WS
 import com.arnyminerz.markdowntext.component.model.ITextContainer
-import com.arnyminerz.markdowntext.component.model.TextComponent.StyledText.Companion.extract
 import com.arnyminerz.markdowntext.name
 import com.arnyminerz.markdowntext.processor.ProcessingContext
 import org.intellij.markdown.ast.ASTNode
@@ -27,8 +26,8 @@ data class Paragraph(
                     node.name == Text.name -> Text(
                         text = node.getTextInNode(allFileText).toString()
                     )
-                    node.name == EOL.name -> EOL()
-                    node.name == WS.name -> WS()
+                    node.name == EOL.name -> EOL
+                    node.name == WS.name -> WS
                     StyledText.isInstanceOf(node) -> with(StyledText) { extract(node) }
                     else -> error("Got an invalid component: ${node.name}")
                 }
@@ -41,4 +40,28 @@ data class Paragraph(
     val lines: List<String> = list.joinToString("") { it.text }.split('\n')
 
     override fun toString(): String = list.joinToString("") { it.toString() }
+
+    operator fun plus(other: Paragraph): Paragraph {
+        val result = list.toMutableList()
+        result.addAll(other.list)
+        return Paragraph(result)
+    }
+}
+
+/**
+ * Results a new list in which each element is the result of adding ([Paragraph.plus]) the
+ * paragraphs of the top list.
+ */
+fun List<List<Paragraph>>.flatten(): List<Paragraph> {
+    val result = mutableListOf<Paragraph>()
+    for (list in this) {
+        if (list.isEmpty()) continue
+        val iterator = list.iterator()
+        var builder = iterator.next()
+        while (iterator.hasNext()) {
+            builder += iterator.next()
+        }
+        result.add(builder)
+    }
+    return result
 }

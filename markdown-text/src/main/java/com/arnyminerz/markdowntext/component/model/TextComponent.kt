@@ -13,19 +13,15 @@ abstract class TextComponent private constructor(
 
 ) : IComponent {
     /** Alias for End Of Line */
-    class EOL : TextComponent() {
-        companion object : FeatureCompanion {
-            override val name: String = "EOL"
-        }
+    object EOL : TextComponent() {
+        const val name: String = "EOL"
 
         override val text: String = "\n"
     }
 
     /** Alias for White Space */
-    class WS : TextComponent() {
-        companion object : FeatureCompanion {
-            override val name: String = "WHITE_SPACE"
-        }
+    object WS : TextComponent() {
+        const val name: String = "WHITE_SPACE"
 
         override val text: String = " "
     }
@@ -45,8 +41,10 @@ abstract class TextComponent private constructor(
         companion object : NodeTypeCheck, NodeExtractor<StyledText> {
             /** `STRONG` */
             const val NODE_BOLD = "STRONG"
+
             /** `EMPH` */
             const val NODE_ITAL = "EMPH"
+
             /** `STRIKETHROUGH` */
             const val NODE_STRI = "STRIKETHROUGH"
 
