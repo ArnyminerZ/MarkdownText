@@ -92,7 +92,7 @@ publishing {
         register("mavenJava", MavenPublication::class) {
             groupId = "com.arnyminerz.markdowntext"
             artifactId = "markdowntext"
-            version = "2.0.0-dev01"
+            version = "2.0.0-dev02"
 
             if (project.plugins.findPlugin("com.android.library") != null) {
                 from(components.findByName("release"))
