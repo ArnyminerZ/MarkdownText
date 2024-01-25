@@ -49,6 +49,20 @@ data class Paragraph(
 }
 
 /**
+ * Uses [Paragraph.plus] to join all the elements of the paragraph.
+ * @throws IllegalStateException If the list is empty.
+ */
+fun List<Paragraph>.join(): Paragraph {
+    check(isNotEmpty()) { "Cannot join an empty list of paragraphs." }
+    val iterator = iterator()
+    var builder = iterator.next()
+    while (iterator.hasNext()) {
+        builder += iterator.next()
+    }
+    return builder
+}
+
+/**
  * Results a new list in which each element is the result of adding ([Paragraph.plus]) the
  * paragraphs of the top list.
  */
@@ -56,12 +70,7 @@ fun List<List<Paragraph>>.flatten(): List<Paragraph> {
     val result = mutableListOf<Paragraph>()
     for (list in this) {
         if (list.isEmpty()) continue
-        val iterator = list.iterator()
-        var builder = iterator.next()
-        while (iterator.hasNext()) {
-            builder += iterator.next()
-        }
-        result.add(builder)
+        result.add(list.join())
     }
     return result
 }

@@ -1,4 +1,5 @@
 import com.arnyminerz.markdowntext.MarkdownFlavour
+import com.arnyminerz.markdowntext.component.OrderedList
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.component.UnorderedList
 import com.arnyminerz.markdowntext.component.model.TextComponent
@@ -148,15 +149,7 @@ class TestJetbrainsMarkdownProcessor {
             // Check that the list has 3 items
             assertEquals(3, component.list.size)
 
-            fun assertTextItem(index: Int, text: String) {
-                component.list[index].let { paragraph ->
-                    assertEquals(1, paragraph.list.size)
-                    assertIsText(paragraph.list[0], text)
-                }
-            }
-
             // Make sure the texts have been loaded correctly
-            assertTextItem(0, "First item")
             component.list[0].list.let { components ->
                 assertEquals(1, components.size)
                 assertIsText(components[0], "First item")
@@ -173,6 +166,80 @@ class TestJetbrainsMarkdownProcessor {
                 assertIsWS(components[1])
                 assertIsStyledText(components[2], "italics", isItalic = true)
                 assertIsText(components[3], ".")
+            }
+        }
+    }
+
+    @Test
+    fun `test load ordered list (Github)`() {
+        val result = githubProcessor.load(
+            """
+            1. Item
+            2. Item
+            3. Item
+            4. Item
+            """.trimIndent()
+        )
+        assertEquals(1, result.size)
+        result[0].let { component ->
+            // Make sure the component is an UnorderedList
+            assertIs<OrderedList>(component)
+            // Check that the list has 4 items
+            assertEquals(4, component.list.size)
+
+            fun assertItem(index: Int, number: String, text: String) {
+                component.list.toList()[index].let { (num, paragraph) ->
+                    assertEquals(number, num)
+                    assertEquals(1, paragraph.list.size)
+                    assertIsText(paragraph.list[0], text)
+                }
+            }
+
+            // Make sure the texts have been loaded correctly
+            assertItem(0, "1. ", "Item")
+            assertItem(1, "2. ", "Item")
+            assertItem(2, "3. ", "Item")
+            assertItem(3, "4. ", "Item")
+        }
+    }
+
+    @Test
+    fun `test load ordered list with styles (Github)`() {
+        val result = githubProcessor.load(
+            """
+            1. First item
+            2. **Bold** item
+            3. Item with *italics*.
+            """.trimIndent()
+        )
+        assertEquals(1, result.size)
+        result[0].let { component ->
+            // Make sure the component is an UnorderedList
+            assertIs<OrderedList>(component)
+            // Check that the list has 3 items
+            assertEquals(3, component.list.size)
+            val components = component.list.toList()
+
+            // Make sure the texts have been loaded correctly
+            components[0].let { (number, components) ->
+                assertEquals("1. ", number)
+                assertEquals(1, components.list.size)
+                assertIsText(components.list[0], "First item")
+            }
+            components[1].let { (number, components) ->
+                assertEquals("2. ", number)
+                assertEquals(3, components.list.size)
+                assertIsStyledText(components.list[0], "Bold", isBold = true)
+                assertIsWS(components.list[1])
+                assertIsText(components.list[2], "item")
+            }
+            components[2].let { (number, components) ->
+                assertEquals("3. ", number)
+                assertEquals(4, components.list.size)
+                assertIsText(components.list[0], "Item with")
+                assertIsWS(components.list[1])
+                assertIsStyledText(components.list[2], "italics", isItalic = true)
+                assertIsText(components.list[3], ".")
             }
         }
     }
