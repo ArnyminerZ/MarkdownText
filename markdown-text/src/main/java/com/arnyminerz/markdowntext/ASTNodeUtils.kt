@@ -25,6 +25,8 @@ internal fun ASTNode.getNodeLinkText(allFileText: CharSequence) = getTextInNode(
 
 internal fun ASTNode.hasChildWithName(nodeName: String): Boolean = findChildOfType(nodeName) != null
 
+internal fun ASTNode.hasChildren(): Boolean = children.isNotEmpty()
+
 /**
  * Searches for a parent with the given [ASTNode.name].
  * @since 20221215
