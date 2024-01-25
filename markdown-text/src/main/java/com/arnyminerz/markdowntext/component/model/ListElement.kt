@@ -5,5 +5,5 @@ import com.arnyminerz.markdowntext.component.Paragraph
 data class ListElement(
     val paragraph: Paragraph,
     val subList: List<ListElement>? = null,
-    val prefix: String? = null
+    val prefix: String? = "•"
 ): Feature
