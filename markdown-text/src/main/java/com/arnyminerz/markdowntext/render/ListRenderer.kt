@@ -6,6 +6,16 @@ import com.arnyminerz.markdowntext.component.model.IListComponent
 import com.arnyminerz.markdowntext.component.model.ListElement
 
 object ListRenderer : IRenderer<IListComponent> {
+    /**
+     * This is the algorithm that calculates the prefix to add to each list item for padding from
+     * its depth.
+     * Default:
+     * ```kotlin
+     * "  ".repeat(depth + 1)
+     * ```
+     */
+    var paddingAlgorithm: (depth: Int) -> String = { "  ".repeat(it + 1) }
+
     @Composable
     override fun Content(feature: IListComponent) {
         TODO("Not yet implemented")
@@ -16,18 +26,19 @@ object ListRenderer : IRenderer<IListComponent> {
         elements: List<ListElement>,
         depth: Int = 0
     ) {
-        val pad = "  ".repeat(depth)
+        // Always append a new line at the beginning of a list
+        annotatedStringBuilder.appendLine()
+        val pad = paddingAlgorithm(depth)
         for (element in elements) {
             // Add the pad
             annotatedStringBuilder.append(pad)
             // Append the prefix string
             annotatedStringBuilder.append(element.prefix)
-            // Add a space for giving a bit of space
-            annotatedStringBuilder.append(" ")
+            // Add a tab for giving a bit of space
+            annotatedStringBuilder.append('\t')
             // Render the paragraph
-            ParagraphRenderer.append(annotatedStringBuilder, element.paragraph)
-            // And add a line break
-            annotatedStringBuilder.appendLine()
+            ParagraphRenderer(otherLinesPrefix = "$pad \t")
+                .append(annotatedStringBuilder, element.paragraph)
 
             element.subList?.let { append(annotatedStringBuilder, it, depth + 1) }
         }

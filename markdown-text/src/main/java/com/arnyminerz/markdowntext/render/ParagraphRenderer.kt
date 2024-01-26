@@ -10,16 +10,29 @@ import androidx.compose.ui.text.withStyle
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.component.model.TextComponent
 
-object ParagraphRenderer : IRenderer<Paragraph> {
+/**
+ * Allows rendering [Paragraph] components.
+ * @param firstLinePrefix Will be added before the first line of the paragraph.
+ * @param otherLinesPrefix Will be added before each line of the paragraph starting from the second.
+ */
+class ParagraphRenderer(
+    private val firstLinePrefix: String = "",
+    private val otherLinesPrefix: String = ""
+) : IRenderer<Paragraph> {
     @Composable
     override fun Content(feature: Paragraph) {
         TODO("Not yet implemented")
     }
 
     override fun append(annotatedStringBuilder: AnnotatedString.Builder, feature: Paragraph) {
+        annotatedStringBuilder.append(firstLinePrefix)
         for (component: TextComponent in feature.list) {
             when (component) {
-                is TextComponent.EOL -> annotatedStringBuilder.appendLine()
+                is TextComponent.EOL -> {
+                    annotatedStringBuilder.appendLine()
+                    annotatedStringBuilder.append(otherLinesPrefix)
+                }
+
                 is TextComponent.WS -> annotatedStringBuilder.append(' ')
                 is TextComponent.Text -> annotatedStringBuilder.append(component.text)
                 is TextComponent.StyledText -> annotatedStringBuilder.withStyle(

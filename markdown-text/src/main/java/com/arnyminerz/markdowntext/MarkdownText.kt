@@ -1,5 +1,6 @@
 package com.arnyminerz.markdowntext
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
@@ -35,9 +36,10 @@ fun MarkdownText(
         text = buildAnnotatedString {
             for (component in text) {
                 when (component) {
-                    is Paragraph -> ParagraphRenderer.append(this, component)
+                    is Paragraph -> ParagraphRenderer().append(this, component)
                     is OrderedList -> ListRenderer.append(this, component)
                     is UnorderedList -> ListRenderer.append(this, component)
+                    else -> Log.e("MarkdownText", "Got unknown component: ${component::class.simpleName}")
                 }
             }
         }
@@ -70,10 +72,10 @@ fun MarkdownTextPreview(
         // "###### Header 6",
         "## Unordered lists",
         "- First",
-        "* Second",
+        "- Second",
         "  - Nested item 1",
         "  - Nested item 2",
-        "* Third",
+        "- Third",
         "  with multiline",
         "- Fifth",
         "## Ordered lists",
