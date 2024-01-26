@@ -11,15 +11,15 @@ import org.intellij.markdown.ast.getTextInNode
 
 abstract class TextComponent private constructor() : IComponent {
     /** Alias for End Of Line */
-    object EOL : TextComponent() {
-        const val name: String = "EOL"
+    object EOL : TextComponent(), FeatureCompanion {
+        override val name: String = "EOL"
 
         override val text: String = "\n"
     }
 
     /** Alias for White Space */
-    object WS : TextComponent() {
-        const val name: String = "WHITE_SPACE"
+    object WS : TextComponent(), FeatureCompanion {
+        override val name: String = "WHITE_SPACE"
 
         override val text: String = " "
     }
@@ -77,6 +77,25 @@ abstract class TextComponent private constructor() : IComponent {
                     isBold,
                     isItalic,
                     isStrikethrough
+                )
+            }
+        }
+    }
+
+    data class CodeSpan(
+        override val text: String
+    ) : TextComponent() {
+        companion object : FeatureCompanion, NodeTypeCheck, NodeExtractor<CodeSpan> {
+            override val name: String = "CODE_SPAN"
+
+            override fun isInstanceOf(node: ASTNode): Boolean {
+                return node.name == name && node.hasChildWithName(Text.name)
+            }
+
+            override fun ProcessingContext.extract(node: ASTNode): CodeSpan {
+                val textNode = node.findChildOfType(Text.name)!!
+                return CodeSpan(
+                    text = textNode.getTextInNode(allFileText).toString()
                 )
             }
         }

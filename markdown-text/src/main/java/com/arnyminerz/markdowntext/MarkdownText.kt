@@ -59,12 +59,12 @@ fun MarkdownTextPreview(
     // val exampleLink = "https://example.com"
 
     val src = listOf(
-        // "# General formatting",
+        "# General formatting",
         "This is markdown text with **bold** content.",
         "This is markdown text with *italic* content.",
         "This is markdown text with **bold and *italic* texts**.",
         "This is markdown text with ~~strikethrough~~ content.",
-        // "Inline `code` annotations",
+        "Inline `code` annotations",
         // "[This]($exampleLink) is a link.",
         // "Automatic link: $exampleLink",
         "# Header 1",

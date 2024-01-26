@@ -17,6 +17,11 @@ fun assertIsEOL(component: TextComponent) {
     assertIs<TextComponent.EOL>(component)
 }
 
+fun assertIsCodeSpan(component: TextComponent, text: String) {
+    assertIs<TextComponent.CodeSpan>(component)
+    assertEquals(text, component.text)
+}
+
 fun assertIsStyledText(
     component: TextComponent,
     text: String,

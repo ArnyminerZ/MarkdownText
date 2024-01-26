@@ -6,6 +6,7 @@ import com.arnyminerz.markdowntext.component.UnorderedList
 import com.arnyminerz.markdowntext.component.model.ListElement
 import com.arnyminerz.markdowntext.component.model.TextComponent
 import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
+import utils.assert.assertIsCodeSpan
 import utils.assert.assertIsStyledText
 import utils.assert.assertIsText
 import utils.assert.assertIsWS
@@ -102,6 +103,24 @@ class TestJetbrainsMarkdownProcessor {
             )
             assertIsText(list.next(), ".")
             assertFalse(list.hasNext())
+        }
+    }
+
+    @Test
+    fun `test load text with code span (Github)`() {
+        val result = githubProcessor.load("Testing text `with code`")
+
+        // Make sure a single component has been loaded
+        assertEquals(1, result.size)
+        result[0].let { component ->
+            // Make sure the component is a paragraph
+            assertIs<Paragraph>(component)
+            // Check that the paragraph has 2 components
+            assertEquals(3, component.list.size)
+            // And that the text is fine
+            assertIsText(component.list[0], "Testing text")
+            assertIsWS(component.list[1])
+            assertIsCodeSpan(component.list[2], "with code")
         }
     }
 
