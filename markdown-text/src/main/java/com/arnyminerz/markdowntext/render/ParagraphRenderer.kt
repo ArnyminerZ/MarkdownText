@@ -1,7 +1,7 @@
 package com.arnyminerz.markdowntext.render
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.AnnotatedString.Builder
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,27 +24,13 @@ class ParagraphRenderer(
         TODO("Not yet implemented")
     }
 
-    override fun append(annotatedStringBuilder: AnnotatedString.Builder, feature: Paragraph) {
+    @Composable
+    override fun append(annotatedStringBuilder: Builder, feature: Paragraph): Builder {
         annotatedStringBuilder.append(firstLinePrefix)
-        for (component: TextComponent in feature.list) {
-            when (component) {
-                is TextComponent.EOL -> {
-                    annotatedStringBuilder.appendLine()
-                    annotatedStringBuilder.append(otherLinesPrefix)
-                }
-
-                is TextComponent.WS -> annotatedStringBuilder.append(' ')
-                is TextComponent.Text -> annotatedStringBuilder.append(component.text)
-                is TextComponent.StyledText -> annotatedStringBuilder.withStyle(
-                    SpanStyle(
-                        fontWeight = if (component.isBold) FontWeight.Bold else FontWeight.Normal,
-                        fontStyle = if (component.isItalic) FontStyle.Italic else FontStyle.Normal,
-                        textDecoration = if (component.isStrikethrough) TextDecoration.LineThrough else TextDecoration.None
-                    )
-                ) {
-                    append(component.text)
-                }
-            }
-        }
+        return appendTextComponents(
+            annotatedStringBuilder,
+            feature.list,
+            afterEOL = { append(otherLinesPrefix) }
+        ).appendLine() as Builder
     }
 }

@@ -9,9 +9,7 @@ import com.arnyminerz.markdowntext.processor.ProcessingContext
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
 
-abstract class TextComponent private constructor(
-
-) : IComponent {
+abstract class TextComponent private constructor() : IComponent {
     /** Alias for End Of Line */
     object EOL : TextComponent() {
         const val name: String = "EOL"

@@ -17,3 +17,12 @@ fun buildASTNode(
     override val children: List<ASTNode> = children
     override val parent: ASTNode? = parent
 }
+
+/** Instantiates a new [ASTNode]. */
+fun buildASTNode(
+    type: String,
+    startOffset: Int = 0,
+    endOffset: Int = 0,
+    parent: ASTNode? = null,
+    children: List<ASTNode> = emptyList()
+): ASTNode = buildASTNode(IElementType(type), startOffset, endOffset, parent, children)

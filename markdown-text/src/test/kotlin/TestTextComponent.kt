@@ -1,13 +1,14 @@
+import com.arnyminerz.markdowntext.component.ext.trimStartWS
 import com.arnyminerz.markdowntext.component.model.TextComponent
 import com.arnyminerz.markdowntext.component.model.TextComponent.StyledText
 import com.arnyminerz.markdowntext.component.model.TextComponent.StyledText.Companion.extract
 import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
 import com.arnyminerz.markdowntext.processor.ProcessingContext
 import org.intellij.markdown.IElementType
-import org.intellij.markdown.ast.ASTNode
 import utils.assert.assertIsStyledText
 import utils.buildASTNode
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class TestTextComponent {
@@ -84,5 +85,16 @@ class TestTextComponent {
                 isStrikethrough = true
             )
         }
+    }
+
+    @Test
+    fun `test List-TextComponent_trimStartWS`() {
+        val list = listOf(
+            TextComponent.WS,
+            TextComponent.WS,
+            TextComponent.Text("Sample Text")
+        ).trimStartWS()
+        assertEquals(1, list.size)
+        assertEquals("Sample Text", list[0].text)
     }
 }

@@ -10,11 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
+import com.arnyminerz.markdowntext.component.Header
 import com.arnyminerz.markdowntext.component.OrderedList
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.component.UnorderedList
 import com.arnyminerz.markdowntext.processor.IProcessor
 import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
+import com.arnyminerz.markdowntext.render.HeaderRenderer
 import com.arnyminerz.markdowntext.render.ListRenderer
 import com.arnyminerz.markdowntext.render.ParagraphRenderer
 
@@ -39,6 +41,7 @@ fun MarkdownText(
                     is Paragraph -> ParagraphRenderer().append(this, component)
                     is OrderedList -> ListRenderer.append(this, component)
                     is UnorderedList -> ListRenderer.append(this, component)
+                    is Header -> HeaderRenderer.append(this, component)
                     else -> Log.e("MarkdownText", "Got unknown component: ${component::class.simpleName}")
                 }
             }
@@ -64,12 +67,12 @@ fun MarkdownTextPreview(
         // "Inline `code` annotations",
         // "[This]($exampleLink) is a link.",
         // "Automatic link: $exampleLink",
-        // "# Header 1",
-        // "## Header 2",
-        // "### Header 3",
-        // "#### Header 4",
-        // "##### Header 5",
-        // "###### Header 6",
+        "# Header 1",
+        "## Header 2",
+        "### Header 3",
+        "#### Header 4",
+        "##### Header 5",
+        "###### Header 6",
         "## Unordered lists",
         "- First",
         "- Second",

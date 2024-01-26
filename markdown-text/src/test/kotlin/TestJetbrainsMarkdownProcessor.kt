@@ -1,7 +1,9 @@
 import com.arnyminerz.markdowntext.MarkdownFlavour
+import com.arnyminerz.markdowntext.component.Header
 import com.arnyminerz.markdowntext.component.OrderedList
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.component.UnorderedList
+import com.arnyminerz.markdowntext.component.model.ListElement
 import com.arnyminerz.markdowntext.component.model.TextComponent
 import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
 import utils.assert.assertIsStyledText
@@ -192,7 +194,7 @@ class TestJetbrainsMarkdownProcessor {
 
             // Make sure the texts have been loaded correctly
             component.list[0].let { (paragraph, subList, prefix) ->
-                assertNull(prefix)
+                assertEquals(ListElement.bullet, prefix)
                 assertNotNull(subList)
                 assertEquals(3, subList.size)
                 subList[0].paragraph.let {
@@ -332,4 +334,56 @@ class TestJetbrainsMarkdownProcessor {
         }
     }
 
+    @Test
+    fun `test load text with headers (Github)`() {
+        val result = githubProcessor.load(
+            """
+            # Header 1
+            ## Header 2
+            ### Header 3
+            #### Header 4
+            ##### Header 5
+            ###### Header 6
+            """.trimIndent()
+        )
+
+        // Make sure 6 components has been loaded
+        assertEquals(6, result.size)
+        result[0].let { component ->
+            // Make sure the component is a paragraph
+            assertIs<Header.Header1>(component)
+            assertEquals(1, component.list.size)
+            assertEquals("Header 1", component.list[0].text)
+        }
+        result[1].let { component ->
+            // Make sure the component is a paragraph
+            assertIs<Header.Header2>(component)
+            assertEquals(1, component.list.size)
+            assertEquals("Header 2", component.list[0].text)
+        }
+        result[2].let { component ->
+            // Make sure the component is a paragraph
+            assertIs<Header.Header3>(component)
+            assertEquals(1, component.list.size)
+            assertEquals("Header 3", component.list[0].text)
+        }
+        result[3].let { component ->
+            // Make sure the component is a paragraph
+            assertIs<Header.Header4>(component)
+            assertEquals(1, component.list.size)
+            assertEquals("Header 4", component.list[0].text)
+        }
+        result[4].let { component ->
+            // Make sure the component is a paragraph
+            assertIs<Header.Header5>(component)
+            assertEquals(1, component.list.size)
+            assertEquals("Header 5", component.list[0].text)
+        }
+        result[5].let { component ->
+            // Make sure the component is a paragraph
+            assertIs<Header.Header6>(component)
+            assertEquals(1, component.list.size)
+            assertEquals("Header 6", component.list[0].text)
+        }
+    }
 }

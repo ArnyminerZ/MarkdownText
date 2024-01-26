@@ -21,13 +21,12 @@ object ListRenderer : IRenderer<IListComponent> {
         TODO("Not yet implemented")
     }
 
+    @Composable
     private fun append(
         annotatedStringBuilder: AnnotatedString.Builder,
         elements: List<ListElement>,
         depth: Int = 0
-    ) {
-        // Always append a new line at the beginning of a list
-        annotatedStringBuilder.appendLine()
+    ): AnnotatedString.Builder {
         val pad = paddingAlgorithm(depth)
         for (element in elements) {
             // Add the pad
@@ -42,9 +41,10 @@ object ListRenderer : IRenderer<IListComponent> {
 
             element.subList?.let { append(annotatedStringBuilder, it, depth + 1) }
         }
+        return annotatedStringBuilder
     }
 
-    override fun append(annotatedStringBuilder: AnnotatedString.Builder, feature: IListComponent) {
+    @Composable
+    override fun append(annotatedStringBuilder: AnnotatedString.Builder, feature: IListComponent) =
         append(annotatedStringBuilder, feature.list)
-    }
 }

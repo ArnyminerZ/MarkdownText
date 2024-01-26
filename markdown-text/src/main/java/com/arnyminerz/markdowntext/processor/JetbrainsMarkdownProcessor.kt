@@ -1,6 +1,7 @@
 package com.arnyminerz.markdowntext.processor
 
 import com.arnyminerz.markdowntext.MarkdownFlavour
+import com.arnyminerz.markdowntext.component.Header
 import com.arnyminerz.markdowntext.component.model.IComponent
 import com.arnyminerz.markdowntext.component.MarkdownFile
 import com.arnyminerz.markdowntext.component.OrderedList
@@ -36,10 +37,11 @@ class JetbrainsMarkdownProcessor(
         println("$prefix- ${node.name} [${node.startOffset}-${node.endOffset}] (${node.children.size})")
 
         val features = mutableListOf<IComponent>()
-        when (node.name) {
-            Paragraph.name -> with(Paragraph) { explore(node) }.let(features::add)
-            UnorderedList.name -> with(UnorderedList) { explore(node) }.let(features::add)
-            OrderedList.name -> with(OrderedList) { explore(node) }.let(features::add)
+        when {
+            node.name == Paragraph.name -> with(Paragraph) { explore(node) }.let(features::add)
+            node.name == UnorderedList.name -> with(UnorderedList) { explore(node) }.let(features::add)
+            node.name == OrderedList.name -> with(OrderedList) { explore(node) }.let(features::add)
+            Header.isInstanceOf(node) -> with(Header) { extract(node) }.let(features::add)
             // If not handled, keep getting deeper
             else -> for (child in node.children) explode(child, depth + 1).let(features::addAll)
         }
