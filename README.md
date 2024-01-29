@@ -24,13 +24,14 @@ A library for displaying Markdown contents within Jetpack Compose. Uses [Coil][c
 
 Add to the module's dependencies:
 
-```groovy
-implementation 'com.arnyminerz.markdowntext:markdowntext:1.3.1'
+```kotlin
+implementation('com.arnyminerz.markdowntext:markdowntext:2.0.0')
 ```
 
 Jetpack Compose example:
 
 ```kotlin
+@Preview
 @Composable
 fun MarkdownTextPreview() {
     val exampleImageUrl = "https://picsum.photos/300/200"
