@@ -52,7 +52,7 @@ fun MarkdownText(
 @Preview
 @Composable
 fun MarkdownTextPreview(
-    flavourDescriptor: MarkdownFlavour = MarkdownFlavour.CommonMark,
+    flavour: MarkdownFlavour = MarkdownFlavour.CommonMark,
 ) {
     // val exampleImageUrl = "https://picsum.photos/300/200"
     // val exampleBadge = "https://raster.shields.io/badge/Label-Awesome!-success"
@@ -120,7 +120,7 @@ fun MarkdownTextPreview(
     ) {
         MarkdownText(
             markdown = src,
-            processor = JetbrainsMarkdownProcessor()
+            processor = JetbrainsMarkdownProcessor(flavour)
         )
     }
 }

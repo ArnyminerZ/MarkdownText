@@ -19,60 +19,78 @@ open class Header(
     companion object : NodeTypeCheck, NodeExtractor<Header> {
         private const val HEADER_CONTENT = "ATX_CONTENT"
 
+        private const val MAX_DEPTH = 6
+
+        private val headers: Set<(list: List<TextComponent>) -> Header> = setOf(
+            { Header1(it) },
+            { Header2(it) },
+            { Header3(it) },
+            { Header4(it) },
+            { Header5(it) },
+            { Header6(it) }
+        )
+
         override fun isInstanceOf(node: ASTNode): Boolean {
             if (!node.name.startsWith("ATX_", true)) return false
             val index = node.name.substringAfter("ATX_").toIntOrNull()
-            return index != null && (1..6).contains(index)
+            return index != null && (1..MAX_DEPTH).contains(index)
         }
 
         override fun ProcessingContext.extract(node: ASTNode): Header {
             val content = node.findChildOfType(HEADER_CONTENT)!!
             val list = with(Paragraph) { explore(content) }.list.trimStartWS()
-            return when (node.name.substringAfter("ATX_").toIntOrNull()) {
-                1 -> Header1(list)
-                2 -> Header2(list)
-                3 -> Header3(list)
-                4 -> Header4(list)
-                5 -> Header5(list)
-                6 -> Header6(list)
-                else -> error("Got an invalid header: ${node.name}")
-            }
+            val depth = node.name.substringAfter("ATX_").toIntOrNull()
+            checkNotNull(depth) { "Could not get a valid depth." }
+            val headerConstructor = headers.elementAt(depth - 1)
+            return headerConstructor(list)
         }
     }
 
-    class Header1(list: List<TextComponent>) : Header(0, list) {
+    class Header1(list: List<TextComponent>) : Header(DEPTH_IDX, list) {
         companion object : FeatureCompanion {
             override val name: String = "ATX_1"
+
+            const val DEPTH_IDX = 0
         }
     }
 
-    class Header2(list: List<TextComponent>) : Header(1, list) {
+    class Header2(list: List<TextComponent>) : Header(DEPTH_IDX, list) {
         companion object : FeatureCompanion {
             override val name: String = "ATX_2"
+
+            const val DEPTH_IDX = 1
         }
     }
 
-    class Header3(list: List<TextComponent>) : Header(2, list) {
+    class Header3(list: List<TextComponent>) : Header(DEPTH_IDX, list) {
         companion object : FeatureCompanion {
             override val name: String = "ATX_3"
+
+            const val DEPTH_IDX = 2
         }
     }
 
-    class Header4(list: List<TextComponent>) : Header(3, list) {
+    class Header4(list: List<TextComponent>) : Header(DEPTH_IDX, list) {
         companion object : FeatureCompanion {
             override val name: String = "ATX_4"
+
+            const val DEPTH_IDX = 3
         }
     }
 
-    class Header5(list: List<TextComponent>) : Header(4, list) {
+    class Header5(list: List<TextComponent>) : Header(DEPTH_IDX, list) {
         companion object : FeatureCompanion {
             override val name: String = "ATX_5"
+
+            const val DEPTH_IDX = 4
         }
     }
 
-    class Header6(list: List<TextComponent>) : Header(5, list) {
+    class Header6(list: List<TextComponent>) : Header(DEPTH_IDX, list) {
         companion object : FeatureCompanion {
             override val name: String = "ATX_6"
+
+            const val DEPTH_IDX = 5
         }
     }
 }

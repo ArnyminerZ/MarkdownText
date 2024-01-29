@@ -47,7 +47,10 @@ fun IRenderer<*>.appendTextComponents(
                     SpanStyle(
                         fontWeight = if (component.isBold) FontWeight.Bold else FontWeight.Normal,
                         fontStyle = if (component.isItalic) FontStyle.Italic else FontStyle.Normal,
-                        textDecoration = if (component.isStrikethrough) TextDecoration.LineThrough else TextDecoration.None
+                        textDecoration = if (component.isStrikethrough)
+                            TextDecoration.LineThrough
+                        else
+                            TextDecoration.None
                     )
                 ) {
                     append(component.text)
