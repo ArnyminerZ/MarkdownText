@@ -73,7 +73,7 @@ abstract class TextComponent private constructor() : IComponent {
                 val isStrikethrough = checkFormat(NODE_STRI)
 
                 return StyledText(
-                    text.getTextInNode(allFileText).toString(),
+                    text.getTextInNode(),
                     isBold,
                     isItalic,
                     isStrikethrough
@@ -95,8 +95,42 @@ abstract class TextComponent private constructor() : IComponent {
             override fun ProcessingContext.extract(node: ASTNode): CodeSpan {
                 val textNode = node.findChildOfType(Text.name)!!
                 return CodeSpan(
-                    text = textNode.getTextInNode(allFileText).toString()
+                    text = textNode.getTextInNode()
                 )
+            }
+        }
+    }
+
+    data class Link(
+        override val text: String,
+        val url: String
+    ) : TextComponent() {
+        companion object : FeatureCompanion, NodeTypeCheck, NodeExtractor<Link> {
+            override val name: String = "INLINE_LINK"
+
+            private const val LINK_TEXT = "LINK_TEXT"
+
+            private const val LINK_DESTINATION = "LINK_DESTINATION"
+            private const val LINK_GITHUB_URL = "GFM_AUTOLINK"
+
+            override fun isInstanceOf(node: ASTNode): Boolean {
+                return node.name == name &&
+                        node.hasChildWithName(LINK_TEXT) &&
+                        node.hasChildWithName(LINK_DESTINATION)
+            }
+
+            override fun ProcessingContext.extract(node: ASTNode): Link {
+                val text = node
+                    .findChildOfType(LINK_TEXT)
+                    ?.findChildOfType(Text.name)
+                    ?.getTextInNode()
+                    ?: error("Could not find a $LINK_TEXT node inside of the link.")
+                val destination = node
+                    .findChildOfType(LINK_DESTINATION)
+                    ?.findChildOfType(LINK_GITHUB_URL)
+                    ?.getTextInNode()
+                    ?: error("Could not find a $LINK_DESTINATION > $LINK_GITHUB_URL node inside of the link.")
+                return Link(text, destination)
             }
         }
     }

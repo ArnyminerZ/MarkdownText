@@ -57,6 +57,7 @@ fun IRenderer<*>.appendTextComponents(
                 }
                 afterStyledText(annotatedStringBuilder)
             }
+            is TextComponent.Link -> TODO("Not yet implemented")
         }
     }
     return annotatedStringBuilder

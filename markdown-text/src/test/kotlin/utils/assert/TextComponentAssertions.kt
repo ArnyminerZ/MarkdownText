@@ -22,6 +22,12 @@ fun assertIsCodeSpan(component: TextComponent, text: String) {
     assertEquals(text, component.text)
 }
 
+fun assertIsLink(component: TextComponent, text: String, url: String) {
+    assertIs<TextComponent.Link>(component)
+    assertEquals(text, component.text)
+    assertEquals(url, component.url)
+}
+
 fun assertIsStyledText(
     component: TextComponent,
     text: String,

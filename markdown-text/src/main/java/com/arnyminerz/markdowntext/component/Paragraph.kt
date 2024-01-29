@@ -5,6 +5,7 @@ import com.arnyminerz.markdowntext.component.model.IContainerCompanion
 import com.arnyminerz.markdowntext.component.model.TextComponent
 import com.arnyminerz.markdowntext.component.model.TextComponent.CodeSpan
 import com.arnyminerz.markdowntext.component.model.TextComponent.EOL
+import com.arnyminerz.markdowntext.component.model.TextComponent.Link
 import com.arnyminerz.markdowntext.component.model.TextComponent.StyledText
 import com.arnyminerz.markdowntext.component.model.TextComponent.Text
 import com.arnyminerz.markdowntext.component.model.TextComponent.WS
@@ -31,6 +32,7 @@ data class Paragraph(
                     node.name == WS.name -> WS
                     CodeSpan.isInstanceOf(node) -> with(CodeSpan) { extract(node) }
                     StyledText.isInstanceOf(node) -> with(StyledText) { extract(node) }
+                    Link.isInstanceOf(node) -> with(Link) { extract(node) }
                     else -> error("Got an invalid component: ${node.name}")
                 }
                 list.add(component)

@@ -4,19 +4,17 @@ import com.arnyminerz.markdowntext.component.OrderedList
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.component.UnorderedList
 import com.arnyminerz.markdowntext.component.model.ListElement
-import com.arnyminerz.markdowntext.component.model.TextComponent
 import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
-import utils.assert.assertIsCodeSpan
-import utils.assert.assertIsStyledText
-import utils.assert.assertIsText
-import utils.assert.assertIsWS
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFails
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import utils.assert.assertIsCodeSpan
+import utils.assert.assertIsLink
+import utils.assert.assertIsStyledText
+import utils.assert.assertIsText
+import utils.assert.assertIsWS
 
 class TestJetbrainsMarkdownProcessor {
     private val githubProcessor = JetbrainsMarkdownProcessor(MarkdownFlavour.Github)
@@ -403,6 +401,23 @@ class TestJetbrainsMarkdownProcessor {
             assertIs<Header.Header6>(component)
             assertEquals(1, component.list.size)
             assertEquals("Header 6", component.list[0].text)
+        }
+    }
+
+    @Test
+    fun `test load text with links (Github)`() {
+        val result = githubProcessor.load("Testing text with [link](https://example.com)")
+
+        // Make sure a single component has been loaded
+        assertEquals(1, result.size)
+        result[0].let { component ->
+            // Make sure the component is a paragraph
+            assertIs<Paragraph>(component)
+            // Check that the paragraph has 3 components
+            assertEquals(3, component.list.size)
+            assertIsText(component.list[0], "Testing text with")
+            assertIsWS(component.list[1])
+            assertIsLink(component.list[2], "link", "https://example.com")
         }
     }
 }
