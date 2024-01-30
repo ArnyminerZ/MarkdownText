@@ -406,18 +406,31 @@ class TestJetbrainsMarkdownProcessor {
 
     @Test
     fun `test load text with links (Github)`() {
-        val result = githubProcessor.load("Testing text with [link](https://example.com)")
-
-        // Make sure a single component has been loaded
-        assertEquals(1, result.size)
-        result[0].let { component ->
-            // Make sure the component is a paragraph
-            assertIs<Paragraph>(component)
-            // Check that the paragraph has 3 components
-            assertEquals(3, component.list.size)
-            assertIsText(component.list[0], "Testing text with")
-            assertIsWS(component.list[1])
-            assertIsLink(component.list[2], "link", "https://example.com")
+        githubProcessor.load("Testing text with [link](https://example.com)").let { result ->
+            // Make sure a single component has been loaded
+            assertEquals(1, result.size)
+            result[0].let { component ->
+                // Make sure the component is a paragraph
+                assertIs<Paragraph>(component)
+                // Check that the paragraph has 3 components
+                assertEquals(3, component.list.size)
+                assertIsText(component.list[0], "Testing text with")
+                assertIsWS(component.list[1])
+                assertIsLink(component.list[2], "link", "https://example.com")
+            }
+        }
+        githubProcessor.load("Automatic link https://example.com").let { result ->
+            // Make sure a single component has been loaded
+            assertEquals(1, result.size)
+            result[0].let { component ->
+                // Make sure the component is a paragraph
+                assertIs<Paragraph>(component)
+                // Check that the paragraph has 3 components
+                assertEquals(3, component.list.size)
+                assertIsText(component.list[0], "Automatic link")
+                assertIsWS(component.list[1])
+                assertIsLink(component.list[2], "https://example.com")
+            }
         }
     }
 }

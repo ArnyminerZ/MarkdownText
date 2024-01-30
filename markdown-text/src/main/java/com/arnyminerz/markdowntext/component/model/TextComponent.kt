@@ -7,7 +7,6 @@ import com.arnyminerz.markdowntext.hasChildren
 import com.arnyminerz.markdowntext.name
 import com.arnyminerz.markdowntext.processor.ProcessingContext
 import org.intellij.markdown.ast.ASTNode
-import org.intellij.markdown.ast.getTextInNode
 
 abstract class TextComponent private constructor() : IComponent {
     /** Alias for End Of Line */
@@ -22,6 +21,13 @@ abstract class TextComponent private constructor() : IComponent {
         override val name: String = "WHITE_SPACE"
 
         override val text: String = " "
+    }
+
+    /** Alias for `:` */
+    object Colon : TextComponent(), FeatureCompanion {
+        override val name: String = ":"
+
+        override val text: String = ":"
     }
 
     class Text(override val text: String) : TextComponent() {
@@ -111,15 +117,21 @@ abstract class TextComponent private constructor() : IComponent {
             private const val LINK_TEXT = "LINK_TEXT"
 
             private const val LINK_DESTINATION = "LINK_DESTINATION"
-            private const val LINK_GITHUB_URL = "GFM_AUTOLINK"
+            private const val GFM_AUTOLINK = "GFM_AUTOLINK"
 
             override fun isInstanceOf(node: ASTNode): Boolean {
                 return node.name == name &&
                         node.hasChildWithName(LINK_TEXT) &&
-                        node.hasChildWithName(LINK_DESTINATION)
+                        node.hasChildWithName(LINK_DESTINATION) ||
+                        node.name == GFM_AUTOLINK
             }
 
             override fun ProcessingContext.extract(node: ASTNode): Link {
+                if (node.name == GFM_AUTOLINK) {
+                    val autolink = node.getTextInNode()
+                    return Link(autolink, autolink)
+                }
+
                 val text = node
                     .findChildOfType(LINK_TEXT)
                     ?.findChildOfType(Text.name)
@@ -127,9 +139,9 @@ abstract class TextComponent private constructor() : IComponent {
                     ?: error("Could not find a $LINK_TEXT node inside of the link.")
                 val destination = node
                     .findChildOfType(LINK_DESTINATION)
-                    ?.findChildOfType(LINK_GITHUB_URL)
+                    ?.findChildOfType(GFM_AUTOLINK)
                     ?.getTextInNode()
-                    ?: error("Could not find a $LINK_DESTINATION > $LINK_GITHUB_URL node inside of the link.")
+                    ?: error("Could not find a $LINK_DESTINATION > $GFM_AUTOLINK node inside of the link.")
                 return Link(text, destination)
             }
         }

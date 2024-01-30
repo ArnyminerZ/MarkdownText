@@ -56,7 +56,7 @@ fun MarkdownTextPreview(
 ) {
     // val exampleImageUrl = "https://picsum.photos/300/200"
     // val exampleBadge = "https://raster.shields.io/badge/Label-Awesome!-success"
-    // val exampleLink = "https://example.com"
+    val exampleLink = "https://example.com"
 
     val src = listOf(
         "# General formatting",
@@ -65,8 +65,8 @@ fun MarkdownTextPreview(
         "This is markdown text with **bold and *italic* texts**.",
         "This is markdown text with ~~strikethrough~~ content.",
         "Inline `code` annotations",
-        // "[This]($exampleLink) is a link.",
-        // "Automatic link: $exampleLink",
+        "[This]($exampleLink) is a link.",
+        "Automatic link: $exampleLink",
         "# Header 1",
         "## Header 2",
         "### Header 3",

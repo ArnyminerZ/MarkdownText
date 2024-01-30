@@ -2,14 +2,19 @@ package com.arnyminerz.markdowntext.render
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString.Builder
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.UrlAnnotation
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withAnnotation
 import androidx.compose.ui.text.withStyle
 import com.arnyminerz.markdowntext.component.model.TextComponent
 
 @Composable
+@ExperimentalTextApi
+@Suppress("UnusedReceiverParameter")
 fun IRenderer<*>.appendTextComponents(
     annotatedStringBuilder: Builder,
     components: List<TextComponent>,
@@ -30,10 +35,12 @@ fun IRenderer<*>.appendTextComponents(
                 annotatedStringBuilder.append(' ')
                 afterWS(annotatedStringBuilder)
             }
+
             is TextComponent.Text -> {
                 annotatedStringBuilder.append(component.text)
                 afterText(annotatedStringBuilder)
             }
+
             is TextComponent.CodeSpan -> {
                 annotatedStringBuilder.withStyle(
                     Styles.getCodeSpanStyle()
@@ -42,6 +49,7 @@ fun IRenderer<*>.appendTextComponents(
                 }
                 afterCodeSpan(annotatedStringBuilder)
             }
+
             is TextComponent.StyledText -> {
                 annotatedStringBuilder.withStyle(
                     SpanStyle(
@@ -57,7 +65,18 @@ fun IRenderer<*>.appendTextComponents(
                 }
                 afterStyledText(annotatedStringBuilder)
             }
-            is TextComponent.Link -> TODO("Not yet implemented")
+
+            is TextComponent.Link -> {
+                annotatedStringBuilder.withStyle(
+                    Styles.getLinkSpanStyle()
+                ) {
+                    withAnnotation(
+                        UrlAnnotation(component.url)
+                    ) {
+                        append(component.text)
+                    }
+                }
+            }
         }
     }
     return annotatedStringBuilder
