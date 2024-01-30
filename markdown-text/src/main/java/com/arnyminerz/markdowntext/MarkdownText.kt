@@ -4,10 +4,15 @@ import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import com.arnyminerz.markdowntext.component.Header
@@ -19,6 +24,7 @@ import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
 import com.arnyminerz.markdowntext.render.HeaderRenderer
 import com.arnyminerz.markdowntext.render.ListRenderer
 import com.arnyminerz.markdowntext.render.ParagraphRenderer
+import okhttp3.internal.format
 
 /**
  * Creates a Text component that supports markdown formatting.
@@ -28,29 +34,44 @@ import com.arnyminerz.markdowntext.render.ParagraphRenderer
  * @see Text
  */
 @Composable
+@ExperimentalTextApi
 fun MarkdownText(
     markdown: String,
-    processor: IProcessor,
+    modifier: Modifier = Modifier,
+    style: TextStyle = MaterialTheme.typography.bodyMedium,
+    processor: IProcessor = JetbrainsMarkdownProcessor(),
 ) {
-    val text = processor.load(markdown)
+    val uriHandler = LocalUriHandler.current
 
-    Text(
-        text = buildAnnotatedString {
-            for (component in text) {
-                when (component) {
-                    is Paragraph -> ParagraphRenderer().append(this, component)
-                    is OrderedList -> ListRenderer.append(this, component)
-                    is UnorderedList -> ListRenderer.append(this, component)
-                    is Header -> HeaderRenderer.append(this, component)
-                    else -> Log.e("MarkdownText", "Got unknown component: ${component::class.simpleName}")
-                }
+    val components = processor.load(markdown)
+    val text = buildAnnotatedString {
+        for (component in components) {
+            when (component) {
+                is Paragraph -> ParagraphRenderer().append(this, component)
+                is OrderedList -> ListRenderer.append(this, component)
+                is UnorderedList -> ListRenderer.append(this, component)
+                is Header -> HeaderRenderer.append(this, component)
+                else -> Log.e("MarkdownText", "Got unknown component: ${component::class.simpleName}")
             }
         }
+    }
+
+    ClickableText(
+        text = text,
+        onClick = { index ->
+            // Launch the first tapped url annotation, if any
+            text.getUrlAnnotations(index, index)
+                .firstOrNull()
+                ?.let { uriHandler.openUri(it.item.url) }
+        },
+        style = style,
+        modifier = modifier
     )
 }
 
 @Preview
 @Composable
+@OptIn(ExperimentalTextApi::class)
 fun MarkdownTextPreview(
     flavour: MarkdownFlavour = MarkdownFlavour.CommonMark,
 ) {
