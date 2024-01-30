@@ -1,10 +1,16 @@
 package com.arnyminerz.markdowntext.render
 
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.ExperimentalTextApi
 import com.arnyminerz.markdowntext.component.model.IListComponent
 import com.arnyminerz.markdowntext.component.model.ListElement
 
+@ExperimentalTextApi
 object ListRenderer : IRenderer<IListComponent> {
     /**
      * This is the algorithm that calculates the prefix to add to each list item for padding from
@@ -17,8 +23,23 @@ object ListRenderer : IRenderer<IListComponent> {
     var paddingAlgorithm: (depth: Int) -> String = { "  ".repeat(it + 1) }
 
     @Composable
-    override fun Content(feature: IListComponent) {
-        TODO("Not yet implemented")
+    override fun Content(feature: IListComponent, modifier: Modifier) {
+        val uriHandler = LocalUriHandler.current
+        val style = LocalTextStyle.current
+
+        val text = buildAnnotatedString(feature.list)
+
+        ClickableText(
+            text = text,
+            onClick = { index ->
+                // Launch the first tapped url annotation, if any
+                text.getUrlAnnotations(index, index)
+                    .firstOrNull()
+                    ?.let { uriHandler.openUri(it.item.url) }
+            },
+            style = style,
+            modifier = modifier
+        )
     }
 
     @Composable

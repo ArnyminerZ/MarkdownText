@@ -1,6 +1,10 @@
 package com.arnyminerz.markdowntext.render
 
+import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString.Builder
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.SpanStyle
@@ -22,8 +26,23 @@ class ParagraphRenderer(
     private val otherLinesPrefix: String = ""
 ) : IRenderer<Paragraph> {
     @Composable
-    override fun Content(feature: Paragraph) {
-        TODO("Not yet implemented")
+    override fun Content(feature: Paragraph, modifier: Modifier) {
+        val uriHandler = LocalUriHandler.current
+        val style = LocalTextStyle.current
+
+        val text = buildAnnotatedString(feature.list)
+
+        ClickableText(
+            text = text,
+            onClick = { index ->
+                // Launch the first tapped url annotation, if any
+                text.getUrlAnnotations(index, index)
+                    .firstOrNull()
+                    ?.let { uriHandler.openUri(it.item.url) }
+            },
+            style = style,
+            modifier = modifier
+        )
     }
 
     @Composable

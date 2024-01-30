@@ -2,11 +2,11 @@ package com.arnyminerz.markdowntext.processor
 
 import com.arnyminerz.markdowntext.MarkdownFlavour
 import com.arnyminerz.markdowntext.component.Header
-import com.arnyminerz.markdowntext.component.model.IComponent
 import com.arnyminerz.markdowntext.component.MarkdownFile
 import com.arnyminerz.markdowntext.component.OrderedList
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.component.UnorderedList
+import com.arnyminerz.markdowntext.component.model.IComponent
 import com.arnyminerz.markdowntext.name
 import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode

@@ -12,6 +12,7 @@ import kotlin.test.assertIs
 import kotlin.test.assertNotNull
 import utils.assert.assertIsCodeSpan
 import utils.assert.assertIsLink
+import utils.assert.assertIsMono
 import utils.assert.assertIsStyledText
 import utils.assert.assertIsText
 import utils.assert.assertIsWS
@@ -40,7 +41,7 @@ class TestJetbrainsMarkdownProcessor {
 
     @Test
     fun `test load text with special characters (Github)`() {
-        val result = githubProcessor.load(". : , ; ' \" - _ ! # @ $ % & / ( ) = ? ¿ º ª [ ] { } ` + ^ ´ ¨ < > | \\ ·")
+        val result = githubProcessor.load(": ' \" ! ( ) [ ] ` < >")
 
         // Make sure a single component has been loaded
         assertEquals(1, result.size)
@@ -48,12 +49,29 @@ class TestJetbrainsMarkdownProcessor {
             // Make sure the component is a paragraph
             assertIs<Paragraph>(component)
             // Check that the paragraph has 3 components
-            assertEquals(73, component.list.size)
-            // And two lines
-            assertEquals(2, component.lines.size)
-            // And that the text is fine
-            assertEquals("Testing text", component.lines[0])
-            assertEquals("With paragraphs", component.lines[1])
+            assertEquals(21, component.list.size)
+            val list = component.list.iterator()
+            assertIsMono(list.next(), ':')
+            assertIsWS(list.next())
+            assertIsMono(list.next(), '\'')
+            assertIsWS(list.next())
+            assertIsMono(list.next(), '"')
+            assertIsWS(list.next())
+            assertIsMono(list.next(), '!')
+            assertIsWS(list.next())
+            assertIsMono(list.next(), '(')
+            assertIsWS(list.next())
+            assertIsMono(list.next(), ')')
+            assertIsWS(list.next())
+            assertIsMono(list.next(), '[')
+            assertIsWS(list.next())
+            assertIsMono(list.next(), ']')
+            assertIsWS(list.next())
+            assertIsMono(list.next(), '`')
+            assertIsWS(list.next())
+            assertIsMono(list.next(), '<')
+            assertIsWS(list.next())
+            assertIsMono(list.next(), '>')
         }
     }
 

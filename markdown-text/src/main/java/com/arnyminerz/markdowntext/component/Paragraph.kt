@@ -6,10 +6,11 @@ import com.arnyminerz.markdowntext.component.model.ITextContainer
 import com.arnyminerz.markdowntext.component.model.NodeExtractor
 import com.arnyminerz.markdowntext.component.model.NodeTypeCheck
 import com.arnyminerz.markdowntext.component.model.TextComponent
+import com.arnyminerz.markdowntext.component.model.TextComponent.BACKTICK
 import com.arnyminerz.markdowntext.component.model.TextComponent.CodeSpan
-import com.arnyminerz.markdowntext.component.model.TextComponent.Colon
 import com.arnyminerz.markdowntext.component.model.TextComponent.EOL
 import com.arnyminerz.markdowntext.component.model.TextComponent.Link
+import com.arnyminerz.markdowntext.component.model.TextComponent.Mono
 import com.arnyminerz.markdowntext.component.model.TextComponent.StyledText
 import com.arnyminerz.markdowntext.component.model.TextComponent.Text
 import com.arnyminerz.markdowntext.component.model.TextComponent.WS
@@ -17,42 +18,59 @@ import com.arnyminerz.markdowntext.name
 import com.arnyminerz.markdowntext.processor.ProcessingContext
 import org.intellij.markdown.ast.ASTNode
 
-private typealias Component = Pair<(ASTNode) -> Boolean, ProcessingContext.(ASTNode) -> TextComponent>
-
 data class Paragraph(
     override val list: List<TextComponent>
 ) : ITextContainer {
     companion object : FeatureCompanion, IContainerCompanion<TextComponent, Paragraph> {
         override val name: String = "PARAGRAPH"
 
+        private interface ComponentBuilder {
+            fun instanceCheck(node: ASTNode): Boolean
+
+            fun ProcessingContext.constructor(node: ASTNode): TextComponent
+        }
+
         private fun nameCheck(
             featureCompanion: FeatureCompanion,
             constructor: ProcessingContext.(ASTNode) -> TextComponent
-        ): Component =
-            { n: ASTNode -> n.name == featureCompanion.name } to { constructor(it) }
+        ): ComponentBuilder = object : ComponentBuilder {
+            override fun instanceCheck(node: ASTNode): Boolean = node.name == featureCompanion.name
 
-        private fun <C: TextComponent> typeCheck(
+            override fun ProcessingContext.constructor(node: ASTNode): TextComponent {
+                return constructor(this, node)
+            }
+        }
+
+        private fun <C: TextComponent> nodeTypeCheck(
             checker: NodeTypeCheck,
             extractor: NodeExtractor<C>
-        ): Component = { n: ASTNode -> checker.isInstanceOf(n) } to { with(extractor) { extract(it) } }
+        ): ComponentBuilder = object : ComponentBuilder {
+            override fun instanceCheck(node: ASTNode): Boolean = checker.isInstanceOf(node)
 
-        private val components: Set<Component> = setOf(
+            override fun ProcessingContext.constructor(node: ASTNode): TextComponent {
+                return with(extractor) { extract(node) }
+            }
+        }
+
+        private val components: Set<ComponentBuilder> = setOf(
             nameCheck(Text) { Text(it.getTextInNode()) },
             nameCheck(EOL) { EOL },
             nameCheck(WS) { WS },
-            nameCheck(Colon) { Colon },
-            typeCheck(CodeSpan, CodeSpan),
-            typeCheck(StyledText, StyledText),
-            typeCheck(Link, Link)
+            nameCheck(BACKTICK) { BACKTICK },
+            nodeTypeCheck(Mono, Mono),
+            nodeTypeCheck(CodeSpan, CodeSpan),
+            nodeTypeCheck(StyledText, StyledText),
+            nodeTypeCheck(Link, Link)
         )
 
         override fun ProcessingContext.explore(root: ASTNode): Paragraph {
             val list = mutableListOf<TextComponent>()
             for (node in root.children) {
                 // Find a component that fulfills its condition
-                val entry = components.find { it.first(node) }?.second
+                val entry = components.find { it.instanceCheck(node) }
+                    ?: error("Got an invalid component: ${node.name}")
                 // Execute the component's callback, or throw
-                val component = entry?.let { it(this, node) } ?: error("Got an invalid component: ${node.name}")
+                val component = with(entry) { constructor(node) }
                 list.add(component)
             }
             return Paragraph(list)

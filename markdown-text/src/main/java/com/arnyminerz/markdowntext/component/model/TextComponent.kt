@@ -7,20 +7,30 @@ import com.arnyminerz.markdowntext.hasChildWithName
 import com.arnyminerz.markdowntext.hasChildren
 import com.arnyminerz.markdowntext.name
 import com.arnyminerz.markdowntext.processor.ProcessingContext
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.intellij.markdown.ast.ASTNode
 
 abstract class TextComponent private constructor() : IComponent {
-    abstract class SingleCharacterTextObject(
+    /**
+     * Represents a TextComponent which only has one character, for example `:` are parsed as is, and not as TEXT
+     * components.
+     * Line breaks and white spaces.
+     * @param name The name of the node that loads the component.
+     * @param character The character that the class represents.
+     */
+    abstract class Mono(
         override val name: String,
-        override val text: String = name
+        character: Char = name[0]
     ) : TextComponent(), FeatureCompanion {
-        companion object {
+        override val text: String = character.toString()
+
+        companion object : NodeTypeCheck, NodeExtractor<Mono> {
             fun isInstanceOf(component: TextComponent): Boolean {
                 if (component.text.length == 1) {
                     val companion = component::class.companionClass
                         ?.getDeclaredConstructor()
                         ?.newInstance()
-                            as FeatureCompanion?
+                        as FeatureCompanion?
                         ?: error("Could not find a companion for the given component (${component::class.simpleName})")
                     if (companion.name.length == 1) {
                         return true
@@ -31,14 +41,30 @@ abstract class TextComponent private constructor() : IComponent {
                 }
                 return false
             }
+
+            override fun isInstanceOf(instance: ASTNode): Boolean {
+                val name = instance.name
+                when {
+                    name.length == 1 -> return true
+                    name == EOL.name -> return true
+                    name == WS.name -> return true
+                }
+                return false
+            }
+
+            override fun ProcessingContext.extract(node: ASTNode): Mono {
+                return object : Mono(node.name) {}
+            }
         }
     }
 
     /** Alias for End Of Line */
-    object EOL : SingleCharacterTextObject("EOL", "\n")
+    object EOL : Mono("EOL", '\n')
 
     /** Alias for White Space */
-    object WS : SingleCharacterTextObject("WHITE_SPACE", " ")
+    object WS : Mono("WHITE_SPACE", ' ')
+
+    object BACKTICK : Mono("BACKTICK", '`')
 
     class Text(override val text: String) : TextComponent() {
         companion object : FeatureCompanion {
@@ -62,8 +88,8 @@ abstract class TextComponent private constructor() : IComponent {
             /** `STRIKETHROUGH` */
             const val NODE_STRI = "STRIKETHROUGH"
 
-            override fun isInstanceOf(node: ASTNode): Boolean {
-                val name = node.name
+            override fun isInstanceOf(instance: ASTNode): Boolean {
+                val name = instance.name
                 return name == NODE_BOLD || name == NODE_ITAL || name == NODE_STRI
             }
 
@@ -104,8 +130,8 @@ abstract class TextComponent private constructor() : IComponent {
         companion object : FeatureCompanion, NodeTypeCheck, NodeExtractor<CodeSpan> {
             override val name: String = "CODE_SPAN"
 
-            override fun isInstanceOf(node: ASTNode): Boolean {
-                return node.name == name && node.hasChildWithName(Text.name)
+            override fun isInstanceOf(instance: ASTNode): Boolean {
+                return instance.name == name && instance.hasChildWithName(Text.name)
             }
 
             override fun ProcessingContext.extract(node: ASTNode): CodeSpan {
@@ -129,11 +155,11 @@ abstract class TextComponent private constructor() : IComponent {
             private const val LINK_DESTINATION = "LINK_DESTINATION"
             private const val GFM_AUTOLINK = "GFM_AUTOLINK"
 
-            override fun isInstanceOf(node: ASTNode): Boolean {
-                return node.name == name &&
-                        node.hasChildWithName(LINK_TEXT) &&
-                        node.hasChildWithName(LINK_DESTINATION) ||
-                        node.name == GFM_AUTOLINK
+            override fun isInstanceOf(instance: ASTNode): Boolean {
+                return instance.name == name &&
+                    instance.hasChildWithName(LINK_TEXT) &&
+                    instance.hasChildWithName(LINK_DESTINATION) ||
+                    instance.name == GFM_AUTOLINK
             }
 
             override fun ProcessingContext.extract(node: ASTNode): Link {
@@ -147,10 +173,14 @@ abstract class TextComponent private constructor() : IComponent {
                     ?.findChildOfType(Text.name)
                     ?.getTextInNode()
                     ?: error("Could not find a $LINK_TEXT node inside of the link.")
-                val destination = node
-                    .findChildOfType(LINK_DESTINATION)
+                val destinationNode = node.findChildOfType(LINK_DESTINATION)
+                val destination = destinationNode
                     ?.findChildOfType(GFM_AUTOLINK)
                     ?.getTextInNode()
+                    ?: destinationNode
+                        ?.getTextInNode()
+                        ?.toHttpUrlOrNull()
+                        ?.toString()
                     ?: error("Could not find a $LINK_DESTINATION > $GFM_AUTOLINK node inside of the link.")
                 return Link(text, destination)
             }
