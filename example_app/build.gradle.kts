@@ -41,6 +41,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.appcompat)
 
     // Jetpack Compose core
     implementation(libs.androidx.activityCompose)

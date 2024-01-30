@@ -2,6 +2,7 @@ package com.arnyminerz.markdowntext.render
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString.Builder
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -15,6 +16,7 @@ import com.arnyminerz.markdowntext.component.model.TextComponent
  * @param firstLinePrefix Will be added before the first line of the paragraph.
  * @param otherLinesPrefix Will be added before each line of the paragraph starting from the second.
  */
+@ExperimentalTextApi
 class ParagraphRenderer(
     private val firstLinePrefix: String = "",
     private val otherLinesPrefix: String = ""
@@ -30,7 +32,11 @@ class ParagraphRenderer(
         return appendTextComponents(
             annotatedStringBuilder,
             feature.list,
-            afterEOL = { append(otherLinesPrefix) }
+            object : IRendererAppendCallback() {
+                override fun afterEOL(builder: Builder) {
+                    builder.append(otherLinesPrefix)
+                }
+            }
         ).appendLine() as Builder
     }
 }

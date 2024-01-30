@@ -3,10 +3,12 @@ package com.arnyminerz.markdowntext.render
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.AnnotatedString.Builder
+import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.withStyle
 import com.arnyminerz.markdowntext.component.Header
 
+@ExperimentalTextApi
 object HeaderRenderer : IRenderer<Header> {
     var getHeaderStyle: @Composable (depth: Int) -> SpanStyle = {
         when (it) {

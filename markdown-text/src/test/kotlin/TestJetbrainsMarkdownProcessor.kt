@@ -39,6 +39,25 @@ class TestJetbrainsMarkdownProcessor {
     }
 
     @Test
+    fun `test load text with special characters (Github)`() {
+        val result = githubProcessor.load(". : , ; ' \" - _ ! # @ $ % & / ( ) = ? ¿ º ª [ ] { } ` + ^ ´ ¨ < > | \\ ·")
+
+        // Make sure a single component has been loaded
+        assertEquals(1, result.size)
+        result[0].let { component ->
+            // Make sure the component is a paragraph
+            assertIs<Paragraph>(component)
+            // Check that the paragraph has 3 components
+            assertEquals(73, component.list.size)
+            // And two lines
+            assertEquals(2, component.lines.size)
+            // And that the text is fine
+            assertEquals("Testing text", component.lines[0])
+            assertEquals("With paragraphs", component.lines[1])
+        }
+    }
+
+    @Test
     fun `test load text with styles (Github)`() {
         val result = githubProcessor.load(
             "Text with **bold**, " +

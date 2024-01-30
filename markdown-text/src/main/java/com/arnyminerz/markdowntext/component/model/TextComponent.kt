@@ -1,5 +1,6 @@
 package com.arnyminerz.markdowntext.component.model
 
+import com.arnyminerz.markdowntext.companionClass
 import com.arnyminerz.markdowntext.findChildOfType
 import com.arnyminerz.markdowntext.flatChildren
 import com.arnyminerz.markdowntext.hasChildWithName
@@ -9,26 +10,35 @@ import com.arnyminerz.markdowntext.processor.ProcessingContext
 import org.intellij.markdown.ast.ASTNode
 
 abstract class TextComponent private constructor() : IComponent {
-    /** Alias for End Of Line */
-    object EOL : TextComponent(), FeatureCompanion {
-        override val name: String = "EOL"
-
-        override val text: String = "\n"
+    abstract class SingleCharacterTextObject(
+        override val name: String,
+        override val text: String = name
+    ) : TextComponent(), FeatureCompanion {
+        companion object {
+            fun isInstanceOf(component: TextComponent): Boolean {
+                if (component.text.length == 1) {
+                    val companion = component::class.companionClass
+                        ?.getDeclaredConstructor()
+                        ?.newInstance()
+                            as FeatureCompanion?
+                        ?: error("Could not find a companion for the given component (${component::class.simpleName})")
+                    if (companion.name.length == 1) {
+                        return true
+                    }
+                } else when (component) {
+                    is EOL -> return true
+                    is WS -> return true
+                }
+                return false
+            }
+        }
     }
+
+    /** Alias for End Of Line */
+    object EOL : SingleCharacterTextObject("EOL", "\n")
 
     /** Alias for White Space */
-    object WS : TextComponent(), FeatureCompanion {
-        override val name: String = "WHITE_SPACE"
-
-        override val text: String = " "
-    }
-
-    /** Alias for `:` */
-    object Colon : TextComponent(), FeatureCompanion {
-        override val name: String = ":"
-
-        override val text: String = ":"
-    }
+    object WS : SingleCharacterTextObject("WHITE_SPACE", " ")
 
     class Text(override val text: String) : TextComponent() {
         companion object : FeatureCompanion {

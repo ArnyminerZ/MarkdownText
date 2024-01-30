@@ -18,39 +18,40 @@ import com.arnyminerz.markdowntext.component.model.TextComponent
 fun IRenderer<*>.appendTextComponents(
     annotatedStringBuilder: Builder,
     components: List<TextComponent>,
-    afterEOL: Builder.() -> Unit = {},
-    afterWS: Builder.() -> Unit = {},
-    afterText: Builder.() -> Unit = {},
-    afterCodeSpan: Builder.() -> Unit = {},
-    afterStyledText: Builder.() -> Unit = {}
+    callback: IRendererAppendCallback = object : IRendererAppendCallback() {}
 ): Builder {
     for (component: TextComponent in components) {
-        when (component) {
-            is TextComponent.EOL -> {
-                annotatedStringBuilder.appendLine()
-                afterEOL(annotatedStringBuilder)
-            }
-
-            is TextComponent.WS -> {
-                annotatedStringBuilder.append(' ')
-                afterWS(annotatedStringBuilder)
-            }
-
-            is TextComponent.Text -> {
+        when {
+            component is TextComponent.EOL -> {
                 annotatedStringBuilder.append(component.text)
-                afterText(annotatedStringBuilder)
+                callback.afterEOL(annotatedStringBuilder)
             }
 
-            is TextComponent.CodeSpan -> {
+            component is TextComponent.WS -> {
+                annotatedStringBuilder.append(component.text)
+                callback.afterWS(annotatedStringBuilder)
+            }
+
+            TextComponent.SingleCharacterTextObject.isInstanceOf(component) -> {
+                annotatedStringBuilder.append(component.text)
+                callback.afterSingleCharacter(annotatedStringBuilder)
+            }
+
+            component is TextComponent.Text -> {
+                annotatedStringBuilder.append(component.text)
+                callback.afterText(annotatedStringBuilder)
+            }
+
+            component is TextComponent.CodeSpan -> {
                 annotatedStringBuilder.withStyle(
                     Styles.getCodeSpanStyle()
                 ) {
                     append(component.text)
                 }
-                afterCodeSpan(annotatedStringBuilder)
+                callback.afterCodeSpan(annotatedStringBuilder)
             }
 
-            is TextComponent.StyledText -> {
+            component is TextComponent.StyledText -> {
                 annotatedStringBuilder.withStyle(
                     SpanStyle(
                         fontWeight = if (component.isBold) FontWeight.Bold else FontWeight.Normal,
@@ -63,10 +64,10 @@ fun IRenderer<*>.appendTextComponents(
                 ) {
                     append(component.text)
                 }
-                afterStyledText(annotatedStringBuilder)
+                callback.afterStyledText(annotatedStringBuilder)
             }
 
-            is TextComponent.Link -> {
+            component is TextComponent.Link -> {
                 annotatedStringBuilder.withStyle(
                     Styles.getLinkSpanStyle()
                 ) {
