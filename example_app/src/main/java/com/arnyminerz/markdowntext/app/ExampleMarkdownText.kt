@@ -1,9 +1,5 @@
 package com.arnyminerz.markdowntext.app
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -12,11 +8,11 @@ import com.arnyminerz.markdowntext.MarkdownFlavour
 import com.arnyminerz.markdowntext.MarkdownText
 import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
 
-
 @Preview
 @Composable
 @OptIn(ExperimentalTextApi::class)
 fun MarkdownTextPreview(
+    modifier: Modifier = Modifier,
     flavour: MarkdownFlavour = MarkdownFlavour.CommonMark,
 ) {
     // val exampleImageUrl = "https://picsum.photos/300/200"
@@ -78,14 +74,9 @@ fun MarkdownTextPreview(
         // "```"
     ).joinToString(System.lineSeparator())
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-    ) {
-        MarkdownText(
-            markdown = src,
-            processor = JetbrainsMarkdownProcessor(flavour)
-        )
-    }
+    MarkdownText(
+        markdown = src,
+        processor = JetbrainsMarkdownProcessor(flavour),
+        modifier = modifier
+    )
 }

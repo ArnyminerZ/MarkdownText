@@ -31,7 +31,7 @@ abstract class TextComponent private constructor() : IComponent {
                         ?.getDeclaredConstructor()
                         ?.newInstance()
                         as FeatureCompanion?
-                        ?: error("Could not find a companion for the given component (${component::class.simpleName})")
+                        ?: return false
                     if (companion.name.length == 1) {
                         return true
                     }

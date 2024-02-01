@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.unit.LayoutDirection
 import com.arnyminerz.markdowntext.component.Header
 import com.arnyminerz.markdowntext.component.OrderedList
 import com.arnyminerz.markdowntext.component.Paragraph
@@ -41,7 +40,7 @@ fun MarkdownContainer(
     val components = remember(markdown) { processor.load(markdown) }
 
     @Composable
-    fun Draw() {
+    fun drawComponents() {
         for (component in components) {
             val mod = componentModifier?.invoke(component) ?: Modifier.fillMaxWidth()
             when (component) {
@@ -56,11 +55,11 @@ fun MarkdownContainer(
 
     if (isVertical) {
         Column(modifier) {
-            Draw()
+            drawComponents()
         }
     } else {
         Row(modifier) {
-            Draw()
+            drawComponents()
         }
     }
 }
