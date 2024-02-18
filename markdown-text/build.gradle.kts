@@ -2,6 +2,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.detekt)
     alias(libs.plugins.kotlin)
 
     `maven-publish`
@@ -52,8 +53,8 @@ android {
 }
 
 dependencies {
+    // Android dependencies
     implementation(libs.androidx.core)
-    implementation(libs.appcompat)
 
     // Jetpack Compose core
     implementation(libs.androidx.activityCompose)
@@ -67,9 +68,14 @@ dependencies {
     implementation(libs.coil.gif)
     implementation(libs.coil.svg)
 
+    // Markdown parsing
     implementation(libs.jetbrains.markdown)
 
-    testImplementation(libs.junit)
+    // Kotlin libraries
+    implementation(libs.kotlin.reflect)
+
+    testImplementation(kotlin("test"))
+
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)
 }
