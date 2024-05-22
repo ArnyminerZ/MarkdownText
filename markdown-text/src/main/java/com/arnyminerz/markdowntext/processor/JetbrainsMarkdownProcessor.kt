@@ -1,5 +1,6 @@
 package com.arnyminerz.markdowntext.processor
 
+import com.arnyminerz.markdowntext.Logger
 import com.arnyminerz.markdowntext.MarkdownFlavour
 import com.arnyminerz.markdowntext.component.Header
 import com.arnyminerz.markdowntext.component.MarkdownFile
@@ -21,20 +22,24 @@ class JetbrainsMarkdownProcessor(
 
     @Suppress("MagicNumber")
     private fun logNode(node: ASTNode, allFileText: String, depth: Int = 0) {
-        val prefix = "  ".repeat(depth)
         var text = node.getTextInNode(allFileText)
         if (text.length > MaxLogTextLength) {
             text = text
                 .substring(0, MaxLogTextLength)
                 .replace("\n", "\\n") + " ..."
         }
-        println("$prefix- ${node.name} [${node.startOffset}-${node.endOffset}] (${node.children.size}) - $text")
+        Logger.verbose(
+            message = "- ${node.name} [${node.startOffset}-${node.endOffset}] (${node.children.size}) - $text",
+            depth = depth
+        )
         for (child in node.children) logNode(child,  allFileText, depth + 1)
     }
 
     private fun ProcessingContext.explode(node: ASTNode, depth: Int = 0): List<IComponent> {
-        val prefix = "  ".repeat(depth)
-        println("$prefix- ${node.name} [${node.startOffset}-${node.endOffset}] (${node.children.size})")
+        Logger.verbose(
+            message = "- ${node.name} [${node.startOffset}-${node.endOffset}] (${node.children.size})",
+            depth = depth
+        )
 
         val features = mutableListOf<IComponent>()
         when {
@@ -53,9 +58,9 @@ class JetbrainsMarkdownProcessor(
 
         check(parsedTree.name == MarkdownFile.name) { "Root element must be MARKDOWN_FILE" }
 
-        println("Loaded data:")
+        Logger.debug("Loaded data:")
         logNode(parsedTree, markdown)
-        println()
+        Logger.debug()
 
         val context = ProcessingContext.build(markdown, this)
         return context.explode(parsedTree)

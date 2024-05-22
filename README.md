@@ -122,6 +122,18 @@ click listener will be added. Summary:
     * If `onClickOverrides` is `true`:
         * Tapping anything will call `onClick`
 
+# Set log level
+
+If you want to see the logs of the library, you can set the log level with `Logger`:
+```kotlin
+import com.arnyminerz.markdowntext.Logger
+import com.arnyminerz.markdowntext.Logger.Level
+
+Logger.setLogLevel(Level.DEBUG)
+```
+
+> ![INFO] The default log level is `Level.INFO`.
+
 # Used by
 
 Feel free to open a new PR to add your application or implementation here:
