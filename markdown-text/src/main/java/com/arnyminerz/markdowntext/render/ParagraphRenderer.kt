@@ -1,5 +1,6 @@
 package com.arnyminerz.markdowntext.render
 
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
@@ -17,6 +18,8 @@ import com.arnyminerz.markdowntext.component.model.TextComponent
 
 /**
  * Allows rendering [Paragraph] components.
+ *
+ * Uses [LocalUriHandler] for launching URLs.
  * @param firstLinePrefix Will be added before the first line of the paragraph.
  * @param otherLinesPrefix Will be added before each line of the paragraph starting from the second.
  */
@@ -26,7 +29,7 @@ class ParagraphRenderer(
     private val otherLinesPrefix: String = ""
 ) : IRenderer<Paragraph> {
     @Composable
-    override fun Content(feature: Paragraph, modifier: Modifier) {
+    override fun LazyItemScope.Content(feature: Paragraph, modifier: Modifier) {
         val uriHandler = LocalUriHandler.current
         val style = LocalTextStyle.current
 

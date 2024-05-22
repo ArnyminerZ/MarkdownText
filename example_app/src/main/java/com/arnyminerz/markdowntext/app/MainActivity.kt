@@ -23,10 +23,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import com.arnyminerz.markdowntext.Logger
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Logger.setLogLevel(Logger.Level.VERBOSE)
+
         setContent {
             // A surface container using the 'background' color from the theme
             Surface(
@@ -44,7 +48,8 @@ class MainActivity : ComponentActivity() {
                     ) {
                         AnimatedContent(
                             targetState = showingContainer,
-                            modifier = Modifier.weight(1f)
+                            modifier = Modifier.weight(1f),
+                            label = "Animate change between container and text"
                         ) { showing ->
                             Text(
                                 text = if (showing) "MarkdownContainer" else "MarkdownText",
@@ -64,7 +69,6 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f)
-                                .verticalScroll(rememberScrollState())
                         )
                     } else {
                         ExampleMarkdownText(

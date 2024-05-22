@@ -1,5 +1,6 @@
 package com.arnyminerz.markdowntext.render
 
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString.Builder
@@ -16,7 +17,7 @@ interface IRenderer<FeatureType : Feature> {
      * @param modifier The modifier to apply to the component.
      */
     @Composable
-    fun Content(feature: FeatureType, modifier: Modifier)
+    fun LazyItemScope.Content(feature: FeatureType, modifier: Modifier)
 
     /**
      * Provides a way to append the feature to the [annotatedStringBuilder].

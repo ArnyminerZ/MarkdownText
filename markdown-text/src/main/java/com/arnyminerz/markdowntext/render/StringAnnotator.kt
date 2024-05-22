@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.buildAnnotatedString
 import com.arnyminerz.markdowntext.component.Header
+import com.arnyminerz.markdowntext.component.HorizontalRule
 import com.arnyminerz.markdowntext.component.OrderedList
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.component.UnorderedList
@@ -21,6 +22,7 @@ fun buildAnnotatedString(
             is OrderedList -> ListRenderer.append(this, feature)
             is UnorderedList -> ListRenderer.append(this, feature)
             is Header -> HeaderRenderer.append(this, feature)
+            is HorizontalRule -> HorizontalRuleRenderer.append(this, feature)
             else -> Log.e("MarkdownText", "Got unknown feature: ${feature::class.simpleName}")
         }
     }

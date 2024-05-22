@@ -1,5 +1,6 @@
 package com.arnyminerz.markdowntext.render
 
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -26,7 +27,7 @@ object HeaderRenderer : IRenderer<Header> {
     }
 
     @Composable
-    override fun Content(feature: Header, modifier: Modifier) {
+    override fun LazyItemScope.Content(feature: Header, modifier: Modifier) {
         val uriHandler = LocalUriHandler.current
 
         val text = buildAnnotatedString(feature.list)

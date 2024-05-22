@@ -1,5 +1,6 @@
 package com.arnyminerz.markdowntext.render
 
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
@@ -23,7 +24,7 @@ object ListRenderer : IRenderer<IListComponent> {
     var paddingAlgorithm: (depth: Int) -> String = { "  ".repeat(it + 1) }
 
     @Composable
-    override fun Content(feature: IListComponent, modifier: Modifier) {
+    override fun LazyItemScope.Content(feature: IListComponent, modifier: Modifier) {
         val uriHandler = LocalUriHandler.current
         val style = LocalTextStyle.current
 

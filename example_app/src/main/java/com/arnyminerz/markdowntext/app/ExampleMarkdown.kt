@@ -2,7 +2,7 @@ package com.arnyminerz.markdowntext.app
 
 // val exampleImageUrl = "https://picsum.photos/300/200"
 // val exampleBadge = "https://raster.shields.io/badge/Label-Awesome!-success"
-private const val exampleLink = "https://example.com"
+private const val ExampleLink = "https://example.com"
 
 val exampleMarkdown = listOf(
     "# General formatting",
@@ -11,8 +11,8 @@ val exampleMarkdown = listOf(
     "This is markdown text with **bold and *italic* texts**.",
     "This is markdown text with ~~strikethrough~~ content.",
     "Inline `code` annotations",
-    "[This]($exampleLink) is a link.",
-    "Automatic link: $exampleLink",
+    "[This]($ExampleLink) is a link.",
+    "Automatic link: $ExampleLink",
     "# Header 1",
     "## Header 2",
     "### Header 3",
@@ -37,7 +37,7 @@ val exampleMarkdown = listOf(
     // "- [ ] Second",
     // "- [x] Third",
     // "- [ ] Fifth",
-    // "--------",
+    "--------",
     // "/\\ That is a hr! /\\",
     // "# Images",
     // " ![Badge]($exampleBadge)![Badge]($exampleBadge)",

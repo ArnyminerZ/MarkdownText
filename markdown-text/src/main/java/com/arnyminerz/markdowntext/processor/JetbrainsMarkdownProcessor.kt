@@ -3,6 +3,7 @@ package com.arnyminerz.markdowntext.processor
 import com.arnyminerz.markdowntext.Logger
 import com.arnyminerz.markdowntext.MarkdownFlavour
 import com.arnyminerz.markdowntext.component.Header
+import com.arnyminerz.markdowntext.component.HorizontalRule
 import com.arnyminerz.markdowntext.component.MarkdownFile
 import com.arnyminerz.markdowntext.component.OrderedList
 import com.arnyminerz.markdowntext.component.Paragraph
@@ -47,6 +48,7 @@ class JetbrainsMarkdownProcessor(
             node.name == UnorderedList.name -> with(UnorderedList) { explore(node) }.let(features::add)
             node.name == OrderedList.name -> with(OrderedList) { explore(node) }.let(features::add)
             Header.isInstanceOf(node) -> with(Header) { extract(node) }.let(features::add)
+            node.name == HorizontalRule.name -> features.add(HorizontalRule)
             // If not handled, keep getting deeper
             else -> for (child in node.children) explode(child, depth + 1).let(features::addAll)
         }
