@@ -6,13 +6,13 @@ androidx-lifecycle = "2.8.0"
 androidx-test-espresso = "3.5.1"
 androidx-test-junit = "1.1.5"
 appcompat = "1.6.1"
-compose-compiler = "1.5.8"
+compose-compiler = "1.5.14"
 compose-ui = "1.6.7"
 compose-material3 = "1.2.1"
 coil = "2.6.0"
 jetbrains-markdown = "0.7.2"
 junit = "4.13.2"
-kotlin = "1.9.23"
+kotlin = "1.9.24"
 
 [libraries]
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
