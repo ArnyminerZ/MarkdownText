@@ -31,17 +31,17 @@ object Logger {
      * @param level The level of the message.
      * @param message The message to log.
      */
-    fun log(level: Level, message: String) {
+    fun log(level: Level, message: String, vararg args: Any?) {
         // Check log level
         if (level < logLevel) return
         // Log message
         when (level) {
-            Level.VERBOSE -> Log.v(TAG, message)
-            Level.DEBUG -> Log.d(TAG, message)
-            Level.INFO -> Log.i(TAG, message)
-            Level.WARN -> Log.w(TAG, message)
-            Level.ERROR -> Log.e(TAG, message)
-            Level.ASSERT -> Log.wtf(TAG, message)
+            Level.VERBOSE -> Log.v(TAG, message.format(*args))
+            Level.DEBUG -> Log.d(TAG, message.format(*args))
+            Level.INFO -> Log.i(TAG, message.format(*args))
+            Level.WARN -> Log.w(TAG, message.format(*args))
+            Level.ERROR -> Log.e(TAG, message.format(*args))
+            Level.ASSERT -> Log.wtf(TAG, message.format(*args))
         }
     }
 
@@ -52,24 +52,56 @@ object Logger {
      * @param level The level of the message.
      * @param message The message to log.
      */
-    fun log(level: Level, message: String, depth: Int = 0, prefix: String = "  ") {
+    fun log(level: Level, message: String, vararg args: Any?, depth: Int = 0, prefix: String = "  ") {
         val prepend = prefix.repeat(depth)
-        log(level, "$prepend$message")
+        log(level, "$prepend$message", *args)
     }
 
     /**
-     * Logs a message with the VERBOSE level.
+     * Logs a message with the `VERBOSE` level.
      * @param message The message to log.
      */
-    fun verbose(message: String = "", depth: Int = 0, prefix: String = "  ") {
-        log(Level.VERBOSE, message, depth, prefix)
+    fun verbose(message: String = "", vararg args: Any?, depth: Int = 0, prefix: String = "  ") {
+        log(Level.VERBOSE, message, *args, depth = depth, prefix = prefix)
     }
 
     /**
-     * Logs a message with the DEBUG level.
+     * Logs a message with the `DEBUG` level.
      * @param message The message to log.
      */
-    fun debug(message: String = "", depth: Int = 0, prefix: String = "  ") {
-        log(Level.DEBUG, message, depth, prefix)
+    fun debug(message: String = "", vararg args: Any?, depth: Int = 0, prefix: String = "  ") {
+        log(Level.DEBUG, message, *args, depth = depth, prefix = prefix)
+    }
+
+    /**
+     * Logs a message with the `INFO` level.
+     * @param message The message to log.
+     */
+    fun info(message: String = "", vararg args: Any?, depth: Int = 0, prefix: String = "  ") {
+        log(Level.INFO, message, *args, depth = depth, prefix = prefix)
+    }
+
+    /**
+     * Logs a message with the `WARNING` level.
+     * @param message The message to log.
+     */
+    fun warning(message: String = "", vararg args: Any?, depth: Int = 0, prefix: String = "  ") {
+        log(Level.WARN, message, *args, depth = depth, prefix = prefix)
+    }
+
+    /**
+     * Logs a message with the `ERROR` level.
+     * @param message The message to log.
+     */
+    fun error(message: String = "", vararg args: Any?, depth: Int = 0, prefix: String = "  ") {
+        log(Level.ERROR, message, *args, depth = depth, prefix = prefix)
+    }
+
+    /**
+     * Logs a message with the `ASSERT` level.
+     * @param message The message to log.
+     */
+    fun assert(message: String = "", vararg args: Any?, depth: Int = 0, prefix: String = "  ") {
+        log(Level.ASSERT, message, *args, depth = depth, prefix = prefix)
     }
 }
