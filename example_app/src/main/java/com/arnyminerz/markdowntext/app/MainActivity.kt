@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,14 +60,14 @@ class MainActivity : ComponentActivity() {
                     }
 
                     if (showingContainer) {
-                        MarkdownContainerPreview(
+                        ExampleMarkdownContainer(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f)
                                 .verticalScroll(rememberScrollState())
                         )
                     } else {
-                        MarkdownTextPreview(
+                        ExampleMarkdownText(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f)
