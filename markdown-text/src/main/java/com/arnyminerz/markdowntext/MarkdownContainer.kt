@@ -24,6 +24,24 @@ import com.arnyminerz.markdowntext.render.HorizontalRuleRenderer
 import com.arnyminerz.markdowntext.render.ListRenderer
 import com.arnyminerz.markdowntext.render.ParagraphRenderer
 
+@ExperimentalTextApi
+fun LazyListScope.drawComponents(
+    components: List<IComponent>,
+    componentModifier: ((IComponent) -> Modifier)?
+) {
+    items(components) { component ->
+        val mod = componentModifier?.invoke(component) ?: Modifier.fillMaxWidth()
+        when (component) {
+            is Paragraph -> with(ParagraphRenderer()) { Content(component, modifier = mod) }
+            is OrderedList -> with(ListRenderer) { Content(component, modifier = mod) }
+            is UnorderedList -> with(ListRenderer) { Content(component, modifier = mod) }
+            is Header -> with(HeaderRenderer) { Content(component, modifier = mod) }
+            is HorizontalRule -> with(HorizontalRuleRenderer) { Content(component, modifier = mod) }
+            else -> Logger.error("Got unknown component: ${component::class.simpleName}")
+        }
+    }
+}
+
 /**
  * Displays a fully-capable container which renders Markdown content.
  * @param markdown The markdown text to display.
@@ -47,27 +65,13 @@ fun MarkdownContainer(
 ) {
     val components = remember(markdown) { processor.load(markdown) }
 
-    fun LazyListScope.drawComponents() {
-        items(components) { component ->
-            val mod = componentModifier?.invoke(component) ?: Modifier.fillMaxWidth()
-            when (component) {
-                is Paragraph -> with(ParagraphRenderer()) { Content(component, modifier = mod) }
-                is OrderedList -> with(ListRenderer) { Content(component, modifier = mod) }
-                is UnorderedList -> with(ListRenderer) { Content(component, modifier = mod) }
-                is Header -> with(HeaderRenderer) { Content(component, modifier = mod) }
-                is HorizontalRule -> with(HorizontalRuleRenderer) { Content(component, modifier = mod) }
-                else -> Logger.error("Got unknown component: ${component::class.simpleName}")
-            }
-        }
-    }
-
     if (isVertical) {
         LazyColumn(modifier, state = state) {
-            drawComponents()
+            drawComponents(components, componentModifier)
         }
     } else {
         LazyRow(modifier, state = state) {
-            drawComponents()
+            drawComponents(components, componentModifier)
         }
     }
 }
