@@ -1,5 +1,6 @@
 import com.arnyminerz.markdowntext.component.Header
 import com.arnyminerz.markdowntext.component.Header.Companion.extract
+import com.arnyminerz.markdowntext.component.ext.isInstanceOf
 import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
 import com.arnyminerz.markdowntext.processor.ProcessingContext
 import org.intellij.markdown.IElementType
@@ -9,32 +10,38 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
+import utils.emptyProcessingContext
 
 class TestHeader {
     @Test
     fun `test Header_instanceOf`() {
         assertTrue(
             Header.isInstanceOf(
+                emptyProcessingContext,
                 buildASTNode("ATX_1")
             )
         )
         assertTrue(
             Header.isInstanceOf(
+                emptyProcessingContext,
                 buildASTNode("ATX_3")
             )
         )
         assertTrue(
             Header.isInstanceOf(
+                emptyProcessingContext,
                 buildASTNode("ATX_1")
             )
         )
         assertFalse(
             Header.isInstanceOf(
+                emptyProcessingContext,
                 buildASTNode("ATX_0")
             )
         )
         assertFalse(
             Header.isInstanceOf(
+                emptyProcessingContext,
                 buildASTNode("ATX_7")
             )
         )

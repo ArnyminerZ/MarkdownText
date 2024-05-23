@@ -30,9 +30,9 @@ open class Header(
             { Header6(it) }
         )
 
-        override fun isInstanceOf(node: ASTNode): Boolean {
-            if (!node.name.startsWith("ATX_", true)) return false
-            val index = node.name.substringAfter("ATX_").toIntOrNull()
+        override fun ProcessingContext.isInstanceOf(instance: ASTNode): Boolean {
+            if (!instance.name.startsWith("ATX_", true)) return false
+            val index = instance.name.substringAfter("ATX_").toIntOrNull()
             return index != null && (1..MAX_DEPTH).contains(index)
         }
 

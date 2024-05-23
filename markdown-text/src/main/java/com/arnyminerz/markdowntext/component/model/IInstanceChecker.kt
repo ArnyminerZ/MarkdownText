@@ -1,5 +1,7 @@
 package com.arnyminerz.markdowntext.component.model
 
+import com.arnyminerz.markdowntext.processor.ProcessingContext
+
 interface IInstanceChecker<SourceType : Any> {
-    fun isInstanceOf(instance: SourceType): Boolean
+    fun ProcessingContext.isInstanceOf(instance: SourceType): Boolean
 }

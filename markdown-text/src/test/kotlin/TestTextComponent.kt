@@ -1,3 +1,4 @@
+import com.arnyminerz.markdowntext.component.ext.isInstanceOf
 import com.arnyminerz.markdowntext.component.ext.trimStartWS
 import com.arnyminerz.markdowntext.component.model.TextComponent
 import com.arnyminerz.markdowntext.component.model.TextComponent.StyledText
@@ -10,24 +11,28 @@ import utils.buildASTNode
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
+import utils.emptyProcessingContext
 
 class TestTextComponent {
     @Test
     fun `test StyledText_isInstanceOf`() {
         assertTrue(
             StyledText.isInstanceOf(
+                emptyProcessingContext,
                 buildASTNode(IElementType(StyledText.NODE_BOLD))
             )
         )
 
         assertTrue(
             StyledText.isInstanceOf(
+                emptyProcessingContext,
                 buildASTNode(IElementType(StyledText.NODE_ITAL))
             )
         )
 
         assertTrue(
             StyledText.isInstanceOf(
+                emptyProcessingContext,
                 buildASTNode(IElementType(StyledText.NODE_STRI))
             )
         )

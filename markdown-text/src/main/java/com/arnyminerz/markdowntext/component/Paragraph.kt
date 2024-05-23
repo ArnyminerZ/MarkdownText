@@ -25,7 +25,7 @@ data class Paragraph(
         override val name: String = "PARAGRAPH"
 
         private interface ComponentBuilder {
-            fun instanceCheck(node: ASTNode): Boolean
+            fun ProcessingContext.instanceCheck(node: ASTNode): Boolean
 
             fun ProcessingContext.constructor(node: ASTNode): TextComponent
         }
@@ -34,7 +34,7 @@ data class Paragraph(
             featureCompanion: FeatureCompanion,
             constructor: ProcessingContext.(ASTNode) -> TextComponent
         ): ComponentBuilder = object : ComponentBuilder {
-            override fun instanceCheck(node: ASTNode): Boolean = node.name == featureCompanion.name
+            override fun ProcessingContext.instanceCheck(node: ASTNode): Boolean = node.name == featureCompanion.name
 
             override fun ProcessingContext.constructor(node: ASTNode): TextComponent {
                 return constructor(this, node)
@@ -45,7 +45,8 @@ data class Paragraph(
             checker: NodeTypeCheck,
             extractor: NodeExtractor<C>
         ): ComponentBuilder = object : ComponentBuilder {
-            override fun instanceCheck(node: ASTNode): Boolean = checker.isInstanceOf(node)
+            override fun ProcessingContext.instanceCheck(node: ASTNode): Boolean =
+                with(checker) { isInstanceOf(node) }
 
             override fun ProcessingContext.constructor(node: ASTNode): TextComponent {
                 return with(extractor) { extract(node) }
@@ -67,8 +68,9 @@ data class Paragraph(
             val list = mutableListOf<TextComponent>()
             for (node in root.children) {
                 // Find a component that fulfills its condition
-                val entry = components.find { it.instanceCheck(node) }
-                    ?: error("Got an invalid component: ${node.name}")
+                val entry = components.find {
+                    with (it) { instanceCheck(node) }
+                } ?: error("Got an invalid component: ${node.name}")
                 // Execute the component's callback, or throw
                 val component = with(entry) { constructor(node) }
                 list.add(component)

@@ -9,6 +9,7 @@ import com.arnyminerz.markdowntext.name
 import com.arnyminerz.markdowntext.processor.ProcessingContext
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.intellij.markdown.ast.ASTNode
+import org.intellij.markdown.ast.getTextInNode
 
 abstract class TextComponent private constructor() : IComponent {
     /**
@@ -42,7 +43,7 @@ abstract class TextComponent private constructor() : IComponent {
                 return false
             }
 
-            override fun isInstanceOf(instance: ASTNode): Boolean {
+            override fun ProcessingContext.isInstanceOf(instance: ASTNode): Boolean {
                 val name = instance.name
                 when {
                     name.length == 1 -> return true
@@ -88,7 +89,7 @@ abstract class TextComponent private constructor() : IComponent {
             /** `STRIKETHROUGH` */
             const val NODE_STRI = "STRIKETHROUGH"
 
-            override fun isInstanceOf(instance: ASTNode): Boolean {
+            override fun ProcessingContext.isInstanceOf(instance: ASTNode): Boolean {
                 val name = instance.name
                 return name == NODE_BOLD || name == NODE_ITAL || name == NODE_STRI
             }
@@ -130,7 +131,7 @@ abstract class TextComponent private constructor() : IComponent {
         companion object : FeatureCompanion, NodeTypeCheck, NodeExtractor<CodeSpan> {
             override val name: String = "CODE_SPAN"
 
-            override fun isInstanceOf(instance: ASTNode): Boolean {
+            override fun ProcessingContext.isInstanceOf(instance: ASTNode): Boolean {
                 return instance.name == name && instance.hasChildWithName(Text.name)
             }
 
@@ -155,7 +156,7 @@ abstract class TextComponent private constructor() : IComponent {
             private const val LINK_DESTINATION = "LINK_DESTINATION"
             private const val GFM_AUTOLINK = "GFM_AUTOLINK"
 
-            override fun isInstanceOf(instance: ASTNode): Boolean {
+            override fun ProcessingContext.isInstanceOf(instance: ASTNode): Boolean {
                 return instance.name == name &&
                     instance.hasChildWithName(LINK_TEXT) &&
                     instance.hasChildWithName(LINK_DESTINATION) ||
