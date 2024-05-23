@@ -12,8 +12,8 @@ import androidx.compose.ui.text.font.FontFamily
 import com.arnyminerz.markdowntext.component.CodeFence
 import com.arnyminerz.markdowntext.render.code.LocalCodeParser
 import com.arnyminerz.markdowntext.render.code.LocalCodeTheme
-import com.wakaztahir.codeeditor.highlight.model.CodeLang
-import com.wakaztahir.codeeditor.highlight.utils.parseCodeAsAnnotatedString
+import com.wakaztahir.codeeditor.model.CodeLang
+import com.wakaztahir.codeeditor.utils.parseCodeAsAnnotatedString
 
 /**
  * Renders a code fence feature into a composable element.
@@ -27,12 +27,11 @@ object CodeFenceRenderer : IRenderer<CodeFence> {
 
         val localParser = LocalCodeParser.current
         val localTheme = LocalCodeTheme.current
-        val theme = localTheme.theme()
 
         val code = remember {
             parseCodeAsAnnotatedString(
                 localParser,
-                theme,
+                localTheme.theme,
                 language,
                 code = feature.lines.joinToString("\n")
             )
@@ -54,12 +53,11 @@ object CodeFenceRenderer : IRenderer<CodeFence> {
 
         val localParser = LocalCodeParser.current
         val localTheme = LocalCodeTheme.current
-        val theme = localTheme.theme()
 
         val code = remember {
             parseCodeAsAnnotatedString(
                 localParser,
-                theme,
+                localTheme.theme,
                 language,
                 code = feature.lines.joinToString("\n")
             )
