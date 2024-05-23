@@ -32,51 +32,53 @@ class MainActivity : ComponentActivity() {
         Logger.setLogLevel(Logger.Level.VERBOSE)
 
         setContent {
-            // A surface container using the 'background' color from the theme
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize()
+            MaterialTheme {
+                // A surface container using the 'background' color from the theme
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
-                    var showingContainer by remember { mutableStateOf(false) }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        modifier = Modifier.fillMaxSize()
                     ) {
-                        AnimatedContent(
-                            targetState = showingContainer,
-                            modifier = Modifier.weight(1f),
-                            label = "Animate change between container and text"
-                        ) { showing ->
-                            Text(
-                                text = if (showing) "MarkdownContainer" else "MarkdownText",
+                        var showingContainer by remember { mutableStateOf(false) }
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            AnimatedContent(
+                                targetState = showingContainer,
                                 modifier = Modifier.weight(1f),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontFamily = FontFamily.Monospace
-                            )
+                                label = "Animate change between container and text"
+                            ) { showing ->
+                                Text(
+                                    text = if (showing) "MarkdownContainer" else "MarkdownText",
+                                    modifier = Modifier.weight(1f),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontFamily = FontFamily.Monospace
+                                )
+                            }
+
+                            OutlinedButton(
+                                onClick = { showingContainer = !showingContainer }
+                            ) { Text("Switch Container / Text") }
                         }
 
-                        OutlinedButton(
-                            onClick = { showingContainer = !showingContainer }
-                        ) { Text("Switch Container / Text") }
-                    }
-
-                    if (showingContainer) {
-                        ExampleMarkdownContainer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                        )
-                    } else {
-                        ExampleMarkdownText(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                                .verticalScroll(rememberScrollState())
-                        )
+                        if (showingContainer) {
+                            ExampleMarkdownContainer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                            )
+                        } else {
+                            ExampleMarkdownText(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f)
+                                    .verticalScroll(rememberScrollState())
+                            )
+                        }
                     }
                 }
             }

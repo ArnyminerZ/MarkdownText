@@ -7,10 +7,13 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.TextStyle
 import com.arnyminerz.markdowntext.component.CodeFence
 import com.arnyminerz.markdowntext.component.Header
 import com.arnyminerz.markdowntext.component.HorizontalRule
@@ -27,7 +30,7 @@ import com.arnyminerz.markdowntext.render.ListRenderer
 import com.arnyminerz.markdowntext.render.ParagraphRenderer
 
 @ExperimentalTextApi
-fun LazyListScope.drawComponents(
+private fun LazyListScope.drawComponents(
     components: List<IComponent>,
     componentModifier: ((IComponent) -> Modifier)?
 ) {
@@ -64,17 +67,20 @@ fun MarkdownContainer(
     componentModifier: ((IComponent) -> Modifier)? = null,
     processor: IProcessor = JetbrainsMarkdownProcessor(),
     isVertical: Boolean = true,
-    state: LazyListState = rememberLazyListState()
+    state: LazyListState = rememberLazyListState(),
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium
 ) {
     val components = remember(markdown) { processor.load(markdown) }
 
-    if (isVertical) {
-        LazyColumn(modifier, state = state) {
-            drawComponents(components, componentModifier)
-        }
-    } else {
-        LazyRow(modifier, state = state) {
-            drawComponents(components, componentModifier)
+    ProvideTextStyle(textStyle) {
+        if (isVertical) {
+            LazyColumn(modifier, state = state) {
+                drawComponents(components, componentModifier)
+            }
+        } else {
+            LazyRow(modifier, state = state) {
+                drawComponents(components, componentModifier)
+            }
         }
     }
 }
