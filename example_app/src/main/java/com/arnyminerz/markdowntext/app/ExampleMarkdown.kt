@@ -53,8 +53,8 @@ val exampleMarkdown = listOf(
     // "| Formatted | In       | Markdown |   |   |",
     // "|           |          |          |   |   |",
     // "",
-    // "```bash",
-    // "#!/bin/bash",
-    // "echo 'Hello world!'",
-    // "```"
+    "```bash",
+    "#!/bin/bash",
+    "echo 'Hello world!'",
+    "```"
 ).joinToString(System.lineSeparator())

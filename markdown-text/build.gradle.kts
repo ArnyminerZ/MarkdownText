@@ -62,6 +62,9 @@ dependencies {
     implementation(libs.compose.ui.base)
     implementation(libs.compose.ui.toolingPreview)
 
+    // Jetpack Compose Code Highlighter
+    implementation(libs.compose.codeEditor)
+
     // Coil image loader
     implementation(libs.coil.base)
     implementation(libs.coil.compose)

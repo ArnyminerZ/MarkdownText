@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.ExperimentalTextApi
+import com.arnyminerz.markdowntext.component.CodeFence
 import com.arnyminerz.markdowntext.component.Header
 import com.arnyminerz.markdowntext.component.HorizontalRule
 import com.arnyminerz.markdowntext.component.OrderedList
@@ -19,6 +20,7 @@ import com.arnyminerz.markdowntext.component.UnorderedList
 import com.arnyminerz.markdowntext.component.model.IComponent
 import com.arnyminerz.markdowntext.processor.IProcessor
 import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
+import com.arnyminerz.markdowntext.render.CodeFenceRenderer
 import com.arnyminerz.markdowntext.render.HeaderRenderer
 import com.arnyminerz.markdowntext.render.HorizontalRuleRenderer
 import com.arnyminerz.markdowntext.render.ListRenderer
@@ -37,6 +39,7 @@ fun LazyListScope.drawComponents(
             is UnorderedList -> with(ListRenderer) { Content(component, modifier = mod) }
             is Header -> with(HeaderRenderer) { Content(component, modifier = mod) }
             is HorizontalRule -> with(HorizontalRuleRenderer) { Content(component, modifier = mod) }
+            is CodeFence -> with(CodeFenceRenderer) { Content(component, modifier = mod) }
             else -> Logger.error("Got unknown component: ${component::class.simpleName}")
         }
     }
