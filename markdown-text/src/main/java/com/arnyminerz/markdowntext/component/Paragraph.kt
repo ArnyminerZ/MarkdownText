@@ -7,6 +7,8 @@ import com.arnyminerz.markdowntext.component.model.NodeExtractor
 import com.arnyminerz.markdowntext.component.model.NodeTypeCheck
 import com.arnyminerz.markdowntext.component.model.TextComponent
 import com.arnyminerz.markdowntext.component.model.TextComponent.BACKTICK
+import com.arnyminerz.markdowntext.component.model.TextComponent.BR
+import com.arnyminerz.markdowntext.component.model.TextComponent.Checkbox
 import com.arnyminerz.markdowntext.component.model.TextComponent.CodeSpan
 import com.arnyminerz.markdowntext.component.model.TextComponent.EOL
 import com.arnyminerz.markdowntext.component.model.TextComponent.Link
@@ -16,6 +18,7 @@ import com.arnyminerz.markdowntext.component.model.TextComponent.Text
 import com.arnyminerz.markdowntext.component.model.TextComponent.WS
 import com.arnyminerz.markdowntext.name
 import com.arnyminerz.markdowntext.processor.ProcessingContext
+import okhttp3.internal.toImmutableList
 import org.intellij.markdown.ast.ASTNode
 
 data class Paragraph(
@@ -54,9 +57,11 @@ data class Paragraph(
         }
 
         private val components: Set<ComponentBuilder> = setOf(
+            nodeTypeCheck(Checkbox, Checkbox),
             nameCheck(Text) { Text(it.getTextInNode()) },
             nameCheck(EOL) { EOL },
             nameCheck(WS) { WS },
+            nameCheck(BR) { BR },
             nameCheck(BACKTICK) { BACKTICK },
             nodeTypeCheck(Mono, Mono),
             nodeTypeCheck(CodeSpan, CodeSpan),
@@ -68,6 +73,7 @@ data class Paragraph(
             val list = mutableListOf<TextComponent>()
             for (node in root.children) {
                 // Find a component that fulfills its condition
+                // FIXME - Do not throw error, handle it properly
                 val entry = components.find {
                     with (it) { instanceCheck(node) }
                 } ?: error("Got an invalid component: ${node.name}")
@@ -87,6 +93,18 @@ data class Paragraph(
         val result = list.toMutableList()
         result.addAll(other.list)
         return Paragraph(result)
+    }
+
+    fun trimStartWS(): Paragraph {
+        // Remove all the elements from the beginning of list that are WS
+        val newList = list.toMutableList()
+        for (item in list) {
+            if (item !is WS) break
+            newList.remove(item)
+        }
+        return Paragraph(
+            list = newList.toImmutableList()
+        )
     }
 }
 

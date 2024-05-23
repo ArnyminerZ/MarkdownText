@@ -54,7 +54,7 @@ object ListRenderer : IRenderer<IListComponent> {
             // Add the pad
             annotatedStringBuilder.append(pad)
             // Append the prefix string
-            annotatedStringBuilder.append(element.prefix)
+            element.prefix?.let(annotatedStringBuilder::append)
             // Add a tab for giving a bit of space
             annotatedStringBuilder.append('\t')
             // Render the paragraph

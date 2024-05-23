@@ -39,6 +39,7 @@ abstract class TextComponent private constructor() : IComponent {
                 } else when (component) {
                     is EOL -> return true
                     is WS -> return true
+                    is BR -> return true
                 }
                 return false
             }
@@ -49,6 +50,7 @@ abstract class TextComponent private constructor() : IComponent {
                     name.length == 1 -> return true
                     name == EOL.name -> return true
                     name == WS.name -> return true
+                    name == BR.name -> return true
                 }
                 return false
             }
@@ -59,12 +61,16 @@ abstract class TextComponent private constructor() : IComponent {
         }
     }
 
-    /** Alias for End Of Line */
+    /** Alias for End Of Line (`EOL`) */
     object EOL : Mono("EOL", '\n')
 
-    /** Alias for White Space */
+    /** Alias for White Space (`WHITE_SPACE`) */
     object WS : Mono("WHITE_SPACE", ' ')
 
+    /** Alias for Backslash (`BR`) */
+    object BR : Mono("BR", '\\')
+
+    /** Alias for Backtick (`BACKTICK`) */
     object BACKTICK : Mono("BACKTICK", '`')
 
     class Text(override val text: String) : TextComponent() {
@@ -186,6 +192,62 @@ abstract class TextComponent private constructor() : IComponent {
                 return Link(text, destination)
             }
         }
+    }
+
+    data class Checkbox(
+        val isChecked: Boolean
+    ) : TextComponent() {
+        companion object : NodeTypeCheck, NodeExtractor<Checkbox> {
+            private const val SHORT_REFERENCE_LINK = "SHORT_REFERENCE_LINK"
+
+            private const val CHECKBOX_PREFIX_LENGTH = 3
+
+            /**
+             * Checkboxes get processed either as:
+             * - `[`
+             * - `WHITE_SPACE`
+             * - `]`
+             *
+             * when not checked, or:
+             * - `SHORT_REFERENCE_LINK`
+             *     - `LINK_LABEL`
+             *         - `[`
+             *         - `TEXT` (`x`)
+             *         - `]`
+             */
+            override fun ProcessingContext.isInstanceOf(instance: ASTNode): Boolean {
+                if (instance.name == SHORT_REFERENCE_LINK) {
+                    val text = instance.getTextInNode()
+                    if (text[0] != '[') return false
+                    if (text[2] != ']') return false
+                    return true
+                }
+
+                // Only allow detection of parent checkbox for the first iteration of the array,
+                // otherwise the text is never detected and/or added
+                val isFirst = instance.startOffset == instance.parent?.startOffset
+                if (!isFirst) return false
+
+                return instance.parent?.children?.let { nodes ->
+                    nodes.size >= CHECKBOX_PREFIX_LENGTH &&
+                        nodes[0].name == "[" &&
+                        nodes[1].name == WS.name &&
+                        nodes[2].name == "]"
+                } == true
+            }
+
+            override fun ProcessingContext.extract(node: ASTNode): Checkbox {
+                val text = if (node.name == SHORT_REFERENCE_LINK)
+                    node.getTextInNode()
+                else
+                    node.parent!!.getTextInNode()
+                return Checkbox(
+                    isChecked = text[1] != ' '
+                )
+            }
+        }
+
+        override val text: String = ""
     }
 
     abstract val text: String

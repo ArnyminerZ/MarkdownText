@@ -1,21 +1,23 @@
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.component.flatten
 import com.arnyminerz.markdowntext.component.model.TextComponent
+import com.arnyminerz.markdowntext.component.model.TextComponent.Text
+import com.arnyminerz.markdowntext.component.model.TextComponent.WS
 import org.junit.Test
 import kotlin.test.assertContentEquals
 
 class TestParagraph {
     @Test
     fun `test Paragraph_add`() {
-        val comp1 = TextComponent.Text("this")
-        val comp2 = TextComponent.WS
-        val comp3 = TextComponent.Text("is")
-        val comp4 = TextComponent.WS
-        val comp5 = TextComponent.Text("some")
-        val comp6 = TextComponent.WS
-        val comp7 = TextComponent.Text("testing")
+        val comp1 = Text("this")
+        val comp2 = WS
+        val comp3 = Text("is")
+        val comp4 = WS
+        val comp5 = Text("some")
+        val comp6 = WS
+        val comp7 = Text("testing")
         val comp8 = TextComponent.EOL
-        val comp9 = TextComponent.Text("text")
+        val comp9 = Text("text")
         val par1 = Paragraph(
             listOf(comp1, comp2, comp3, comp4)
         )
@@ -37,15 +39,15 @@ class TestParagraph {
 
     @Test
     fun `test List-Paragraph_flatten`() {
-        val comp1 = TextComponent.Text("this")
-        val comp2 = TextComponent.WS
-        val comp3 = TextComponent.Text("is")
-        val comp4 = TextComponent.WS
-        val comp5 = TextComponent.Text("some")
-        val comp6 = TextComponent.WS
-        val comp7 = TextComponent.Text("testing")
+        val comp1 = Text("this")
+        val comp2 = WS
+        val comp3 = Text("is")
+        val comp4 = WS
+        val comp5 = Text("some")
+        val comp6 = WS
+        val comp7 = Text("testing")
         val comp8 = TextComponent.EOL
-        val comp9 = TextComponent.Text("text")
+        val comp9 = Text("text")
         val par1 = Paragraph(
             listOf(comp1, comp2, comp3, comp4)
         )
@@ -62,6 +64,36 @@ class TestParagraph {
         assertContentEquals(
             listOf(par1 + par2, par3),
             paragraphs.flatten()
+        )
+    }
+
+    @Test
+    fun `test Paragraph_trimStartWS`() {
+        val text = Text("Text")
+
+        assertContentEquals(
+            listOf(text),
+            Paragraph(
+                listOf(WS, WS, WS, text)
+            ).trimStartWS().list
+        )
+        assertContentEquals(
+            listOf(text),
+            Paragraph(
+                listOf(text)
+            ).trimStartWS().list
+        )
+        assertContentEquals(
+            emptyList(),
+            Paragraph(
+                listOf(WS)
+            ).trimStartWS().list
+        )
+        assertContentEquals(
+            emptyList(),
+            Paragraph(
+                emptyList()
+            ).trimStartWS().list
         )
     }
 }

@@ -16,7 +16,7 @@ import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
 @OptIn(ExperimentalTextApi::class)
 fun ExampleMarkdownContainer(
     modifier: Modifier = Modifier,
-    flavour: MarkdownFlavour = MarkdownFlavour.CommonMark,
+    flavour: MarkdownFlavour = MarkdownFlavour.Github
 ) {
     ProvideTextStyle(
         value = LocalTextStyle.current.copy(color = Color.Red)

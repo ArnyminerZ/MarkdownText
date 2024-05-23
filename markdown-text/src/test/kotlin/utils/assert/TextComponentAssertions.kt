@@ -17,6 +17,10 @@ fun assertIsEOL(component: TextComponent) {
     assertIs<TextComponent.EOL>(component)
 }
 
+fun assertIsBR(component: TextComponent) {
+    assertIs<TextComponent.BR>(component)
+}
+
 fun assertIsMono(component: TextComponent, character: Char) {
     assertIs<TextComponent.Mono>(component)
     assertEquals(component.text, character.toString())

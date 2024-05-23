@@ -4,6 +4,8 @@ import com.arnyminerz.markdowntext.component.model.FeatureCompanion
 import com.arnyminerz.markdowntext.component.model.IContainerCompanion
 import com.arnyminerz.markdowntext.component.model.IListComponent
 import com.arnyminerz.markdowntext.component.model.ListElement
+import com.arnyminerz.markdowntext.component.model.ListElement.Companion.bullet
+import com.arnyminerz.markdowntext.component.model.TextComponent
 import com.arnyminerz.markdowntext.name
 import com.arnyminerz.markdowntext.processor.ProcessingContext
 import org.intellij.markdown.ast.ASTNode
@@ -34,8 +36,20 @@ data class UnorderedList(
                         // Process all paragraphs
                         .map { with(Paragraph) { explore(it) } }
                         .join()
+                        .trimStartWS()
 
-                    ListElement(paragraph, subLists)
+                    val checkbox = paragraph.list
+                        .find { it is TextComponent.Checkbox } as TextComponent.Checkbox?
+
+                    ListElement(
+                        paragraph,
+                        subLists,
+                        prefix = if (checkbox != null) {
+                            if (checkbox.isChecked) "☑" else "☐"
+                        } else {
+                            bullet
+                        }
+                    )
                 }
             return UnorderedList(elements)
         }
