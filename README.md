@@ -134,6 +134,13 @@ Logger.setLogLevel(Level.DEBUG)
 
 > ![INFO] The default log level is `Level.INFO`.
 
+# Code Blocks
+
+You can adjust the parser and theme of code blocks using `LocalCodeParser` and `LocalCodeTheme`
+respectively. The default values are `PrettifyParser()` and `CodeTheme.Default`.
+
+See https://github.com/Qawaz/compose-code-editor for more information.
+
 # Used by
 
 Feel free to open a new PR to add your application or implementation here:
