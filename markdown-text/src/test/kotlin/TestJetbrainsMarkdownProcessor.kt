@@ -1,5 +1,6 @@
 import com.arnyminerz.markdowntext.MarkdownFlavour
 import com.arnyminerz.markdowntext.component.Header
+import com.arnyminerz.markdowntext.component.HorizontalRule
 import com.arnyminerz.markdowntext.component.OrderedList
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.component.UnorderedList
@@ -468,6 +469,15 @@ class TestJetbrainsMarkdownProcessor {
                 assertIsWS(component.list[1])
                 assertIsLink(component.list[2], "https://example.com")
             }
+        }
+    }
+
+    @Test
+    fun `test load horizontal rule (Github)`() {
+        githubProcessor.load("---").let { result ->
+            // Make sure a single component has been loaded
+            assertEquals(1, result.size)
+            assertIs<HorizontalRule>(result[0])
         }
     }
 }
