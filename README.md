@@ -20,6 +20,12 @@ A library for displaying Markdown contents within Jetpack Compose. Uses [Coil][c
 * Tables are not supported.
 * Horizontal rules do not fill the whole width.
 
+# Permissions
+
+The library requires the following permissions:
+- `INTERNET`: To load images from the web. If you don't want the app to load images from the web,
+  you can disable it from the Manifest.
+
 ## Usage
 
 Add to the module's dependencies:
