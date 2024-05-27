@@ -55,6 +55,8 @@ android {
 dependencies {
     // Android dependencies
     implementation(libs.androidx.core)
+    implementation(libs.androidx.lifecycle.viewmodel)
+    implementation(libs.androidx.lifecycle.viewmodelCompose)
 
     // Jetpack Compose core
     implementation(libs.androidx.activityCompose)
@@ -81,6 +83,12 @@ dependencies {
 
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).all {
+    kotlinOptions {
+        freeCompilerArgs += "-Xcontext-receivers"
+    }
 }
 
 val androidSourcesJar = tasks.create("androidSourcesJar", Jar::class.java) {

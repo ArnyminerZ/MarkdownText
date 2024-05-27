@@ -1,6 +1,7 @@
 package com.arnyminerz.markdowntext.render
 
 import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -9,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.IntSize
 import com.arnyminerz.markdowntext.component.CodeFence
 import com.arnyminerz.markdowntext.render.code.LocalCodeParser
 import com.arnyminerz.markdowntext.render.code.LocalCodeTheme
@@ -44,11 +46,9 @@ object CodeFenceRenderer : IRenderer<CodeFence> {
         )
     }
 
+    context(RenderContext)
     @Composable
-    override fun append(
-        annotatedStringBuilder: AnnotatedString.Builder,
-        feature: CodeFence
-    ): AnnotatedString.Builder {
+    override fun append(feature: CodeFence) {
         val language = feature.language ?: CodeLang.Markdown
 
         val localParser = LocalCodeParser.current
@@ -66,7 +66,5 @@ object CodeFenceRenderer : IRenderer<CodeFence> {
         annotatedStringBuilder.pushStyle(SpanStyle(fontFamily = FontFamily.Monospace))
         annotatedStringBuilder.append(code)
         annotatedStringBuilder.pop()
-
-        return annotatedStringBuilder
     }
 }

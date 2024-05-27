@@ -1,9 +1,10 @@
 package com.arnyminerz.markdowntext
 
-import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -12,6 +13,8 @@ import androidx.compose.ui.text.TextStyle
 import com.arnyminerz.markdowntext.processor.IProcessor
 import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
 import com.arnyminerz.markdowntext.render.buildAnnotatedString
+import com.arnyminerz.markdowntext.ui.ExtendedClickableText
+import com.arnyminerz.markdowntext.ui.utils.rememberMaxCharacterSize
 
 /**
  * Creates a Text component that supports markdown formatting.
@@ -30,11 +33,15 @@ fun MarkdownText(
 ) {
     val uriHandler = LocalUriHandler.current
 
-    val components = remember(markdown) { processor.load(markdown) }
-    val text = buildAnnotatedString(components)
+    val fontSize = rememberMaxCharacterSize(style)
 
-    ClickableText(
+    val components = remember(markdown) { processor.load(markdown) }
+    val inlineContentMap = remember { mutableStateMapOf<String, InlineTextContent>() }
+    val text = buildAnnotatedString(inlineContentMap, fontSize, components)
+
+    ExtendedClickableText(
         text = text,
+        inlineContent = inlineContentMap,
         onClick = { index ->
             // Launch the first tapped url annotation, if any
             text.getUrlAnnotations(index, index)

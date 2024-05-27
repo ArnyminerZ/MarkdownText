@@ -14,6 +14,7 @@ import kotlin.test.assertNotNull
 import utils.assert.assertIsCodeSpan
 import utils.assert.assertIsLink
 import utils.assert.assertIsMono
+import utils.assert.assertIsSQUOTE
 import utils.assert.assertIsStyledText
 import utils.assert.assertIsText
 import utils.assert.assertIsWS

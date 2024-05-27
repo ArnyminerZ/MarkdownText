@@ -4,9 +4,9 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString.Builder
-import com.arnyminerz.markdowntext.component.model.Feature
 import com.arnyminerz.markdowntext.MarkdownContainer
 import com.arnyminerz.markdowntext.MarkdownText
+import com.arnyminerz.markdowntext.component.model.Feature
 
 interface IRenderer<FeatureType : Feature> {
     /**
@@ -20,15 +20,15 @@ interface IRenderer<FeatureType : Feature> {
     fun LazyItemScope.Content(feature: FeatureType, modifier: Modifier)
 
     /**
-     * Provides a way to append the feature to the [annotatedStringBuilder].
+     * Provides a way to append the feature to the string builder in the current context.
      *
      * Used for instances where the feature can be rendered directly inside of a Text component.
      *
      * **Used by [MarkdownText]**
-     * @param annotatedStringBuilder The [Builder] to append the feature to.
      * @param feature The feature to append.
      * @return The [Builder] with the appended feature.
      */
+    context(RenderContext)
     @Composable
-    fun append(annotatedStringBuilder: Builder, feature: FeatureType): Builder
+    fun append(feature: FeatureType)
 }

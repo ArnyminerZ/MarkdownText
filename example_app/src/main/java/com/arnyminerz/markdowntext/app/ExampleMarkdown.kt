@@ -1,7 +1,7 @@
 package com.arnyminerz.markdowntext.app
 
-// val exampleImageUrl = "https://picsum.photos/300/200"
-// val exampleBadge = "https://raster.shields.io/badge/Label-Awesome!-success"
+private const val ExampleImageUrl = "https://picsum.photos/300/200"
+private const val ExampleBadgeUrl = "https://raster.shields.io/badge/Label-Awesome!-success"
 private const val ExampleLink = "https://example.com"
 
 val exampleMarkdown = listOf(
@@ -39,12 +39,13 @@ val exampleMarkdown = listOf(
     "- [ ] Fifth",
     "--------",
     "/\\ That is a hr! /\\",
-    // "# Images",
-    // " ![Badge]($exampleBadge)![Badge]($exampleBadge)",
-    // "Here is a normal inline image: ![This is an image]($exampleBadge)",
-    // "But this one has a link: [![This is an image]($exampleBadge)]($exampleLink)",
-    // "This is a large block image:",
-    // "![Large image]($exampleImageUrl)",
+    "# Images",
+    " ![Badge]($ExampleBadgeUrl)![Badge]($ExampleBadgeUrl)",
+    "Here is a normal inline image: ![This is an image]($ExampleBadgeUrl)",
+    "But this one has a link: [![This is an image]($ExampleBadgeUrl)]($ExampleLink)",
+    "This is a large block image:",
+    "![Large image]($ExampleImageUrl)",
+    "# Special characters",
     "Special characters should be fine: ' \" ! ( ) [ ] ` < >",
     // "",
     // "| Column 1  | Column 2 | Column 3 |   |   |",
@@ -53,6 +54,7 @@ val exampleMarkdown = listOf(
     // "| Formatted | In       | Markdown |   |   |",
     // "|           |          |          |   |   |",
     // "",
+    "# Here's a code block",
     "```bash",
     "#!/bin/bash",
     "echo 'Hello world!'",

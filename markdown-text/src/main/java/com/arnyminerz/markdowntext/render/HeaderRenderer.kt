@@ -2,15 +2,21 @@ package com.arnyminerz.markdowntext.render
 
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString.Builder
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.IntSize
 import com.arnyminerz.markdowntext.component.Header
+import com.arnyminerz.markdowntext.ui.ExtendedClickableText
+import com.arnyminerz.markdowntext.ui.utils.rememberMaxCharacterSize
 
 @ExperimentalTextApi
 object HeaderRenderer : IRenderer<Header> {
@@ -30,28 +36,35 @@ object HeaderRenderer : IRenderer<Header> {
     override fun LazyItemScope.Content(feature: Header, modifier: Modifier) {
         val uriHandler = LocalUriHandler.current
 
-        val text = buildAnnotatedString(feature.list)
+        val style = getHeaderStyle(feature.depth)
+        val textSize = rememberMaxCharacterSize(style = style)
 
-        ClickableText(
+        val inlineContentMap = remember { mutableStateMapOf<String, InlineTextContent>() }
+        val text = buildAnnotatedString(inlineContentMap, textSize, feature.list)
+
+        ExtendedClickableText(
             text = text,
+            inlineContent = inlineContentMap,
             onClick = { index ->
                 // Launch the first tapped url annotation, if any
                 text.getUrlAnnotations(index, index)
                     .firstOrNull()
                     ?.let { uriHandler.openUri(it.item.url) }
             },
-            style = getHeaderStyle(feature.depth),
+            style = style,
             modifier = modifier
         )
     }
 
+    context(RenderContext)
     @Composable
-    override fun append(annotatedStringBuilder: Builder, feature: Header): Builder {
+    override fun append(
+        feature: Header
+    ) {
         val style = getHeaderStyle(feature.depth)
         annotatedStringBuilder.withStyle(style.toSpanStyle()) {
-            appendTextComponents(annotatedStringBuilder, feature.list)
+            appendTextComponents(feature.list)
         }
         annotatedStringBuilder.appendLine()
-        return annotatedStringBuilder
     }
 }

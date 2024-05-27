@@ -1,16 +1,15 @@
 package com.arnyminerz.markdowntext.component
 
+import com.arnyminerz.markdowntext.Logger
 import com.arnyminerz.markdowntext.component.model.FeatureCompanion
 import com.arnyminerz.markdowntext.component.model.IContainerCompanion
 import com.arnyminerz.markdowntext.component.model.ITextContainer
 import com.arnyminerz.markdowntext.component.model.NodeExtractor
 import com.arnyminerz.markdowntext.component.model.NodeTypeCheck
 import com.arnyminerz.markdowntext.component.model.TextComponent
-import com.arnyminerz.markdowntext.component.model.TextComponent.BACKTICK
-import com.arnyminerz.markdowntext.component.model.TextComponent.BR
 import com.arnyminerz.markdowntext.component.model.TextComponent.Checkbox
 import com.arnyminerz.markdowntext.component.model.TextComponent.CodeSpan
-import com.arnyminerz.markdowntext.component.model.TextComponent.EOL
+import com.arnyminerz.markdowntext.component.model.TextComponent.Image
 import com.arnyminerz.markdowntext.component.model.TextComponent.Link
 import com.arnyminerz.markdowntext.component.model.TextComponent.Mono
 import com.arnyminerz.markdowntext.component.model.TextComponent.StyledText
@@ -27,13 +26,13 @@ data class Paragraph(
     companion object : FeatureCompanion, IContainerCompanion<TextComponent, Paragraph> {
         override val name: String = "PARAGRAPH"
 
-        private interface ComponentBuilder {
+        interface ComponentBuilder {
             fun ProcessingContext.instanceCheck(node: ASTNode): Boolean
 
             fun ProcessingContext.constructor(node: ASTNode): TextComponent
         }
 
-        private fun nameCheck(
+        internal fun nameCheck(
             featureCompanion: FeatureCompanion,
             constructor: ProcessingContext.(ASTNode) -> TextComponent
         ): ComponentBuilder = object : ComponentBuilder {
@@ -56,13 +55,12 @@ data class Paragraph(
             }
         }
 
+        @Suppress("SpreadOperator")
         private val components: Set<ComponentBuilder> = setOf(
             nodeTypeCheck(Checkbox, Checkbox),
             nameCheck(Text) { Text(it.getTextInNode()) },
-            nameCheck(EOL) { EOL },
-            nameCheck(WS) { WS },
-            nameCheck(BR) { BR },
-            nameCheck(BACKTICK) { BACKTICK },
+            *TextComponent.monoComponentBuilders,
+            nodeTypeCheck(Image, Image),
             nodeTypeCheck(Mono, Mono),
             nodeTypeCheck(CodeSpan, CodeSpan),
             nodeTypeCheck(StyledText, StyledText),
@@ -73,10 +71,12 @@ data class Paragraph(
             val list = mutableListOf<TextComponent>()
             for (node in root.children) {
                 // Find a component that fulfills its condition
-                // FIXME - Do not throw error, handle it properly
                 val entry = components.find {
                     with (it) { instanceCheck(node) }
-                } ?: error("Got an invalid component: ${node.name}")
+                } ?: let {
+                    Logger.warning("Got an invalid component: ${node.name}")
+                    null
+                } ?: continue
                 // Execute the component's callback, or throw
                 val component = with(entry) { constructor(node) }
                 list.add(component)

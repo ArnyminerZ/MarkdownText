@@ -1,7 +1,8 @@
 package com.arnyminerz.markdowntext.render
 
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.AnnotatedString.Builder
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.UrlAnnotation
@@ -12,14 +13,13 @@ import androidx.compose.ui.text.withAnnotation
 import androidx.compose.ui.text.withStyle
 import com.arnyminerz.markdowntext.component.model.TextComponent
 
+context(RenderContext)
 @Composable
 @ExperimentalTextApi
-@Suppress("UnusedReceiverParameter")
 fun IRenderer<*>.appendTextComponents(
-    annotatedStringBuilder: Builder,
     components: List<TextComponent>,
     callback: IRendererAppendCallback = object : IRendererAppendCallback() {}
-): Builder {
+) {
     for (component: TextComponent in components) {
         when {
             component is TextComponent.EOL -> {
@@ -35,6 +35,11 @@ fun IRenderer<*>.appendTextComponents(
             component is TextComponent.BR -> {
                 annotatedStringBuilder.append(component.text)
                 callback.afterBR(annotatedStringBuilder)
+            }
+
+            component is TextComponent.SQUOTE -> {
+                annotatedStringBuilder.append(component.text)
+                callback.afterSQUOTE(annotatedStringBuilder)
             }
 
             TextComponent.Mono.isInstanceOf(component) -> {
@@ -83,7 +88,19 @@ fun IRenderer<*>.appendTextComponents(
                     }
                 }
             }
+
+            component is TextComponent.Image -> {
+                val url = component.url
+
+                LaunchedEffect(url) {
+                    viewModel.obtainImageSize(textSize, url, inlineContentMap)
+                }
+
+                annotatedStringBuilder.appendInlineContent(
+                    id = url,
+                    alternateText = component.text
+                )
+            }
         }
     }
-    return annotatedStringBuilder
 }

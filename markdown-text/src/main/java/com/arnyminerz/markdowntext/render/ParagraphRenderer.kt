@@ -2,19 +2,26 @@ package com.arnyminerz.markdowntext.render
 
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString.Builder
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.IntSize
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.component.model.TextComponent
+import com.arnyminerz.markdowntext.ui.ExtendedClickableText
+import com.arnyminerz.markdowntext.ui.utils.rememberMaxCharacterSize
 
 /**
  * Allows rendering [Paragraph] components.
@@ -33,10 +40,14 @@ class ParagraphRenderer(
         val uriHandler = LocalUriHandler.current
         val style = LocalTextStyle.current
 
-        val text = buildAnnotatedString(feature.list)
+        val fontSize = rememberMaxCharacterSize(style)
 
-        ClickableText(
+        val inlineContentMap = remember { mutableStateMapOf<String, InlineTextContent>() }
+        val text = buildAnnotatedString(inlineContentMap, fontSize, feature.list)
+
+        ExtendedClickableText(
             text = text,
+            inlineContent = inlineContentMap,
             onClick = { index ->
                 // Launch the first tapped url annotation, if any
                 text.getUrlAnnotations(index, index)
@@ -48,17 +59,18 @@ class ParagraphRenderer(
         )
     }
 
+    context(RenderContext)
     @Composable
-    override fun append(annotatedStringBuilder: Builder, feature: Paragraph): Builder {
+    override fun append(feature: Paragraph) {
         annotatedStringBuilder.append(firstLinePrefix)
-        return appendTextComponents(
-            annotatedStringBuilder,
+        appendTextComponents(
             feature.list,
             object : IRendererAppendCallback() {
                 override fun afterEOL(builder: Builder) {
                     builder.append(otherLinesPrefix)
                 }
             }
-        ).appendLine() as Builder
+        )
+        annotatedStringBuilder.appendLine()
     }
 }

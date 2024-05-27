@@ -1,6 +1,9 @@
 package com.arnyminerz.markdowntext.component.model
 
 import com.arnyminerz.markdowntext.companionClass
+import com.arnyminerz.markdowntext.component.Paragraph
+import com.arnyminerz.markdowntext.findByInstanceOfKey
+import com.arnyminerz.markdowntext.findByKey
 import com.arnyminerz.markdowntext.findChildOfType
 import com.arnyminerz.markdowntext.flatChildren
 import com.arnyminerz.markdowntext.hasChildWithName
@@ -12,6 +15,20 @@ import org.intellij.markdown.ast.ASTNode
 import org.intellij.markdown.ast.getTextInNode
 
 abstract class TextComponent private constructor() : IComponent {
+    companion object {
+        val monoComponents = mapOf<FeatureCompanion, TextComponent>(
+            EOL to EOL,
+            WS to WS,
+            BR to BR,
+            SQUOTE to SQUOTE,
+            BACKTICK to BACKTICK
+        )
+
+        val monoComponentBuilders = monoComponents.map { (co, cp) ->
+            Paragraph.nameCheck(co) { cp }
+        }.toTypedArray()
+    }
+
     /**
      * Represents a TextComponent which only has one character, for example `:` are parsed as is, and not as TEXT
      * components.
@@ -36,22 +53,16 @@ abstract class TextComponent private constructor() : IComponent {
                     if (companion.name.length == 1) {
                         return true
                     }
-                } else when (component) {
-                    is EOL -> return true
-                    is WS -> return true
-                    is BR -> return true
+                } else {
+                    monoComponents.findByInstanceOfKey(component::class)?.let { return true }
                 }
                 return false
             }
 
             override fun ProcessingContext.isInstanceOf(instance: ASTNode): Boolean {
                 val name = instance.name
-                when {
-                    name.length == 1 -> return true
-                    name == EOL.name -> return true
-                    name == WS.name -> return true
-                    name == BR.name -> return true
-                }
+                if (name.length == 1) return true
+                monoComponents.findByKey { it.name == name }?.let { return true }
                 return false
             }
 
@@ -72,6 +83,9 @@ abstract class TextComponent private constructor() : IComponent {
 
     /** Alias for Backtick (`BACKTICK`) */
     object BACKTICK : Mono("BACKTICK", '`')
+
+    /** Alias for Single Quote (`'`) */
+    object SQUOTE : Mono("SQUOTE", '\'')
 
     class Text(override val text: String) : TextComponent() {
         companion object : FeatureCompanion {
@@ -248,6 +262,35 @@ abstract class TextComponent private constructor() : IComponent {
         }
 
         override val text: String = ""
+    }
+
+    data class Image(
+        val url: String,
+        override val text: String
+    ): TextComponent() {
+        companion object : FeatureCompanion, NodeTypeCheck, NodeExtractor<Image> {
+            override val name: String = "IMAGE"
+
+            override fun ProcessingContext.isInstanceOf(instance: ASTNode): Boolean {
+                return instance.name == name
+            }
+
+            override fun ProcessingContext.extract(node: ASTNode): Image {
+                val inlineLink = node.findChildOfType("INLINE_LINK")
+                    ?: error("No inline link found")
+                val linkText = inlineLink.findChildOfType("LINK_TEXT")
+                    ?: error("No link text found")
+                val linkDestination = inlineLink.findChildOfType("LINK_DESTINATION")
+                    ?: error("No link text found")
+
+                val text = linkText.findChildOfType("TEXT")
+                    ?.getTextInNode()
+                    ?: error("No text found in LINK_TEXT")
+                val url = linkDestination.getTextInNode()
+
+                return Image(url, text)
+            }
+        }
     }
 
     abstract val text: String
