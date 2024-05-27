@@ -1,8 +1,6 @@
 package com.arnyminerz.markdowntext.render
 
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.UrlAnnotation
@@ -14,7 +12,6 @@ import androidx.compose.ui.text.withStyle
 import com.arnyminerz.markdowntext.component.model.TextComponent
 
 context(RenderContext)
-@Composable
 @ExperimentalTextApi
 fun IRenderer<*>.appendTextComponents(
     components: List<TextComponent>,
@@ -48,9 +45,7 @@ fun IRenderer<*>.appendTextComponents(
             }
 
             component is TextComponent.CodeSpan -> {
-                annotatedStringBuilder.withStyle(
-                    Styles.getCodeSpanStyle()
-                ) {
+                annotatedStringBuilder.withStyle(textStyles.codeSpanStyle) {
                     append(component.text)
                 }
                 callback.afterCodeSpan(annotatedStringBuilder)
@@ -73,9 +68,7 @@ fun IRenderer<*>.appendTextComponents(
             }
 
             component is TextComponent.Link -> {
-                annotatedStringBuilder.withStyle(
-                    Styles.getLinkSpanStyle()
-                ) {
+                annotatedStringBuilder.withStyle(textStyles.linkSpanStyle) {
                     withAnnotation(
                         UrlAnnotation(component.url)
                     ) {
@@ -87,9 +80,8 @@ fun IRenderer<*>.appendTextComponents(
             component is TextComponent.Image -> {
                 val url = component.url
 
-                LaunchedEffect(url) {
-                    viewModel.obtainImageSize(textSize, url)
-                }
+                // FIXME: Maybe it's not the best place to call this function
+                viewModel.obtainImageSize(textSize, url)
 
                 annotatedStringBuilder.appendInlineContent(
                     id = url,

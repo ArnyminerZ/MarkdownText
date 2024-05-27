@@ -28,7 +28,5 @@ interface IRenderer<FeatureType : Feature> {
      * @param feature The feature to append.
      * @return The [Builder] with the appended feature.
      */
-    context(RenderContext)
-    @Composable
-    fun append(feature: FeatureType)
+    context(RenderContext) fun append(feature: FeatureType)
 }

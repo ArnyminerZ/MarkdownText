@@ -17,7 +17,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.arnyminerz.markdowntext.processor.IProcessor
 import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
-import com.arnyminerz.markdowntext.render.buildAnnotatedString
+import com.arnyminerz.markdowntext.render.code.LocalCodeParser
+import com.arnyminerz.markdowntext.render.code.LocalCodeTheme
+import com.arnyminerz.markdowntext.render.style.TextStyles
 import com.arnyminerz.markdowntext.ui.ExtendedClickableText
 import com.arnyminerz.markdowntext.ui.utils.rememberMaxCharacterSize
 
@@ -46,16 +48,19 @@ fun MarkdownText(
 ) {
     val uriHandler = LocalUriHandler.current
 
+    val textStyles = TextStyles.getFromCompositionLocal()
+    val codeParser = LocalCodeParser.current
+    val codeTheme = LocalCodeTheme.current
+
     val viewModel = viewModel<MarkdownViewModel>()
 
     val fontSize = rememberMaxCharacterSize(style)
 
-    val components by remember(markdown, processor) {
-        viewModel.processMarkdown(markdown, processor)
+    val annotatedString by remember(markdown, processor) {
+        viewModel.processMarkdown(markdown, fontSize, textStyles, codeParser, codeTheme, processor)
     }.collectAsState(initial = null)
-    components?.let { list ->
-        val text = buildAnnotatedString(fontSize, list, viewModel)
 
+    annotatedString?.let { text ->
         ExtendedClickableText(
             text = text,
             inlineContent = viewModel.inlineContentMap,

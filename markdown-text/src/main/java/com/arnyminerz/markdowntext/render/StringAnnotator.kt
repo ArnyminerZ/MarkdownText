@@ -1,14 +1,9 @@
 package com.arnyminerz.markdowntext.render
 
 import android.util.Log
-import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.unit.IntSize
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.arnyminerz.markdowntext.MarkdownViewModel
 import com.arnyminerz.markdowntext.component.CodeFence
 import com.arnyminerz.markdowntext.component.Header
@@ -17,6 +12,9 @@ import com.arnyminerz.markdowntext.component.OrderedList
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.component.UnorderedList
 import com.arnyminerz.markdowntext.component.model.Feature
+import com.arnyminerz.markdowntext.render.style.TextStyles
+import com.wakaztahir.codeeditor.prettify.PrettifyParser
+import com.wakaztahir.codeeditor.theme.CodeThemeType
 
 /**
  * Builds an annotated string from a list of features.
@@ -26,14 +24,25 @@ import com.arnyminerz.markdowntext.component.model.Feature
  * @param features The list of features to append.
  * @return The built annotated string.
  */
-@Composable
 @ExperimentalTextApi
+@Suppress("LongParameterList")
 internal fun buildAnnotatedString(
     textSize: IntSize,
+    textStyles: TextStyles,
+    codeParser: PrettifyParser,
+    codeThemeType: CodeThemeType,
     features: List<Feature>,
     viewModel: MarkdownViewModel
 ) = buildAnnotatedString {
-    RenderContext.provide(this, textSize, viewModel.inlineContentMap, viewModel) {
+    RenderContext.provide(
+        this,
+        textSize,
+        textStyles,
+        codeParser,
+        codeThemeType,
+        viewModel.inlineContentMap,
+        viewModel
+    ) {
         for (feature in features) {
             when (feature) {
                 is Paragraph -> ParagraphRenderer().append(feature)

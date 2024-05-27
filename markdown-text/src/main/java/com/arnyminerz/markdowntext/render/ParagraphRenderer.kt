@@ -1,27 +1,18 @@
 package com.arnyminerz.markdowntext.render
 
 import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString.Builder
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextMeasurer
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.arnyminerz.markdowntext.MarkdownViewModel
 import com.arnyminerz.markdowntext.component.Paragraph
-import com.arnyminerz.markdowntext.component.model.TextComponent
+import com.arnyminerz.markdowntext.render.code.LocalCodeParser
+import com.arnyminerz.markdowntext.render.code.LocalCodeTheme
+import com.arnyminerz.markdowntext.render.style.TextStyles
 import com.arnyminerz.markdowntext.ui.ExtendedClickableText
 import com.arnyminerz.markdowntext.ui.utils.rememberMaxCharacterSize
 
@@ -43,9 +34,12 @@ class ParagraphRenderer(
         val style = LocalTextStyle.current
 
         val fontSize = rememberMaxCharacterSize(style)
+        val codeParser = LocalCodeParser.current
+        val codeTheme = LocalCodeTheme.current
+        val textStyles = TextStyles.getFromCompositionLocal()
 
         val viewModel = viewModel<MarkdownViewModel>()
-        val text = buildAnnotatedString(fontSize, feature.list, viewModel)
+        val text = buildAnnotatedString(fontSize, textStyles, codeParser, codeTheme, feature.list, viewModel)
 
         ExtendedClickableText(
             text = text,
@@ -61,9 +55,7 @@ class ParagraphRenderer(
         )
     }
 
-    context(RenderContext)
-    @Composable
-    override fun append(feature: Paragraph) {
+    context(RenderContext) override fun append(feature: Paragraph) {
         annotatedStringBuilder.append(firstLinePrefix)
         appendTextComponents(
             feature.list,

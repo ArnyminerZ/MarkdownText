@@ -1,21 +1,19 @@
 package com.arnyminerz.markdowntext.render
 
 import androidx.compose.foundation.lazy.LazyItemScope
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.unit.IntSize
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.arnyminerz.markdowntext.MarkdownViewModel
 import com.arnyminerz.markdowntext.component.model.IListComponent
 import com.arnyminerz.markdowntext.component.model.ListElement
+import com.arnyminerz.markdowntext.render.code.LocalCodeParser
+import com.arnyminerz.markdowntext.render.code.LocalCodeTheme
+import com.arnyminerz.markdowntext.render.style.TextStyles
 import com.arnyminerz.markdowntext.ui.ExtendedClickableText
 import com.arnyminerz.markdowntext.ui.utils.rememberMaxCharacterSize
 
@@ -37,9 +35,12 @@ object ListRenderer : IRenderer<IListComponent> {
         val style = LocalTextStyle.current
 
         val textSize = rememberMaxCharacterSize(style)
+        val textStyles = TextStyles.getFromCompositionLocal()
+        val codeParser = LocalCodeParser.current
+        val codeTheme = LocalCodeTheme.current
 
         val viewModel = viewModel<MarkdownViewModel>()
-        val text = buildAnnotatedString(textSize, feature.list, viewModel)
+        val text = buildAnnotatedString(textSize, textStyles, codeParser, codeTheme, feature.list, viewModel)
 
         ExtendedClickableText(
             text = text,
@@ -55,9 +56,7 @@ object ListRenderer : IRenderer<IListComponent> {
         )
     }
 
-    context(RenderContext)
-    @Composable
-    private fun append(
+    context(RenderContext) private fun append(
         elements: List<ListElement>,
         depth: Int = 0
     ): AnnotatedString.Builder {
@@ -77,9 +76,7 @@ object ListRenderer : IRenderer<IListComponent> {
         return annotatedStringBuilder
     }
 
-    context(RenderContext)
-    @Composable
-    override fun append(feature: IListComponent) {
+    context(RenderContext) override fun append(feature: IListComponent) {
         append(feature.list)
     }
 }
