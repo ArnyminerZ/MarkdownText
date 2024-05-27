@@ -21,10 +21,6 @@ fun assertIsBR(component: TextComponent) {
     assertIs<TextComponent.BR>(component)
 }
 
-fun assertIsSQUOTE(component: TextComponent) {
-    assertIs<TextComponent.SQUOTE>(component)
-}
-
 fun assertIsMono(component: TextComponent, character: Char) {
     assertIs<TextComponent.Mono>(component)
     assertEquals(component.text, character.toString())

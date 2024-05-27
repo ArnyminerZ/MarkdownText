@@ -37,11 +37,6 @@ fun IRenderer<*>.appendTextComponents(
                 callback.afterBR(annotatedStringBuilder)
             }
 
-            component is TextComponent.SQUOTE -> {
-                annotatedStringBuilder.append(component.text)
-                callback.afterSQUOTE(annotatedStringBuilder)
-            }
-
             TextComponent.Mono.isInstanceOf(component) -> {
                 annotatedStringBuilder.append(component.text)
                 callback.afterSingleCharacter(annotatedStringBuilder)

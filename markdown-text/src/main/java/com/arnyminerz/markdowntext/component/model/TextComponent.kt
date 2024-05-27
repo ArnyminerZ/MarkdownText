@@ -1,6 +1,5 @@
 package com.arnyminerz.markdowntext.component.model
 
-import com.arnyminerz.markdowntext.companionClass
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.findByInstanceOfKey
 import com.arnyminerz.markdowntext.findByKey
@@ -12,7 +11,6 @@ import com.arnyminerz.markdowntext.name
 import com.arnyminerz.markdowntext.processor.ProcessingContext
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.intellij.markdown.ast.ASTNode
-import org.intellij.markdown.ast.getTextInNode
 
 abstract class TextComponent private constructor() : IComponent {
     companion object {
@@ -20,7 +18,6 @@ abstract class TextComponent private constructor() : IComponent {
             EOL to EOL,
             WS to WS,
             BR to BR,
-            SQUOTE to SQUOTE,
             BACKTICK to BACKTICK
         )
 
@@ -45,14 +42,15 @@ abstract class TextComponent private constructor() : IComponent {
         companion object : NodeTypeCheck, NodeExtractor<Mono> {
             fun isInstanceOf(component: TextComponent): Boolean {
                 if (component.text.length == 1) {
-                    val companion = component::class.companionClass
+                    /*val companion = component::class.companionClass
                         ?.getDeclaredConstructor()
                         ?.newInstance()
                         as FeatureCompanion?
                         ?: return false
                     if (companion.name.length == 1) {
                         return true
-                    }
+                    }*/
+                    return true
                 } else {
                     monoComponents.findByInstanceOfKey(component::class)?.let { return true }
                 }
@@ -83,9 +81,6 @@ abstract class TextComponent private constructor() : IComponent {
 
     /** Alias for Backtick (`BACKTICK`) */
     object BACKTICK : Mono("BACKTICK", '`')
-
-    /** Alias for Single Quote (`'`) */
-    object SQUOTE : Mono("SQUOTE", '\'')
 
     class Text(override val text: String) : TextComponent() {
         companion object : FeatureCompanion {
