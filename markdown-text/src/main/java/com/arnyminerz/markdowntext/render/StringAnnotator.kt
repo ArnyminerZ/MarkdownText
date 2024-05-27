@@ -28,13 +28,12 @@ import com.arnyminerz.markdowntext.component.model.Feature
  */
 @Composable
 @ExperimentalTextApi
-fun buildAnnotatedString(
-    inlineContentMap: SnapshotStateMap<String, InlineTextContent>,
+internal fun buildAnnotatedString(
     textSize: IntSize,
     features: List<Feature>,
-    viewModel: MarkdownViewModel = viewModel()
+    viewModel: MarkdownViewModel
 ) = buildAnnotatedString {
-    RenderContext.provide(this, textSize, inlineContentMap, viewModel) {
+    RenderContext.provide(this, textSize, viewModel.inlineContentMap, viewModel) {
         for (feature in features) {
             when (feature) {
                 is Paragraph -> ParagraphRenderer().append(feature)

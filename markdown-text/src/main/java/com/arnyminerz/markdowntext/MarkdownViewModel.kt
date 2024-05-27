@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.Placeholder
@@ -15,17 +15,20 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import coil.compose.AsyncImage
+import com.arnyminerz.markdowntext.component.model.IComponent
 import com.arnyminerz.markdowntext.network.RemoteImageSizeIdentifier
 import com.arnyminerz.markdowntext.network.SizeIdentifierCache
+import com.arnyminerz.markdowntext.processor.IProcessor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.launch
 
-class MarkdownViewModel(application: Application) : AndroidViewModel(application) {
+internal class MarkdownViewModel(application: Application) : AndroidViewModel(application) {
+    val inlineContentMap = mutableStateMapOf<String, InlineTextContent>()
+
     fun obtainImageSize(
         textSize: IntSize,
-        url: String,
-        inlineContentMap: SnapshotStateMap<String, InlineTextContent>
+        url: String
     ) = viewModelScope.launch {
         // TODO: Handle IllegalArgumentException: URL is not a JPEG or PNG
         val originalImageSize = if (SizeIdentifierCache.isCached(getApplication(), url))
@@ -65,6 +68,16 @@ class MarkdownViewModel(application: Application) : AndroidViewModel(application
                     .height(lineHeightDp)
                     .aspectRatio(ratio)
             )
+        }
+    }
+
+    fun processMarkdown(
+        markdown: String,
+        processor: IProcessor
+    ): Flow<List<IComponent>> = channelFlow {
+        viewModelScope.launch {
+            val components = processor.load(markdown)
+            send(components)
         }
     }
 }

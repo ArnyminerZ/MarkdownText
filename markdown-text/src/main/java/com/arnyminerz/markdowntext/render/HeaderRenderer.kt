@@ -14,6 +14,9 @@ import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntSize
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.arnyminerz.markdowntext.MarkdownViewModel
 import com.arnyminerz.markdowntext.component.Header
 import com.arnyminerz.markdowntext.ui.ExtendedClickableText
 import com.arnyminerz.markdowntext.ui.utils.rememberMaxCharacterSize
@@ -39,12 +42,12 @@ object HeaderRenderer : IRenderer<Header> {
         val style = getHeaderStyle(feature.depth)
         val textSize = rememberMaxCharacterSize(style = style)
 
-        val inlineContentMap = remember { mutableStateMapOf<String, InlineTextContent>() }
-        val text = buildAnnotatedString(inlineContentMap, textSize, feature.list)
+        val viewModel = viewModel<MarkdownViewModel>()
+        val text = buildAnnotatedString(textSize, feature.list, viewModel)
 
         ExtendedClickableText(
             text = text,
-            inlineContent = inlineContentMap,
+            inlineContent = viewModel.inlineContentMap,
             onClick = { index ->
                 // Launch the first tapped url annotation, if any
                 text.getUrlAnnotations(index, index)

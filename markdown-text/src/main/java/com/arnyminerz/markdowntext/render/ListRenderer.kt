@@ -12,6 +12,8 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.unit.IntSize
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.arnyminerz.markdowntext.MarkdownViewModel
 import com.arnyminerz.markdowntext.component.model.IListComponent
 import com.arnyminerz.markdowntext.component.model.ListElement
 import com.arnyminerz.markdowntext.ui.ExtendedClickableText
@@ -36,12 +38,12 @@ object ListRenderer : IRenderer<IListComponent> {
 
         val textSize = rememberMaxCharacterSize(style)
 
-        val inlineContentMap = remember { mutableStateMapOf<String, InlineTextContent>() }
-        val text = buildAnnotatedString(inlineContentMap, textSize, feature.list)
+        val viewModel = viewModel<MarkdownViewModel>()
+        val text = buildAnnotatedString(textSize, feature.list, viewModel)
 
         ExtendedClickableText(
             text = text,
-            inlineContent = inlineContentMap,
+            inlineContent = viewModel.inlineContentMap,
             onClick = { index ->
                 // Launch the first tapped url annotation, if any
                 text.getUrlAnnotations(index, index)

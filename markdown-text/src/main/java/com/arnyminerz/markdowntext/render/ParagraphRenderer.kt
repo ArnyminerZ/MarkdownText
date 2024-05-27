@@ -18,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.IntSize
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.arnyminerz.markdowntext.MarkdownViewModel
 import com.arnyminerz.markdowntext.component.Paragraph
 import com.arnyminerz.markdowntext.component.model.TextComponent
 import com.arnyminerz.markdowntext.ui.ExtendedClickableText
@@ -42,12 +44,12 @@ class ParagraphRenderer(
 
         val fontSize = rememberMaxCharacterSize(style)
 
-        val inlineContentMap = remember { mutableStateMapOf<String, InlineTextContent>() }
-        val text = buildAnnotatedString(inlineContentMap, fontSize, feature.list)
+        val viewModel = viewModel<MarkdownViewModel>()
+        val text = buildAnnotatedString(fontSize, feature.list, viewModel)
 
         ExtendedClickableText(
             text = text,
-            inlineContent = inlineContentMap,
+            inlineContent = viewModel.inlineContentMap,
             onClick = { index ->
                 // Launch the first tapped url annotation, if any
                 text.getUrlAnnotations(index, index)

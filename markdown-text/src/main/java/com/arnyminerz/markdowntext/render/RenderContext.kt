@@ -6,12 +6,12 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.IntSize
 import com.arnyminerz.markdowntext.MarkdownViewModel
 
-interface RenderContext {
+internal interface RenderContext {
     val textSize: IntSize
 
     val annotatedStringBuilder: AnnotatedString.Builder
 
-    val inlineContentMap: SnapshotStateMap<String, InlineTextContent>
+    val inlineContentMap: MutableMap<String, InlineTextContent>
 
     val viewModel: MarkdownViewModel
 
@@ -19,7 +19,7 @@ interface RenderContext {
         inline fun provide(
             annotatedStringBuilder: AnnotatedString.Builder,
             textSize: IntSize,
-            inlineContentMap: SnapshotStateMap<String, InlineTextContent>,
+            inlineContentMap: MutableMap<String, InlineTextContent>,
             viewModel: MarkdownViewModel,
             block: RenderContext.() -> Unit
         ) {
@@ -29,7 +29,7 @@ interface RenderContext {
 
                     override val annotatedStringBuilder: AnnotatedString.Builder = annotatedStringBuilder
 
-                    override val inlineContentMap: SnapshotStateMap<String, InlineTextContent> = inlineContentMap
+                    override val inlineContentMap: MutableMap<String, InlineTextContent> = inlineContentMap
 
                     override val viewModel: MarkdownViewModel = viewModel
                 }

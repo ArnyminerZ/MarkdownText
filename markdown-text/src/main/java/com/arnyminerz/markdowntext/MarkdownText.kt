@@ -1,15 +1,19 @@
 package com.arnyminerz.markdowntext
 
-import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.TextStyle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.arnyminerz.markdowntext.processor.IProcessor
 import com.arnyminerz.markdowntext.processor.JetbrainsMarkdownProcessor
 import com.arnyminerz.markdowntext.render.buildAnnotatedString
@@ -30,25 +34,36 @@ fun MarkdownText(
     modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.bodyMedium,
     processor: IProcessor = JetbrainsMarkdownProcessor(),
+    placeholder: @Composable () -> Unit = {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    }
 ) {
     val uriHandler = LocalUriHandler.current
 
+    val viewModel = viewModel<MarkdownViewModel>()
+
     val fontSize = rememberMaxCharacterSize(style)
 
-    val components = remember(markdown) { processor.load(markdown) }
-    val inlineContentMap = remember { mutableStateMapOf<String, InlineTextContent>() }
-    val text = buildAnnotatedString(inlineContentMap, fontSize, components)
+    val components by viewModel.processMarkdown(markdown, processor).collectAsState(initial = null)
+    components?.let {
+        val text = buildAnnotatedString(fontSize, it, viewModel)
 
-    ExtendedClickableText(
-        text = text,
-        inlineContent = inlineContentMap,
-        onClick = { index ->
-            // Launch the first tapped url annotation, if any
-            text.getUrlAnnotations(index, index)
-                .firstOrNull()
-                ?.let { uriHandler.openUri(it.item.url) }
-        },
-        style = style,
-        modifier = modifier
-    )
+        ExtendedClickableText(
+            text = text,
+            inlineContent = viewModel.inlineContentMap,
+            onClick = { index ->
+                // Launch the first tapped url annotation, if any
+                text.getUrlAnnotations(index, index)
+                    .firstOrNull()
+                    ?.let { uriHandler.openUri(it.item.url) }
+            },
+            style = style,
+            modifier = modifier
+        )
+    } ?: placeholder()
 }

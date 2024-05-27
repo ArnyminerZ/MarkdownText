@@ -93,7 +93,7 @@ fun IRenderer<*>.appendTextComponents(
                 val url = component.url
 
                 LaunchedEffect(url) {
-                    viewModel.obtainImageSize(textSize, url, inlineContentMap)
+                    viewModel.obtainImageSize(textSize, url)
                 }
 
                 annotatedStringBuilder.appendInlineContent(
