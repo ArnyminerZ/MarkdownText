@@ -10,7 +10,7 @@ compose-compiler = "1.5.14"
 compose-ui = "1.6.7"
 compose-material3 = "1.2.1"
 coil = "2.6.0"
-jetbrains-markdown = "0.7.2"
+jetbrains-markdown = "0.7.3"
 junit = "4.13.2"
 kotlin = "1.9.24"
 
