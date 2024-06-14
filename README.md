@@ -20,17 +20,24 @@ A library for displaying Markdown contents within Jetpack Compose. Uses [Coil][c
 * Tables are not supported.
 * Horizontal rules do not fill the whole width.
 
+# Permissions
+
+The library requires the following permissions:
+- `INTERNET`: To load images from the web. If you don't want the app to load images from the web,
+  you can disable it from the Manifest.
+
 ## Usage
 
 Add to the module's dependencies:
 
-```groovy
-implementation 'com.arnyminerz.markdowntext:markdowntext:1.3.1'
+```kotlin
+implementation('com.arnyminerz.markdowntext:markdowntext:2.0.0')
 ```
 
 Jetpack Compose example:
 
 ```kotlin
+@Preview
 @Composable
 fun MarkdownTextPreview() {
     val exampleImageUrl = "https://picsum.photos/300/200"
@@ -120,6 +127,25 @@ click listener will be added. Summary:
         * Tapping something else will call `onClick`
     * If `onClickOverrides` is `true`:
         * Tapping anything will call `onClick`
+
+# Set log level
+
+If you want to see the logs of the library, you can set the log level with `Logger`:
+```kotlin
+import com.arnyminerz.markdowntext.Logger
+import com.arnyminerz.markdowntext.Logger.Level
+
+Logger.setLogLevel(Level.DEBUG)
+```
+
+> ![INFO] The default log level is `Level.INFO`.
+
+# Code Blocks
+
+You can adjust the parser and theme of code blocks using `LocalCodeParser` and `LocalCodeTheme`
+respectively. The default values are `PrettifyParser()` and `CodeTheme.Default`.
+
+See https://github.com/Qawaz/compose-code-editor for more information.
 
 # Used by
 

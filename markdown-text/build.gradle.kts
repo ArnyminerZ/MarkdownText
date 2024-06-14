@@ -2,6 +2,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.detekt)
     alias(libs.plugins.kotlin)
 
     `maven-publish`
@@ -52,8 +53,10 @@ android {
 }
 
 dependencies {
+    // Android dependencies
     implementation(libs.androidx.core)
-    implementation(libs.appcompat)
+    implementation(libs.androidx.lifecycle.viewmodel)
+    implementation(libs.androidx.lifecycle.viewmodelCompose)
 
     // Jetpack Compose core
     implementation(libs.androidx.activityCompose)
@@ -61,17 +64,31 @@ dependencies {
     implementation(libs.compose.ui.base)
     implementation(libs.compose.ui.toolingPreview)
 
+    // Jetpack Compose Code Highlighter
+    implementation(libs.compose.codeEditor)
+
     // Coil image loader
     implementation(libs.coil.base)
     implementation(libs.coil.compose)
     implementation(libs.coil.gif)
     implementation(libs.coil.svg)
 
+    // Markdown parsing
     implementation(libs.jetbrains.markdown)
 
-    testImplementation(libs.junit)
+    // Kotlin libraries
+    implementation(libs.kotlin.reflect)
+
+    testImplementation(kotlin("test"))
+
     androidTestImplementation(libs.androidx.test.junit)
     androidTestImplementation(libs.androidx.test.espresso)
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java).all {
+    kotlinOptions {
+        freeCompilerArgs += "-Xcontext-receivers"
+    }
 }
 
 val androidSourcesJar = tasks.create("androidSourcesJar", Jar::class.java) {

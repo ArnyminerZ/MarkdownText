@@ -6,21 +6,25 @@ androidx-lifecycle = "2.8.0"
 androidx-test-espresso = "3.5.1"
 androidx-test-junit = "1.1.5"
 appcompat = "1.6.1"
+compose-code-editor = "3.0.5"
 compose-compiler = "1.5.14"
 compose-ui = "1.6.7"
 compose-material3 = "1.2.1"
 coil = "2.6.0"
+detekt = "1.23.6"
 jetbrains-markdown = "0.7.3"
-junit = "4.13.2"
 kotlin = "1.9.24"
 
 [libraries]
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+compose-codeEditor = { module = "com.github.qawaz.compose-code-editor:codeeditor-android", version.ref = "compose-code-editor" }
 compose-ui-base = { module = "androidx.compose.ui:ui", version.ref = "compose-ui" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose-ui" }
 compose-ui-toolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose-ui" }
@@ -30,9 +34,10 @@ coil-svg = { module = "io.coil-kt:coil-svg", version.ref = "coil" }
 coil-gif = { module = "io.coil-kt:coil-gif", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 jetbrains-markdown = { module = "org.jetbrains:markdown", version.ref = "jetbrains-markdown" }
-junit = { module = "junit:junit", version.ref = "junit" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
