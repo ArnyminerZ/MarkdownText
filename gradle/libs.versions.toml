@@ -2,7 +2,7 @@
 agp = "8.4.2"
 androidx-activity = "1.9.0"
 androidx-core = "1.13.1"
-androidx-lifecycle = "2.8.3"
+androidx-lifecycle = "2.8.4"
 androidx-test-espresso = "3.6.1"
 androidx-test-junit = "1.2.1"
 appcompat = "1.7.0"
