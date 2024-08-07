@@ -12,7 +12,7 @@ compose-material3 = "1.2.1"
 coil = "2.6.0"
 jetbrains-markdown = "0.7.3"
 junit = "4.13.2"
-kotlin = "1.9.24"
+kotlin = "2.0.10"
 
 [libraries]
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
